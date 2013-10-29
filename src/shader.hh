@@ -7,8 +7,8 @@
 **/
 
 
-#ifndef SHADER_HPP
-#define SHADER_HPP
+#ifndef SHADER_HH
+#define SHADER_HH
 
 
 #include <GL/glew.h>
@@ -61,4 +61,4 @@ private:
 };
 
 
-#endif //HANDLER_HPP
+#endif //HANDLER_HH
