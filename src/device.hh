@@ -2,16 +2,20 @@
 #define DEVICE_HH
 
 
-class Device {
-public:
-    Device(void);
+#include "render_thread.hh"
+#include "logic_thread.hh"
+#include "event_thread.hh"
+#include "physics_thread.hh"
+#include "resource_thread.hh"
 
+
+class Device {
 private:
     RenderThread renderThread;
     LogicThread logicThread;
+    EventThread eventThread;
     PhysicsThread physicsThread;
     ResourceThread resourceThread;
-    EventThread eventThread;
 };
 
 
