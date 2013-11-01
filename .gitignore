@@ -4,3 +4,5 @@ temp/
 *.cbp
 *.depend
 *.layout
+*.sublime-project
+*.sublime-workspace
