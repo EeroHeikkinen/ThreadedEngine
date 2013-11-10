@@ -3,7 +3,8 @@
 #include <iostream> //temp
 
 
-PhysicsThread::PhysicsThread(void) :
+PhysicsThread::PhysicsThread(Device& device) :
+    device(device),
     running(true) {
     thread = std::thread(&PhysicsThread::launch, this);
 }
@@ -24,6 +25,9 @@ void PhysicsThread::launch(void) {
 
 void PhysicsThread::stop(void) {
     running = false;
+}
+
+void PhysicsThread::join(void) {
     thread.join();
 }
 

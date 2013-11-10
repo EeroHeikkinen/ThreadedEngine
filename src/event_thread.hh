@@ -5,20 +5,26 @@
 #include <thread>
 
 
+class Device;
+
+
 class EventThread {
 public:
-    EventThread(void);
+    EventThread(Device& device);
     EventThread(const EventThread&) = delete; //Ro3
     ~EventThread(void);
 
     void launch(void);
     void stop(void);
+    void join(void);
 
     void init(void);
     void loop(void);
 
     EventThread& operator=(const EventThread&) = delete; //Ro3
+
 private:
+    Device& device;
     std::thread thread;
     bool running;
 };
