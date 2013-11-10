@@ -10,12 +10,23 @@
 
 
 class Device {
+public:
+    Device(void);
+    Device(const Device&) = delete;
+
+    void join(void);
+    void stop(void);
+
+    RenderThread& getRenderThread(void);
+
+    Device& operator=(const Device&) = delete;
+
 private:
     RenderThread renderThread;
-    LogicThread logicThread;
+    //LogicThread logicThread;
     EventThread eventThread;
-    PhysicsThread physicsThread;
-    ResourceThread resourceThread;
+    //PhysicsThread physicsThread;
+    //ResourceThread resourceThread;
 };
 
 

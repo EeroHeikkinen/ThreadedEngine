@@ -3,7 +3,8 @@
 #include <iostream> //temp
 
 
-ResourceThread::ResourceThread(void) :
+ResourceThread::ResourceThread(Device& device) :
+    device(device),
     running(true) {
     thread = std::thread(&ResourceThread::launch, this);
 }
@@ -24,6 +25,9 @@ void ResourceThread::launch(void) {
 
 void ResourceThread::stop(void) {
     running = false;
+}
+
+void ResourceThread::join(void) {
     thread.join();
 }
 

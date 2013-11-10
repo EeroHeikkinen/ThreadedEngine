@@ -3,7 +3,8 @@
 #include <iostream> //temp
 
 
-LogicThread::LogicThread(void) :
+LogicThread::LogicThread(Device& device) :
+    device(device),
     running(true) {
     thread = std::thread(&LogicThread::launch, this);
 }
@@ -24,6 +25,9 @@ void LogicThread::launch(void) {
 
 void LogicThread::stop(void) {
     running = false;
+}
+
+void LogicThread::join(void) {
     thread.join();
 }
 

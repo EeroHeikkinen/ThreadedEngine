@@ -1,9 +1,14 @@
 #include "event_thread.hh"
+#include "device.hh"
 
+#include <SFML/Window.hpp>
+#include <GL/GLEW.h>
+#include <SFML/OpenGL.hpp>
 #include <iostream> //temp
 
 
-EventThread::EventThread(void) :
+EventThread::EventThread(Device& device) :
+    device(device),
     running(true) {
     thread = std::thread(&EventThread::launch, this);
 }
@@ -24,6 +29,9 @@ void EventThread::launch(void) {
 
 void EventThread::stop(void) {
     running = false;
+}
+
+void EventThread::join(void) {
     thread.join();
 }
 
@@ -32,5 +40,19 @@ void EventThread::init(void) {
 }
 
 void EventThread::loop(void) {
-    std::cout << "event ";//temp
+    /*// handle events
+    sf::Event event;
+    while (device.getRenderThread().getWindow().pollEvent(event))
+    {
+        if (event.type == sf::Event::Closed)
+        {
+            // end the program
+            device.stop();
+        }
+        /*else if (event.type == sf::Event::Resized)
+        {
+            // adjust the viewport when the window is resized
+            glViewport(0, 0, event.size.width, event.size.height);
+        }
+    }*/
 }
