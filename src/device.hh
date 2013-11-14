@@ -25,7 +25,7 @@ private:
     RenderThread renderThread;
     //LogicThread logicThread;
     EventThread eventThread;
-    //PhysicsThread physicsThread;
+    PhysicsThread physicsThread;
     //ResourceThread resourceThread;
 };
 

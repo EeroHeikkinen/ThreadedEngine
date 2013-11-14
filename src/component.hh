@@ -14,4 +14,15 @@ public:
 };
 
 
+class PhysicsComponent {
+public:
+    PhysicsComponent();
+    PhysicsComponent(const PhysicsComponent&) = delete;
+    virtual ~PhysicsComponent();
+
+    void calculate();
+
+    PhysicsComponent& operator=(const PhysicsComponent&) = delete;
+};
+
 #endif // COMPONENT_HH

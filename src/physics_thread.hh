@@ -3,10 +3,10 @@
 
 
 #include <thread>
-
+#include "physics_tree.hh"
+#include "component.hh"
 
 class Device;
-
 
 class PhysicsThread {
 public:
@@ -21,13 +21,16 @@ public:
     void init(void);
     void loop(void);
 
-    PhysicsThread& operator=(const PhysicsThread&) = delete; //Ro3
+    void iterateTree(PhysicsNode*);
 
+    PhysicsThread& operator=(const PhysicsThread&) = delete; //Ro3
 private:
     Device& device;
     std::thread thread;
     bool running;
+    PhysicsTree physicsTree;
 };
+
 
 
 #endif // PHYSICS_THREAD_HH
