@@ -4,7 +4,6 @@
 
 #include "render_thread.hh"
 #include "logic_thread.hh"
-#include "event_thread.hh"
 #include "physics_thread.hh"
 #include "resource_thread.hh"
 
@@ -24,9 +23,11 @@ public:
 private:
     RenderThread renderThread;
     //LogicThread logicThread;
-    EventThread eventThread;
     //PhysicsThread physicsThread;
     //ResourceThread resourceThread;
+
+    void eventLoop(void);
+    bool running;
 };
 
 

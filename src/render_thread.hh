@@ -24,15 +24,17 @@ public:
 
     RenderThread& operator=(const RenderThread&) = delete; //Ro3
 
-    sf::Window& getWindow(void);
+    sf::Window* getWindowPtr(void);
+    bool isWindowInitialized(void);
 
 private:
     Device& device;
     std::thread thread;
     bool running;
 
-    sf::Window window;
     sf::ContextSettings settings;
+    sf::Window* pWindow;
+    bool windowInitialized;
 };
 
 
