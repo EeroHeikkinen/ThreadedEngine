@@ -5,17 +5,25 @@
 
 Device::Device(void) :
     renderThread(*this),
+    eventThread(*this),
+    physicsThread(*this),
     running(true) {
     eventLoop();
 }
 
 void Device::join(void) {
     renderThread.join();
+    physicsThread.join();
 }
 
 void Device::stop(void) {
     renderThread.stop();
+    physicsThread.stop();
     running = false;
+}
+
+RenderThread& Device::getRenderThread(void) {
+    return renderThread;
 }
 
 void Device::eventLoop(void) {
@@ -44,8 +52,4 @@ void Device::eventLoop(void) {
 
         sf::sleep(sf::milliseconds(10));
     }
-}
-
-RenderThread& Device::getRenderThread(void) {
-    return renderThread;
 }

@@ -23,7 +23,7 @@ public:
 private:
     RenderThread renderThread;
     //LogicThread logicThread;
-    //PhysicsThread physicsThread;
+    PhysicsThread physicsThread;
     //ResourceThread resourceThread;
 
     void eventLoop(void);

@@ -10,7 +10,6 @@
 #ifndef SHADER_HH
 #define SHADER_HH
 
-
 #include <GL/glew.h>
 #include <string>
 #include <vector>
