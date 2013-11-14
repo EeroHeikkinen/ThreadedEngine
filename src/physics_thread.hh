@@ -23,12 +23,14 @@ public:
 
     void iterateTree(PhysicsNode*);
 
+    PhysicsTree* getTree() const;
+
     PhysicsThread& operator=(const PhysicsThread&) = delete; //Ro3
 private:
     Device& device;
     std::thread thread;
     bool running;
-    PhysicsTree physicsTree;
+    PhysicsTree* physicsTree;
 };
 
 

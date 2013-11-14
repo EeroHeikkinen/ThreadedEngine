@@ -6,6 +6,7 @@
 PhysicsThread::PhysicsThread(Device& device) :
     device(device), running(true) {
     thread = std::thread(&PhysicsThread::launch, this);
+    physicsTree = new PhysicsTree;
 }
 
 PhysicsThread::~PhysicsThread(void) {
@@ -13,6 +14,7 @@ PhysicsThread::~PhysicsThread(void) {
         running = false;
         thread.join();
     }
+    delete physicsTree;
 }
 
 void PhysicsThread::launch(void) {
@@ -37,9 +39,9 @@ void PhysicsThread::init(void) {
     // TEMP: creating arbitrary tree consisting of one physics component for testing purposes
     PhysicsComponent* component = new PhysicsComponent;
     for (unsigned i = 0; i < 5; i++) {
-        auto parent = physicsTree.getRoot();
+        auto parent = physicsTree->getRoot();
         for (unsigned j = 0; j < 6; j++) {
-            parent = physicsTree.addNode(parent, component);
+            parent = physicsTree->addNode(parent, component);
         }
     }
     // end of TEMP
@@ -48,7 +50,7 @@ void PhysicsThread::init(void) {
 void PhysicsThread::loop(void) {
     std::cout << "physics ";//temp
 
-    PhysicsNode* root = physicsTree.getRoot();
+    PhysicsNode* root = physicsTree->getRoot();
     iterateTree(root);
 
 }
@@ -59,4 +61,8 @@ void PhysicsThread::iterateTree(PhysicsNode* node) {
         child->getComponent()->calculate();
         iterateTree(child);
     }
+}
+
+PhysicsTree* PhysicsThread::getTree() const {
+    return physicsTree;
 }
