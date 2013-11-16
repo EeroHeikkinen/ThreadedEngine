@@ -32,7 +32,7 @@ private:
 
     test::Camera* pCamera;//TEMP
     test::TestRenderer* pTestRenderer;//TEMP
-    test::Triangle* pTriangle;//TEMP
+    test::Sphere* pSphere;//TEMP
 };
 
 

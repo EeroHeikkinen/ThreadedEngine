@@ -18,7 +18,7 @@ ResourceThread::~ResourceThread(void) {
 
     delete pTestRenderer;//TEMP
     delete pCamera;//TEMP
-    delete pTriangle;//TEMP
+    delete pSphere;//TEMP
 }
 
 void ResourceThread::launch(void) {
@@ -45,7 +45,7 @@ void ResourceThread::init(void) {
 
     pCamera = new test::Camera();//TEMP
     pTestRenderer = new test::TestRenderer(pCamera);//TEMP
-    pTriangle = new test::Triangle();//TEMP
+    pSphere = new test::Sphere();//TEMP
 
     Device::getDevice().getRenderThread().attachContext();
 }
