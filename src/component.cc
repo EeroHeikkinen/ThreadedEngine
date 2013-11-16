@@ -16,12 +16,12 @@ using namespace glm;
 
 RenderComponent::RenderComponent(void) {
     //add the component to the render thread
-    Device::getDevice().getRenderThread().addRenderComponent(this);
+    Device::getDevice().getSceneGraph().addRenderComponent(this);
 }
 
 RenderComponent::~RenderComponent(void) {
     //delete the component from the render thread
-    Device::getDevice().getRenderThread().deleteRenderComponent(this);
+    Device::getDevice().getSceneGraph().deleteRenderComponent(this);
 }
 
 

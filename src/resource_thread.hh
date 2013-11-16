@@ -2,6 +2,7 @@
 #define RESOURCE_THREAD_HH
 
 
+#include "test_renderers.hh"//TEMP
 #include "test_entities.hh"//TEMP
 
 #include <thread>
@@ -12,7 +13,7 @@ class Device;
 
 class ResourceThread {
 public:
-    ResourceThread(Device& device);
+    ResourceThread(Device&);
     ResourceThread(const ResourceThread&) = delete; //Ro3
     ~ResourceThread(void);
 
@@ -26,10 +27,11 @@ public:
     ResourceThread& operator=(const ResourceThread&) = delete; //Ro3
 
 private:
-    Device& device;
     std::thread thread;
     bool running;
 
+    test::Camera* pCamera;//TEMP
+    test::TestRenderer* pTestRenderer;//TEMP
     test::Triangle* pTriangle;//TEMP
 };
 

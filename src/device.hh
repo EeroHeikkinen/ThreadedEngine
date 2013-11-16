@@ -6,6 +6,7 @@
 #include "logic_thread.hh"
 #include "physics_thread.hh"
 #include "resource_thread.hh"
+#include "scene_graph.hh"
 
 #include <mutex>
 
@@ -19,12 +20,14 @@ public:
     void stop(void);
     void join(void);
 
+    void setGlewInitialized(bool);
+    bool isGlewInitialized(void) const;
+
     RenderThread& getRenderThread(void);
     LogicThread& getLogicThread(void);
     PhysicsThread& getPhysicsThread(void);
 
-    void setGlewInitialized(bool);
-    bool isGlewInitialized(void) const;
+    SceneGraph& getSceneGraph(void);
 
     Device& operator=(const Device&) = delete;
 
@@ -41,6 +44,9 @@ private:
     LogicThread logicThread;
     PhysicsThread physicsThread;
     ResourceThread resourceThread;
+
+    // scene graph
+    SceneGraph sceneGraph;
 };
 
 

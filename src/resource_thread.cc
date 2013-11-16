@@ -6,7 +6,6 @@
 
 
 ResourceThread::ResourceThread(Device& device) :
-    device(device),
     running(true) {
     thread = std::thread(&ResourceThread::launch, this);
 }
@@ -17,6 +16,8 @@ ResourceThread::~ResourceThread(void) {
         thread.join();
     }
 
+    delete pTestRenderer;//TEMP
+    delete pCamera;//TEMP
     delete pTriangle;//TEMP
 }
 
@@ -36,12 +37,16 @@ void ResourceThread::join(void) {
 }
 
 void ResourceThread::init(void) {
-    while (!device.isGlewInitialized()) {
+    while (!Device::getDevice().isGlewInitialized()) {
         sf::sleep(sf::milliseconds(5));
     }
 
     Device::getDevice().getRenderThread().detachContext();
+
+    pCamera = new test::Camera();//TEMP
+    pTestRenderer = new test::TestRenderer(pCamera);//TEMP
     pTriangle = new test::Triangle();//TEMP
+
     Device::getDevice().getRenderThread().attachContext();
 }
 

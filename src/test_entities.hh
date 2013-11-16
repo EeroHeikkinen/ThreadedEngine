@@ -11,39 +11,38 @@
 
 namespace test {
 
-    class TriangleRender : public RenderComponent {
+    class Camera :
+    public LogicComponent {
     public:
-        TriangleRender(void);
-        ~TriangleRender(void) { };
-
-        void render(void);
-
-    private:
-        GLuint VBO, IBO, VAO;
-        Shader shader;
-    };
-
-
-    class TriangleLogic : public LogicComponent {
-    public:
-        TriangleLogic(void);
-        ~TriangleLogic(void) { };
+        Camera(void);
 
         void logic(void);
-        glm::vec3 getPosition(void);
+
+        const glm::mat4& getViewMatrix(void) const;
+        const glm::mat4& getProjectionMatrix(void) const;
 
     private:
-        float alpha;
         glm::vec3 pos;
+        glm::mat4 view, projection;
     };
 
 
     class Triangle :
-    public TriangleRender,
-    public TriangleLogic {
+    public RenderComponent,
+    public LogicComponent {
     public:
-        Triangle(void) { }
-        ~Triangle(void) { }
+        Triangle(void);
+        ~Triangle(void);
+
+        void render(const glm::mat4&, const glm::mat4&);
+        void logic(void);
+
+    private:
+        GLuint VBO, IBO, VAO;
+        Shader shader;
+
+        float alpha;
+        glm::vec3 pos;
     };
 
 } // namespace test

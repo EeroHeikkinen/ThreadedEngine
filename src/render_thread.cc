@@ -7,7 +7,6 @@
 
 
 RenderThread::RenderThread(Device& device) :
-    device(device),
     running(true),
     windowInitialized(false),
     deactivatingContext(false) {
@@ -86,7 +85,7 @@ void RenderThread::loop(void) {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     // render
-    for (auto it = vpRenderComponents.begin(); it != vpRenderComponents.end(); it++) {
+    for (auto it = vpRenderers.begin(); it != vpRenderers.end(); it++) {
         (*it)->render();
     }
 
@@ -141,14 +140,14 @@ void RenderThread::attachContext(void) {
     glContextMutex.unlock();
 }
 
-void RenderThread::addRenderComponent(RenderComponent* pRenderComponent) {
-    vpRenderComponents.push_back(pRenderComponent);
+void RenderThread::addRenderer(Renderer* pRenderer) {
+    vpRenderers.push_back(pRenderer);
 }
 
-void RenderThread::deleteRenderComponent(RenderComponent* pRenderComponent) {
-    for (auto it = vpRenderComponents.begin(); it != vpRenderComponents.end(); it++) {
-        if (*it == pRenderComponent) {
-            vpRenderComponents.erase(it);
+void RenderThread::deleteRenderer(Renderer* pRenderer) {
+    for (auto it = vpRenderers.begin(); it != vpRenderers.end(); it++) {
+        if (*it == pRenderer) {
+            vpRenderers.erase(it);
             return;
         }
     }

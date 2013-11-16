@@ -13,7 +13,7 @@ class Device;
 
 class PhysicsThread {
 public:
-    PhysicsThread(Device& device);
+    PhysicsThread(Device&);
     PhysicsThread(const PhysicsThread&) = delete; //Ro3
     ~PhysicsThread(void);
 
@@ -30,8 +30,8 @@ public:
     PhysicsThread& operator=(const PhysicsThread&) = delete; //Ro3
 
     btDiscreteDynamicsWorld* getDynamicsWorld() const;
+
 private:
-    Device& device;
     std::thread thread;
     bool running;
     PhysicsTree* physicsTree;
