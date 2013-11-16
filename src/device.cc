@@ -4,6 +4,7 @@
 #include <iostream>//TEMP
 
 
+
 Device& Device::getDevice(void) {
     static Device device; // singleton instance
     return device;
@@ -39,6 +40,10 @@ RenderThread& Device::getRenderThread(void) {
 
 LogicThread& Device::getLogicThread(void) {
     return logicThread;
+}
+
+PhysicsThread& Device::getPhysicsThread(void) {
+    return physicsThread;
 }
 
 SceneGraph& Device::getSceneGraph(void) {

@@ -25,6 +25,7 @@ public:
 
     RenderThread& getRenderThread(void);
     LogicThread& getLogicThread(void);
+    PhysicsThread& getPhysicsThread(void);
 
     SceneGraph& getSceneGraph(void);
 

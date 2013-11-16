@@ -3,8 +3,11 @@
 
 
 #include <thread>
+#include <btBulletDynamicsCommon.h>
+
 #include "physics_tree.hh"
 #include "component.hh"
+#include "physics_motion_state.hh"
 
 class Device;
 
@@ -21,16 +24,27 @@ public:
     void init(void);
     void loop(void);
 
-    void iterateTree(PhysicsNode*);
 
-    PhysicsTree* getTree() const;
+    PhysicsTree* getPhysicsTree() const;
 
     PhysicsThread& operator=(const PhysicsThread&) = delete; //Ro3
+
+    btDiscreteDynamicsWorld* getDynamicsWorld() const;
 
 private:
     std::thread thread;
     bool running;
     PhysicsTree* physicsTree;
+
+    //Bullet stuff
+
+    btBroadphaseInterface* broadphase;
+    btDefaultCollisionConfiguration* collisionConfiguration;
+    btCollisionDispatcher* dispatcher;
+
+    btSequentialImpulseConstraintSolver* solver;
+
+    btDiscreteDynamicsWorld* dynamicsWorld;
 };
 
 

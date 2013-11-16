@@ -1,8 +1,8 @@
 #include "physics_thread.hh"
+#include "physics_tree.hh"
 
 #include <SFML/Window.hpp>
 #include <iostream> //temp
-
 
 PhysicsThread::PhysicsThread(Device& device) :
     running(true) {
@@ -35,6 +35,16 @@ void PhysicsThread::join(void) {
 }
 
 void PhysicsThread::init(void) {
+    // very basic bullet configuration, change if needed!
+
+    broadphase = new btDbvtBroadphase();
+    collisionConfiguration = new btDefaultCollisionConfiguration();
+    dispatcher = new btCollisionDispatcher(collisionConfiguration);
+    solver = new btSequentialImpulseConstraintSolver;
+    dynamicsWorld = new btDiscreteDynamicsWorld(dispatcher, broadphase, solver, collisionConfiguration);
+
+    dynamicsWorld->setGravity(btVector3(0,-9.81,0));
+
     // TEMP: creating arbitrary tree consisting of one physics component for testing purposes
     /*PhysicsComponent* component = new PhysicsComponent;
     for (unsigned i = 0; i < 5; i++) {
@@ -47,24 +57,15 @@ void PhysicsThread::init(void) {
 }
 
 void PhysicsThread::loop(void) {
-    PhysicsNode* root = physicsTree->getRoot();
-    iterateTree(root);
+    //std::cout << "physics ";//temp
 
-    sf::sleep(sf::milliseconds(10));
-    /*
-        TODO:
-        Improve the delay
-    */
-}
-// Iterates the tree consisting of physics components, calls calculate-function for each
-// component and recursively calls iterateTree for each of current node's children.
-void PhysicsThread::iterateTree(PhysicsNode* node) {
-    for (auto child : node->getChildren()) {
-        child->getComponent()->calculate();
-        iterateTree(child);
-    }
 }
 
-PhysicsTree* PhysicsThread::getTree() const {
+
+PhysicsTree* PhysicsThread::getPhysicsTree() const {
     return physicsTree;
+}
+
+btDiscreteDynamicsWorld* PhysicsThread::getDynamicsWorld() const {
+    return dynamicsWorld;
 }
