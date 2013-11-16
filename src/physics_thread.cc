@@ -35,8 +35,6 @@ void PhysicsThread::join(void) {
 }
 
 void PhysicsThread::init(void) {
-    std::cout << "Helloes from PhysicsThread!" << std::endl;//temp
-
     // very basic bullet configuration, change if needed!
 
     broadphase = new btDbvtBroadphase();
@@ -60,7 +58,7 @@ void PhysicsThread::init(void) {
 
 void PhysicsThread::loop(void) {
     //std::cout << "physics ";//temp
-    
+
 }
 
 

@@ -80,7 +80,6 @@ void RenderThread::init(void) {
 
 void RenderThread::loop(void) {
     // clear the buffers
-    std::cout << "RENDER";
     glClearColor(0.0f, 1.0f, 0.5f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 

@@ -1,7 +1,7 @@
 #include "component.hh"
 #include "device.hh"
 
-#include <iostream>
+#include <iostream>//TEMP
 #include <glm/glm.hpp>
 #include <glm/gtc/quaternion.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -9,8 +9,6 @@
 #include <glm/gtx/transform.hpp>
 
 using namespace glm;
-
-
 
 
 RenderComponent::RenderComponent(void) {
@@ -61,7 +59,7 @@ void PhysicsComponent::setTransformation(const btTransform& worldTrans) {
 	quat glm_rot = quat(rot.w(), rot.x(), rot.y(), rot.z());
 	to_world = toMat4(glm_rot);
 	mat4 translation = translate(pos.x(), pos.y(), pos.z());
-	
+
 	to_world = to_world * translation;
 
 }
