@@ -116,12 +116,12 @@ void test::makeUVSphere(GLuint& VBO_, GLuint& IBO_, GLuint& VAO_, size_t& numInd
     for (unsigned int s=0; s<numSegments; ++s) {
         for (unsigned int r=0; r<numRings+1; ++r) {
             if (r <= numRings/2) {
-                vertices[s*(numRings+2) + r].position = glm::vec3(s*sAngle, 0.0f, r*rAngle - PI/2);
+                vertices[s*(numRings+2) + r].position = glm::vec3(s*sAngle, r*rAngle - PI/2, 0.0f);
                 float t = (float)r/(numRings/2);
                 vertices[s*(numRings+2) + r].uv = glm::vec2(0.25f + 0.25f*sinf(s*sAngle)*t, 0.75f + 0.25f*cosf(s*sAngle)*t);
             }
             if (r >= numRings/2) {
-                vertices[s*(numRings+2) + r + 1].position = glm::vec3(s*sAngle, 0.0f, r*rAngle - PI/2);
+                vertices[s*(numRings+2) + r + 1].position = glm::vec3(s*sAngle, r*rAngle - PI/2, 0.0f);
                 float t = (float)(numRings-r)/((numRings+1)/2);
                 vertices[s*(numRings+2) + r + 1].uv = glm::vec2(0.25f + 0.25f*sinf(s*sAngle)*t, 0.25f + 0.25f*cosf(s*sAngle)*t);
             }
@@ -130,9 +130,9 @@ void test::makeUVSphere(GLuint& VBO_, GLuint& IBO_, GLuint& VAO_, size_t& numInd
 
     // reconfiguring
     for (unsigned int i=0; i<numVertices; ++i) {
-        vertices[i].position.y = sinf(vertices[i].position.x) * cosf(vertices[i].position.z);
-        vertices[i].position.x = cosf(vertices[i].position.x) * cosf(vertices[i].position.z);
-        vertices[i].position.z = sinf(vertices[i].position.z);
+        vertices[i].position.z = sinf(vertices[i].position.x) * cosf(vertices[i].position.y);
+        vertices[i].position.x = cosf(vertices[i].position.x) * cosf(vertices[i].position.y);
+        vertices[i].position.y = sinf(vertices[i].position.y);
         vertices[i].normal = glm::normalize(vertices[i].position);
     }
 

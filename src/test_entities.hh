@@ -22,6 +22,7 @@ namespace test {
         const glm::mat4& getProjectionMatrix(void) const;
 
     private:
+        float angle;
         glm::vec3 pos;
         glm::mat4 view, projection;
     };
@@ -43,6 +44,22 @@ namespace test {
 
         float alpha;
         glm::vec3 pos;
+    };
+
+
+    class Sphere :
+    public RenderComponent {
+    public:
+        Sphere(void);
+        ~Sphere(void);
+
+        void render(const glm::mat4&, const glm::mat4&);
+
+    private:
+        GLuint VBO, IBO, VAO;
+        Shader shader;
+        unsigned int numIndices;
+        glm::mat4 model;
     };
 
 } // namespace test
