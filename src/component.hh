@@ -22,6 +22,7 @@ public:
 };
 
 
+
 class LogicComponent {
 public:
     LogicComponent(void);

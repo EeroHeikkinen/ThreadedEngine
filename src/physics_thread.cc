@@ -45,6 +45,8 @@ void PhysicsThread::init(void) {
 
     dynamicsWorld->setGravity(btVector3(0,-9.81,0));
 
+    time_physics_prev = clock::now();
+    time_physics_curr = clock::now();
     // TEMP: creating arbitrary tree consisting of one physics component for testing purposes
     /*PhysicsComponent* component = new PhysicsComponent;
     for (unsigned i = 0; i < 5; i++) {
@@ -58,7 +60,10 @@ void PhysicsThread::init(void) {
 
 void PhysicsThread::loop(void) {
     //std::cout << "physics ";//temp
-
+    time_physics_curr = clock::now();
+    dynamicsWorld->stepSimulation((float)(std::chrono::duration_cast<std::chrono::milliseconds>(
+                                        time_physics_curr - time_physics_prev).count()) / 1000.0, 10);
+    time_physics_prev = time_physics_curr;
 }
 
 

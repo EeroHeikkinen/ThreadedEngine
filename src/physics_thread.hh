@@ -4,6 +4,7 @@
 
 #include <thread>
 #include <btBulletDynamicsCommon.h>
+#include <chrono>
 
 #include "physics_tree.hh"
 #include "component.hh"
@@ -45,6 +46,10 @@ private:
     btSequentialImpulseConstraintSolver* solver;
 
     btDiscreteDynamicsWorld* dynamicsWorld;
+
+    typedef std::chrono::high_resolution_clock clock;
+    std::chrono::time_point<clock> time_physics_prev, time_physics_curr;
+    
 };
 
 

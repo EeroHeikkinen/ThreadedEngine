@@ -92,7 +92,7 @@ test::Triangle::~Triangle(void) {
 }
 
 void test::Triangle::render(const glm::mat4& view, const glm::mat4& projection) {
-    glm::mat4 MVP = glm::mat4(1.0f) * view;
+    glm::mat4 MVP = projection * view;
 
     glBindVertexArray(VAO);
     shader.use();
