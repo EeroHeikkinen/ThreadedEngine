@@ -2,13 +2,13 @@
 
 #include <cmath>
 #include <vector>
-#include <iostream>//TEMP
+#include <glm/glm.hpp>
 
 
 #define PI 3.14159265358979323846
 
 
-GLuint test::makeCube(GLuint& VBO_, GLuint& IBO_, GLuint& VAO_) {
+void test::makeCube(GLuint& VBO_, GLuint& IBO_, GLuint& VAO_) {
     const GLfloat vertices[24] = {
         -1.0f,  -1.0f,  -1.0f,
         1.0f,   -1.0f,  -1.0f,
@@ -95,16 +95,22 @@ void test::makeUVSphere(GLuint& VBO_, GLuint& IBO_, GLuint& VAO_, size_t& numInd
         return;
     }
 
-    //some temp values
-    const unsigned int
-        numVertices( numSegments * (numRings+2) ),
-        numIndices_( 6 * numSegments * (numRings-1) );
+    // some temp values
+    const unsigned int numVertices( numSegments * (numRings+2) );
+    numIndices_ = 6 * numSegments * (numRings-1);
 
     float
         sAngle( 2*PI / numSegments),
         rAngle( PI / numRings);
 
-    //vertices
+     // packed vertex struct for position, UV, normal
+    struct PackedVertex_PUN {
+        glm::vec3 position;
+        glm::vec2 uv;
+        glm::vec3 normal;
+    };
+
+    // vertices
     PackedVertex_PUN* vertices = new PackedVertex_PUN[numVertices];
 
     for (unsigned int s=0; s<numSegments; ++s) {
@@ -122,7 +128,7 @@ void test::makeUVSphere(GLuint& VBO_, GLuint& IBO_, GLuint& VAO_, size_t& numInd
         }
     }
 
-    //reconfiguring
+    // reconfiguring
     for (unsigned int i=0; i<numVertices; ++i) {
         vertices[i].position.y = sinf(vertices[i].position.x) * cosf(vertices[i].position.z);
         vertices[i].position.x = cosf(vertices[i].position.x) * cosf(vertices[i].position.z);
@@ -130,7 +136,7 @@ void test::makeUVSphere(GLuint& VBO_, GLuint& IBO_, GLuint& VAO_, size_t& numInd
         vertices[i].normal = glm::normalize(vertices[i].position);
     }
 
-    //indices
+    // indices
     GLshort* indices = new GLshort[numIndices_];
 
     for (unsigned int s=0; s<numSegments; ++s) {
@@ -171,22 +177,22 @@ void test::makeUVSphere(GLuint& VBO_, GLuint& IBO_, GLuint& VAO_, size_t& numInd
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO_);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, numIndices_ * 2, indices, GL_STATIC_DRAW);
 
-    //vertex array object
+    // vertex array object
     glGenVertexArrays(1, &VAO_);
     glBindVertexArray(VAO_);
 
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    glBindBuffer(GL_ARRAY_BUFFER, VBO_);
 
-    glEnableVertexAttribArray(0);//position
+    glEnableVertexAttribArray(0); // position
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 32, (GLvoid*)0);
 
-    glEnableVertexAttribArray(1);//uv
+    glEnableVertexAttribArray(1); // uv
     glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 32, (GLvoid*)12);
 
-    glEnableVertexAttribArray(2);//normal
+    glEnableVertexAttribArray(2); // normal
     glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 32, (GLvoid*)20);
 
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO_);
 
     glBindVertexArray(0);
 

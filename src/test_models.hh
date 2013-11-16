@@ -7,9 +7,9 @@
 
 namespace test {
 
-    GLuint makeCube(GLuint&, GLuint&, GLuint&);
+    void makeCube(GLuint&, GLuint&, GLuint&);
 
-    int makeUVSphere(
+    void makeUVSphere(
                      GLuint&,
                      GLuint&,
                      GLuint&,
