@@ -46,7 +46,7 @@ public:
 
     PhysicsComponent& operator=(const PhysicsComponent&) = delete;
 
-private:
+protected:
     btCollisionShape* collisionMesh;
     PhysicsMotionState* motionState;
     PhysicsNode* node;

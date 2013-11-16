@@ -120,8 +120,8 @@ void test::Triangle::logic(void) {
 
 // Sphere
 
-test::Sphere::Sphere(void) :
-    model(glm::mat4(1.0f)) {
+test::Sphere::Sphere(btCollisionShape* collisionMesh_, PhysicsNode* parent, glm::vec3 pos, float mass_) :
+    PhysicsComponent(collisionMesh_, parent, pos, mass_), model(glm::mat4(1.0f)) {
     // Model
     test::makeUVSphere(VBO, IBO, VAO, numIndices, 32, 16);
 
@@ -139,7 +139,7 @@ test::Sphere::~Sphere(void) {
 }
 
 void test::Sphere::render(const glm::mat4& view, const glm::mat4& projection) {
-    glm::mat4 MVP = projection * view * model;
+    glm::mat4 MVP = projection * view * to_world * model;
 
     glBindVertexArray(VAO);
     shader.use();

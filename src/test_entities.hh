@@ -48,9 +48,10 @@ namespace test {
 
 
     class Sphere :
-    public RenderComponent {
+    public RenderComponent,
+    public PhysicsComponent {
     public:
-        Sphere(void);
+        Sphere(btCollisionShape* collisionMesh_, PhysicsNode* parent, glm::vec3 pos, float mass_);
         ~Sphere(void);
 
         void render(const glm::mat4&, const glm::mat4&);

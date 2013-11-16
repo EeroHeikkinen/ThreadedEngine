@@ -45,7 +45,9 @@ void ResourceThread::init(void) {
 
     pCamera = new test::Camera();//TEMP
     pTestRenderer = new test::TestRenderer(pCamera);//TEMP
-    pSphere = new test::Sphere();//TEMP
+    pSphere = new test::Sphere(new btSphereShape(1), 
+                              Device::getDevice().getPhysicsThread().getPhysicsTree()->getRoot(),
+                              glm::vec3(0.0,0.0,0.0), 1.0);//TEMP
 
     Device::getDevice().getRenderThread().attachContext();
 }

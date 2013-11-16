@@ -59,7 +59,6 @@ void PhysicsComponent::setTransformation(const btTransform& worldTrans) {
 	quat glm_rot = quat(rot.w(), rot.x(), rot.y(), rot.z());
 	to_world = toMat4(glm_rot);
 	mat4 translation = translate(pos.x(), pos.y(), pos.z());
-
 	to_world = to_world * translation;
 
 }
