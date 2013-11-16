@@ -1,12 +1,26 @@
 #include "physics_tree.hh"
+
+
 #include <algorithm>
 #include <exception>
 
-PhysicsNode::PhysicsNode(PhysicsNode* parent_, PhysicsComponent* component_, PhysicsNode::Childvec children_) :
-						parent(parent_), component(component_), children(children_) {}
 
-PhysicsNode::PhysicsNode(PhysicsNode* parent_, PhysicsComponent* component_, PhysicsNode* child_) :
-						parent(parent_), component(component_) {
+PhysicsNode::PhysicsNode(
+                         PhysicsNode* parent_,
+                         PhysicsComponent* component_,
+                         PhysicsNode::Childvec children_
+                         ) :
+    parent(parent_),
+    component(component_),
+    children(children_) { }
+
+PhysicsNode::PhysicsNode(
+                         PhysicsNode* parent_,
+                         PhysicsComponent* component_,
+                         PhysicsNode* child_
+                         ) :
+    parent(parent_),
+    component(component_) {
 	if (child_ != nullptr)
 		children.push_back(child_);
 }

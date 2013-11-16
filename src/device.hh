@@ -7,27 +7,39 @@
 #include "physics_thread.hh"
 #include "resource_thread.hh"
 
+#include <mutex>
+
 
 class Device {
 public:
-    Device(void);
     Device(const Device&) = delete;
+    static Device& getDevice(void);
 
-    void join(void);
+    void eventLoop(void);
     void stop(void);
+    void join(void);
 
     RenderThread& getRenderThread(void);
+    LogicThread& getLogicThread(void);
+
+    void setGlewInitialized(bool);
+    bool isGlewInitialized(void) const;
 
     Device& operator=(const Device&) = delete;
 
 private:
-    RenderThread renderThread;
-    //LogicThread logicThread;
-    PhysicsThread physicsThread;
-    //ResourceThread resourceThread;
+    Device(void); // private constructor
+    std::mutex mutex;
 
-    void eventLoop(void);
+    // flags
+    bool glewInitialized;
     bool running;
+
+    // threads
+    RenderThread renderThread;
+    LogicThread logicThread;
+    PhysicsThread physicsThread;
+    ResourceThread resourceThread;
 };
 
 

@@ -13,19 +13,33 @@ public:
     RenderComponent(const RenderComponent&) = delete;
     virtual ~RenderComponent(void);
 
-    void render(void);
+    virtual void render(void) { };
 
     RenderComponent& operator=(const RenderComponent&) = delete;
+};
+
+
+class LogicComponent {
+public:
+    LogicComponent(void);
+    LogicComponent(const LogicComponent&) = delete;
+    virtual ~LogicComponent(void);
+
+    virtual void logic(void) { };
+
+    LogicComponent& operator=(const LogicComponent&) = delete;
 };
 
 
 class PhysicsComponent {
 public:
     PhysicsComponent(btCollisionShape* collisionMesh_, PhysicsNode* parent, glm::vec3 pos, float mass_);
+
     PhysicsComponent(const PhysicsComponent&) = delete;
-    virtual ~PhysicsComponent();
+    virtual ~PhysicsComponent(void) { };
 
     void setTransformation(const btTransform& worldTrans);
+
     PhysicsComponent& operator=(const PhysicsComponent&) = delete;
 
 private:
@@ -38,5 +52,6 @@ private:
     btRigidBody* physicsBody;
 
 };
+
 
 #endif // COMPONENT_HH

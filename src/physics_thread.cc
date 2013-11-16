@@ -1,6 +1,7 @@
 #include "physics_thread.hh"
 #include "physics_tree.hh"
 
+#include <SFML/Window.hpp>
 #include <iostream> //temp
 
 PhysicsThread::PhysicsThread(Device& device) :
@@ -54,13 +55,10 @@ void PhysicsThread::init(void) {
             parent = physicsTree->addNode(parent, component);
         }
     }*/
-
-
     // end of TEMP
 }
 
-void PhysicsThread::loop(void) {
-    std::cout << "physics ";//temp
+void PhysicsThread::loop(void) {    std::cout << "physics ";//temp
     
 }
 
@@ -71,4 +69,3 @@ PhysicsTree* PhysicsThread::getPhysicsTree() const {
 
 btDiscreteDynamicsWorld* PhysicsThread::getDynamicsWorld() const {
     return dynamicsWorld;
-}

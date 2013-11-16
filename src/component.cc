@@ -10,11 +10,19 @@
 
 using namespace glm;
 
-RenderComponent::RenderComponent(void) { }
 
-RenderComponent::~RenderComponent(void) { }
+#include <iostream>//TEMP
 
-void RenderComponent::render(void) { }
+
+RenderComponent::RenderComponent(void) {
+    //add the component to the render thread
+    Device::getDevice().getRenderThread().addRenderComponent(this);
+}
+
+RenderComponent::~RenderComponent(void) {
+    //delete the component from the render thread
+    Device::getDevice().getRenderThread().deleteRenderComponent(this);
+}
 
 
 PhysicsComponent::PhysicsComponent(btCollisionShape* collisionMesh_, PhysicsNode* parent,
@@ -57,4 +65,14 @@ void PhysicsComponent::setTransformation(const btTransform& worldTrans) {
 	
 	to_world = to_world * translation;
 
+}
+
+LogicComponent::LogicComponent(void) {
+    //add the component to the logic thread
+    Device::getDevice().getLogicThread().addLogicComponent(this);
+}
+
+LogicComponent::~LogicComponent(void) {
+    //delete the component from the logic thread
+    Device::getDevice().getLogicThread().deleteLogicComponent(this);
 }

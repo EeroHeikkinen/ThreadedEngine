@@ -1,29 +1,55 @@
 #include "device.hh"
+
 #include <SFML/OpenGL.hpp>
-#include <iostream> //temp
+#include <iostream>//TEMP
 
 
-Device::Device(void) :
-    renderThread(*this),
-    physicsThread(*this),
-    running(true) {
-    eventLoop();
-}
 
-void Device::join(void) {
-    renderThread.join();
-    physicsThread.join();
+Device& Device::getDevice(void) {
+    static Device device; // singleton instance
+    return device;
 }
 
 void Device::stop(void) {
     renderThread.stop();
+    logicThread.stop();
     physicsThread.stop();
+    resourceThread.stop();
     running = false;
+}
+
+void Device::join(void) {
+    renderThread.join();
+    logicThread.join();
+    physicsThread.join();
+    resourceThread.join();
 }
 
 RenderThread& Device::getRenderThread(void) {
     return renderThread;
 }
+
+LogicThread& Device::getLogicThread(void) {
+    return logicThread;
+}
+
+void Device::setGlewInitialized(bool glewInitialized_) {
+    std::lock_guard<std::mutex> lock(mutex);
+    glewInitialized = glewInitialized_;
+}
+
+bool Device::isGlewInitialized(void) const {
+    return glewInitialized;
+}
+
+
+Device::Device(void) :
+    glewInitialized(false),
+    running(true),
+    renderThread(*this),
+    logicThread(*this),
+    physicsThread(*this),
+    resourceThread(*this) { }
 
 void Device::eventLoop(void) {
     while (running) {

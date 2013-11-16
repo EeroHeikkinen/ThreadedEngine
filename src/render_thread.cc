@@ -3,13 +3,14 @@
 
 #include <GL/GLEW.h>
 #include <SFML/OpenGL.hpp>
-#include <iostream> //temp
+#include <iostream> //TEMP
 
 
 RenderThread::RenderThread(Device& device) :
     device(device),
     running(true),
-    windowInitialized(false) {
+    windowInitialized(false),
+    deactivatingContext(false) {
 
     // window settings
     sf::ContextSettings settings;
@@ -28,14 +29,18 @@ RenderThread::RenderThread(Device& device) :
     glewExperimental = GL_TRUE;
     GLenum err = glewInit();
     if (err != GLEW_OK)
-        std::cout << "GLEW initialization failed." << std::endl;//temp
+        std::cout << "GLEW initialization failed." << std::endl;//TEMP
+    else
+        device.setGlewInitialized(true);
     /*
     TODO
     An exception needs to be thrown in case of GLEW initialization failure.
     */
 
     // disable GL context for main thread
-    pWindow->setActive(false);
+    while (!pWindow->setActive(false)) {
+        sf::sleep(sf::milliseconds(5));
+    }
 
     // launch render thread
     thread = std::thread(&RenderThread::launch, this);
@@ -68,7 +73,10 @@ void RenderThread::join(void) {
 
 void RenderThread::init(void) {
     // set GL context active for render thread
-    pWindow->setActive(true);
+    glContextMutex.lock();
+    while (!pWindow->setActive(true)) {
+        sf::sleep(sf::milliseconds(5));
+    }
 }
 
 void RenderThread::loop(void) {
@@ -76,10 +84,29 @@ void RenderThread::loop(void) {
     glClearColor(0.0f, 1.0f, 0.5f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    // render herr
+    // render
+    for (auto it = vpRenderComponents.begin(); it != vpRenderComponents.end(); it++) {
+        (*it)->render();
+    }
 
     // show the rendered stuff
     pWindow->display();
+
+    // check if another thread(resource) wants to deactivate GL context
+    if (deactivatingContext) {
+        while (!pWindow->setActive(false)) {
+            sf::sleep(sf::milliseconds(5));
+        }
+        glContextMutex.unlock(); // deactivated succesfully
+        deactivatingContext = false;
+
+        // another thread does its thing
+
+        glContextMutex.lock();
+        while (!pWindow->setActive(true)) {
+            sf::sleep(sf::milliseconds(5));
+        }
+    }
 
     // delay
     sf::sleep(sf::milliseconds(10));
@@ -95,4 +122,33 @@ sf::Window* RenderThread::getWindowPtr(void) {
 
 bool RenderThread::isWindowInitialized(void) {
     return windowInitialized;
+}
+
+void RenderThread::detachContext(void) {
+    deactivatingContext = true;
+    // once deactivated successfully, glContextMutex lock is gained by another thread:
+    glContextMutex.lock();
+    while (!pWindow->setActive(true)) {
+        sf::sleep(sf::milliseconds(5));
+    }
+}
+
+void RenderThread::attachContext(void) {
+    while (!pWindow->setActive(false)) {
+        sf::sleep(sf::milliseconds(5));
+    }
+    glContextMutex.unlock();
+}
+
+void RenderThread::addRenderComponent(RenderComponent* pRenderComponent) {
+    vpRenderComponents.push_back(pRenderComponent);
+}
+
+void RenderThread::deleteRenderComponent(RenderComponent* pRenderComponent) {
+    for (auto it = vpRenderComponents.begin(); it != vpRenderComponents.end(); it++) {
+        if (*it == pRenderComponent) {
+            vpRenderComponents.erase(it);
+            return;
+        }
+    }
 }
