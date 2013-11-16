@@ -8,7 +8,6 @@
 #include <glm/gtx/quaternion.hpp>
 #include <glm/gtx/transform.hpp>
 
-
 using namespace glm;
 
 
