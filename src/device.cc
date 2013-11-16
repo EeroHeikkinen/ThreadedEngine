@@ -24,14 +24,6 @@ void Device::join(void) {
     resourceThread.join();
 }
 
-RenderThread& Device::getRenderThread(void) {
-    return renderThread;
-}
-
-LogicThread& Device::getLogicThread(void) {
-    return logicThread;
-}
-
 void Device::setGlewInitialized(bool glewInitialized_) {
     std::lock_guard<std::mutex> lock(mutex);
     glewInitialized = glewInitialized_;
@@ -41,6 +33,17 @@ bool Device::isGlewInitialized(void) const {
     return glewInitialized;
 }
 
+RenderThread& Device::getRenderThread(void) {
+    return renderThread;
+}
+
+LogicThread& Device::getLogicThread(void) {
+    return logicThread;
+}
+
+SceneGraph& Device::getSceneGraph(void) {
+    return sceneGraph;
+}
 
 Device::Device(void) :
     glewInitialized(false),

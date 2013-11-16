@@ -4,7 +4,6 @@
 
 
 LogicThread::LogicThread(Device& device) :
-    device(device),
     running(true) {
     thread = std::thread(&LogicThread::launch, this);
 }

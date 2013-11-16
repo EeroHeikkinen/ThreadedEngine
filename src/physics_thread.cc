@@ -5,7 +5,7 @@
 
 
 PhysicsThread::PhysicsThread(Device& device) :
-    device(device), running(true) {
+    running(true) {
     thread = std::thread(&PhysicsThread::launch, this);
     physicsTree = new PhysicsTree;
 }

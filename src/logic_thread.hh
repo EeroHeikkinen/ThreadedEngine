@@ -13,7 +13,7 @@ class Device;
 
 class LogicThread {
 public:
-    LogicThread(Device& device);
+    LogicThread(Device&);
     LogicThread(const LogicThread&) = delete; //Ro3
     ~LogicThread(void);
 
@@ -33,7 +33,6 @@ public:
     void deleteLogicComponent(LogicComponent*);
 
 private:
-    Device& device;
     std::thread thread;
     bool running;
 

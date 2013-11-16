@@ -2,13 +2,16 @@
 #define COMPONENT_HH
 
 
+#include <glm/gtc/matrix_transform.hpp>
+
+
 class RenderComponent {
 public:
     RenderComponent(void);
     RenderComponent(const RenderComponent&) = delete;
     virtual ~RenderComponent(void);
 
-    virtual void render(void) { };
+    virtual void render(const glm::mat4&, const glm::mat4&) = 0;
 
     RenderComponent& operator=(const RenderComponent&) = delete;
 };
@@ -20,7 +23,7 @@ public:
     LogicComponent(const LogicComponent&) = delete;
     virtual ~LogicComponent(void);
 
-    virtual void logic(void) { };
+    virtual void logic(void) = 0;
 
     LogicComponent& operator=(const LogicComponent&) = delete;
 };
