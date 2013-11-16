@@ -11,7 +11,6 @@
 using namespace glm;
 
 
-#include <iostream>//TEMP
 
 
 RenderComponent::RenderComponent(void) {
