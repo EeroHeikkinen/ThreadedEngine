@@ -58,7 +58,8 @@ void PhysicsThread::init(void) {
     // end of TEMP
 }
 
-void PhysicsThread::loop(void) {    std::cout << "physics ";//temp
+void PhysicsThread::loop(void) {
+    //std::cout << "physics ";//temp
     
 }
 
@@ -69,3 +70,4 @@ PhysicsTree* PhysicsThread::getPhysicsTree() const {
 
 btDiscreteDynamicsWorld* PhysicsThread::getDynamicsWorld() const {
     return dynamicsWorld;
+}

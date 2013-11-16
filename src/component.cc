@@ -28,7 +28,7 @@ RenderComponent::~RenderComponent(void) {
 PhysicsComponent::PhysicsComponent(btCollisionShape* collisionMesh_, PhysicsNode* parent,
 								   vec3 pos, float mass_) : collisionMesh(collisionMesh_),
 								   initial_pos(pos), mass(mass_) {
-	node = Device::getDevice().getPhysicsThread().getPhysicsTree().addNode(parent, this);
+	node = Device::getDevice().getPhysicsThread().getPhysicsTree()->addNode(parent, this);
 
 	btTransform tmp_initpos;
 	tmp_initpos.setOrigin(btVector3(initial_pos.x, initial_pos.y, initial_pos.z));
@@ -47,7 +47,7 @@ PhysicsComponent::PhysicsComponent(btCollisionShape* collisionMesh_, PhysicsNode
 
 PhysicsComponent::~PhysicsComponent() {
 
-	Device::getDevice().getPhysicsThread().getPhysicsTree().removeNode(node);
+	Device::getDevice().getPhysicsThread().getPhysicsTree()->removeNode(node);
 
 	delete collisionMesh;
 	delete physicsBody;

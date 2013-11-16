@@ -21,6 +21,7 @@ public:
 
     RenderThread& getRenderThread(void);
     LogicThread& getLogicThread(void);
+    PhysicsThread& getPhysicsThread(void);
 
     void setGlewInitialized(bool);
     bool isGlewInitialized(void) const;

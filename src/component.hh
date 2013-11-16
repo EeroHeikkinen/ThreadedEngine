@@ -36,7 +36,7 @@ public:
     PhysicsComponent(btCollisionShape* collisionMesh_, PhysicsNode* parent, glm::vec3 pos, float mass_);
 
     PhysicsComponent(const PhysicsComponent&) = delete;
-    virtual ~PhysicsComponent(void) { };
+    virtual ~PhysicsComponent(void);
 
     void setTransformation(const btTransform& worldTrans);
 

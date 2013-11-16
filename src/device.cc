@@ -33,6 +33,10 @@ LogicThread& Device::getLogicThread(void) {
     return logicThread;
 }
 
+PhysicsThread& Device::getPhysicsThread(void) {
+    return physicsThread;
+}
+
 void Device::setGlewInitialized(bool glewInitialized_) {
     std::lock_guard<std::mutex> lock(mutex);
     glewInitialized = glewInitialized_;
