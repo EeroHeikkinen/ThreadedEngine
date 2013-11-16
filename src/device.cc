@@ -5,7 +5,6 @@
 
 Device::Device(void) :
     renderThread(*this),
-    eventThread(*this),
     physicsThread(*this),
     running(true) {
     eventLoop();

@@ -2,7 +2,7 @@
 
 CC = i686-w64-mingw32-g++.exe
 CFLAGS=-c -g -std=c++0x -Wall -Wextra -pedantic
-LDFLAGS= -static-libgcc -static-libstdc++ -lsfml-system -lsfml-window -lsfml-graphics -lglew32 -lopengl32
+LDFLAGS= -static-libgcc -static-libstdc++ -lsfml-system -lsfml-window -lsfml-graphics -lglew32 -lopengl32 -Wl,-Bstatic -lBulletSoftBody -lBulletDynamics -lBulletCollision -lLinearMath
 SOURCEDIR := src
 OBJDIR := obj
 SOURCES := $(wildcard $(SOURCEDIR)/*.cc)
