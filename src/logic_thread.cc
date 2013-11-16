@@ -1,6 +1,6 @@
 #include "logic_thread.hh"
 
-#include <iostream> //temp
+#include <SFML/Window.hpp>
 
 
 LogicThread::LogicThread(Device& device) :
@@ -32,9 +32,31 @@ void LogicThread::join(void) {
 }
 
 void LogicThread::init(void) {
-    std::cout << "Helloes from LogicThread!" << std::endl;//temp
+
 }
 
 void LogicThread::loop(void) {
-    std::cout << "logic ";//temp
+    // render
+    for (auto it = vpLogicComponents.begin(); it != vpLogicComponents.end(); it++) {
+        (*it)->logic();
+    }
+
+    sf::sleep(sf::milliseconds(10));
+    /*
+        TODO:
+        Improve the delay
+    */
+}
+
+void LogicThread::addLogicComponent(LogicComponent* pLogicComponent) {
+    vpLogicComponents.push_back(pLogicComponent);
+}
+
+void LogicThread::deleteLogicComponent(LogicComponent* pLogicComponent) {
+    for (auto it = vpLogicComponents.begin(); it != vpLogicComponents.end(); it++) {
+        if (*it == pLogicComponent) {
+            vpLogicComponents.erase(it);
+            return;
+        }
+    }
 }

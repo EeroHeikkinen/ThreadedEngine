@@ -3,8 +3,9 @@
 
 int main()
 {
-    Device mainDevice;
-    mainDevice.join();
+    Device::getDevice();
+    Device::getDevice().eventLoop();
+    Device::getDevice().join();
 
     return 0;
 }

@@ -1,6 +1,8 @@
 #include "resource_thread.hh"
+#include "device.hh"
 
-#include <iostream> //temp
+#include <SFML/Window.hpp>
+#include <iostream>//TEMP
 
 
 ResourceThread::ResourceThread(Device& device) :
@@ -14,6 +16,8 @@ ResourceThread::~ResourceThread(void) {
         running = false;
         thread.join();
     }
+
+    delete pTriangle;//TEMP
 }
 
 void ResourceThread::launch(void) {
@@ -32,9 +36,20 @@ void ResourceThread::join(void) {
 }
 
 void ResourceThread::init(void) {
-    std::cout << "Helloes from ResourceThread!" << std::endl;//temp
+    while (!device.isGlewInitialized()) {
+        sf::sleep(sf::milliseconds(5));
+    }
+
+    Device::getDevice().getRenderThread().detachContext();
+    pTriangle = new test::Triangle();//TEMP
+    Device::getDevice().getRenderThread().attachContext();
 }
 
 void ResourceThread::loop(void) {
-    std::cout << "resource ";//temp
+    sf::sleep(sf::milliseconds(250));
+
+    /*
+    TODO:
+    Improve the delay
+    */
 }

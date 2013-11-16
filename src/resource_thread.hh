@@ -2,6 +2,8 @@
 #define RESOURCE_THREAD_HH
 
 
+#include "test_entities.hh"//TEMP
+
 #include <thread>
 
 
@@ -27,6 +29,8 @@ private:
     Device& device;
     std::thread thread;
     bool running;
+
+    test::Triangle* pTriangle;//TEMP
 };
 
 

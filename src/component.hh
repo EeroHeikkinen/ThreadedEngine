@@ -8,21 +8,34 @@ public:
     RenderComponent(const RenderComponent&) = delete;
     virtual ~RenderComponent(void);
 
-    void render(void);
+    virtual void render(void) { };
 
     RenderComponent& operator=(const RenderComponent&) = delete;
 };
 
 
+class LogicComponent {
+public:
+    LogicComponent(void);
+    LogicComponent(const LogicComponent&) = delete;
+    virtual ~LogicComponent(void);
+
+    virtual void logic(void) { };
+
+    LogicComponent& operator=(const LogicComponent&) = delete;
+};
+
+
 class PhysicsComponent {
 public:
-    PhysicsComponent();
+    PhysicsComponent(void) { };
     PhysicsComponent(const PhysicsComponent&) = delete;
-    virtual ~PhysicsComponent();
+    virtual ~PhysicsComponent(void) { };
 
-    void calculate();
+    void calculate(void);
 
     PhysicsComponent& operator=(const PhysicsComponent&) = delete;
 };
+
 
 #endif // COMPONENT_HH

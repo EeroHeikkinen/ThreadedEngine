@@ -1,13 +1,26 @@
 #ifndef PHYSICS_TREE_HH
 #define PHYSICS_TREE_HH
-#include <vector>
+
+
 #include "component.hh"
+
+#include <vector>
+
+
 // treenode
 class PhysicsNode {
 public:
     typedef std::vector<PhysicsNode*> Childvec;
-    PhysicsNode(PhysicsNode* parent_, PhysicsComponent* component_, Childvec children_ = Childvec());
-    PhysicsNode(PhysicsNode* parent_, PhysicsComponent* component_, PhysicsNode* child_);
+    PhysicsNode(
+                PhysicsNode* parent_,
+                PhysicsComponent* component_,
+                Childvec children_ = Childvec()
+                );
+    PhysicsNode(
+                PhysicsNode* parent_,
+                PhysicsComponent* component_,
+                PhysicsNode* child_
+                );
     ~PhysicsNode();
 
     Childvec getChildren() const;
@@ -66,7 +79,7 @@ private:
         bool operator!=(const PhysicsTreeIterator) const;
 
 
-        
+
     protected:
         virtual void operator++() = 0;
         virtual void operator++(int) = 0;

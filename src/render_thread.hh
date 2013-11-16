@@ -2,7 +2,12 @@
 #define RENDER_THREAD_HH
 
 
+#include "component.hh"
+#include "test_entities.hh"//TEMP
+
 #include <thread>
+#include <mutex>
+#include <vector>//TEMP?
 #include <SFML/Window.hpp>
 
 
@@ -26,6 +31,16 @@ public:
 
     sf::Window* getWindowPtr(void);
     bool isWindowInitialized(void);
+    // Asks to unload the GL context from this thread, can happen only
+    // after rendering cycle.
+    void detachContext(void);
+    void attachContext(void);
+
+    // Adds a new RenderComponent pointer to vpRenderComponents vector.
+    void addRenderComponent(RenderComponent*);
+    // Seeks for given RenderComponent pointer and if found, deletes it.
+    // Automagically called by RenderComponent's destructor.
+    void deleteRenderComponent(RenderComponent*);
 
 private:
     Device& device;
@@ -35,6 +50,10 @@ private:
     sf::ContextSettings settings;
     sf::Window* pWindow;
     bool windowInitialized;
+    bool deactivatingContext;
+    std::mutex glContextMutex;
+
+    std::vector<RenderComponent*> vpRenderComponents;//TEMP?
 };
 
 
