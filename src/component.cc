@@ -51,19 +51,20 @@ PhysicsComponent::PhysicsComponent(
 }
 
 PhysicsComponent::~PhysicsComponent() {
+
 	Device::getDevice().getPhysicsThread().getPhysicsTree()->removeNode(node);
 	Device::getDevice().getPhysicsThread().getDynamicsWorld()->removeRigidBody(physicsBody);
 	delete collisionMesh;
 	delete physicsBody;
 	delete motionState;
+
 }
 
 void PhysicsComponent::setTransformation(const btTransform& worldTrans) {
+	
 	btQuaternion rot = worldTrans.getRotation();
 	btVector3 pos = worldTrans.getOrigin();
-
 	quat glm_rot = quat(rot.w(), rot.x(), rot.y(), rot.z());
-
 	model = toMat4(glm_rot) * translate(pos.x(), pos.y(), pos.z());
 }
 

@@ -22,6 +22,7 @@ PhysicsThread::~PhysicsThread(void) {
     delete collisionConfiguration;
     delete dispatcher;
     delete broadphase;
+
 }
 
 void PhysicsThread::launch(void) {

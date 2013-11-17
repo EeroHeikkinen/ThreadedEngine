@@ -23,6 +23,7 @@ void Device::join(void) {
     logicThread.join();
     physicsThread.join();
     resourceThread.join();
+
 }
 
 void Device::setGlewInitialized(bool glewInitialized_) {

@@ -1,7 +1,6 @@
 #ifndef COMPONENT_HH
 #define COMPONENT_HH
 
-
 #include "physics_motion_state.hh"
 
 #include <mutex>
@@ -62,6 +61,7 @@ protected:
     glm::mat4& model;
     float mass;
     btRigidBody* physicsBody;
+
 };
 
 

@@ -92,7 +92,6 @@ test::Box::Box(float xSize, float ySize, float zSize, glm::vec3 pos) :
     shader.link();
 }
 
-
 test::Box::~Box(void) {
     glDeleteBuffers(1, &VBO);
     glDeleteBuffers(1, &IBO);
@@ -100,7 +99,6 @@ test::Box::~Box(void) {
 }
 
 void test::Box::render(const glm::mat4& view, const glm::mat4& projection) {
-
     glm::mat4 MVP = projection * view * model;
 
     glBindVertexArray(VAO);
