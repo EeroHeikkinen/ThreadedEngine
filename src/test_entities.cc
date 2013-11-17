@@ -139,7 +139,9 @@ test::Sphere::~Sphere(void) {
 }
 
 void test::Sphere::render(const glm::mat4& view, const glm::mat4& projection) {
+    mutex.lock();
     glm::mat4 MVP = projection * view * to_world * model;
+    mutex.unlock();
 
     glBindVertexArray(VAO);
     shader.use();

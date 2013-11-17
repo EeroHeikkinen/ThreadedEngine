@@ -15,8 +15,6 @@ PhysicsThread::~PhysicsThread(void) {
         thread.join();
     }
 
-    std::cout << "PHYSDESTRU" << std::endl;
-
 
     delete physicsTree;
     delete dynamicsWorld;
@@ -24,9 +22,6 @@ PhysicsThread::~PhysicsThread(void) {
     delete collisionConfiguration;
     delete dispatcher;
     delete broadphase;
-
-
-    std::cout << "PHYSDESTRULOPPU" << std::endl;
 
 }
 

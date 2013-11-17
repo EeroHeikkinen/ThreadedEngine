@@ -44,23 +44,24 @@ PhysicsComponent::PhysicsComponent(btCollisionShape* collisionMesh_, PhysicsNode
 
 PhysicsComponent::~PhysicsComponent() {
 
-	std::cout << "COMPONENTDEST" << std::endl;
 	Device::getDevice().getPhysicsThread().getPhysicsTree()->removeNode(node);
 	Device::getDevice().getPhysicsThread().getDynamicsWorld()->removeRigidBody(physicsBody);
 	delete collisionMesh;
 	delete physicsBody;
 	delete motionState;
-	std::cout << "COMPONENTDESTENDDD!!!" << std::endl;
 
 }
 
 void PhysicsComponent::setTransformation(const btTransform& worldTrans) {
+	
+	mutex.lock();
 	btQuaternion rot = worldTrans.getRotation();
 	btVector3 pos = worldTrans.getOrigin();
 	quat glm_rot = quat(rot.w(), rot.x(), rot.y(), rot.z());
 	to_world = toMat4(glm_rot);
 	mat4 translation = translate(pos.x(), pos.y(), pos.z());
 	to_world = to_world * translation;
+	mutex.unlock();
 
 }
 

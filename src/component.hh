@@ -2,6 +2,7 @@
 #define COMPONENT_HH
 
 #include <glm/glm.hpp>
+#include <mutex>
 
 #include "physics_motion_state.hh"
 
@@ -54,6 +55,7 @@ protected:
     glm::mat4 to_world;
     float mass;
     btRigidBody* physicsBody;
+    std::mutex mutex;
 
 };
 
