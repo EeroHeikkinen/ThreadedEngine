@@ -44,12 +44,13 @@ PhysicsComponent::PhysicsComponent(btCollisionShape* collisionMesh_, PhysicsNode
 
 PhysicsComponent::~PhysicsComponent() {
 
+	std::cout << "COMPONENTDEST" << std::endl;
 	Device::getDevice().getPhysicsThread().getPhysicsTree()->removeNode(node);
-
+	Device::getDevice().getPhysicsThread().getDynamicsWorld()->removeRigidBody(physicsBody);
 	delete collisionMesh;
 	delete physicsBody;
 	delete motionState;
-	delete node;
+	std::cout << "COMPONENTDESTENDDD!!!" << std::endl;
 
 }
 

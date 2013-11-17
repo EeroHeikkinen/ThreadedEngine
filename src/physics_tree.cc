@@ -30,6 +30,8 @@ PhysicsNode::~PhysicsNode() {
 	for (auto i : children) {
 		delete i;
 	}
+	if (parent != NULL)
+		parent->removeChild(this);
 }
 
 PhysicsNode::Childvec PhysicsNode::getChildren() const {
@@ -61,9 +63,10 @@ void PhysicsNode::setParent(PhysicsNode* newparent) {
 
 bool PhysicsNode::removeChild(PhysicsNode* removed) {
 	std::vector<PhysicsNode*>::iterator found = std::find(children.begin(), children.end(), removed);
-	if (found != children.end())
+	if (found != children.end()) {
 		children.erase(found);
 		return true;
+	}
 	return false;
 }
 
@@ -93,10 +96,10 @@ PhysicsNode* PhysicsTree::addNode(PhysicsNode* parent_, PhysicsComponent* compon
 }
 
 void PhysicsTree::removeNode(PhysicsNode* node) {
+	node->getParent()->removeChild(node);
 	delete node;
 }
 
 PhysicsNode* PhysicsTree::getRoot() const {
 	return root;
 }
-

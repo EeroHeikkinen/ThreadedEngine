@@ -7,7 +7,6 @@
 PhysicsThread::PhysicsThread(Device& device) :
     running(true) {
     thread = std::thread(&PhysicsThread::launch, this);
-    physicsTree = new PhysicsTree;
 }
 
 PhysicsThread::~PhysicsThread(void) {
@@ -15,7 +14,20 @@ PhysicsThread::~PhysicsThread(void) {
         running = false;
         thread.join();
     }
+
+    std::cout << "PHYSDESTRU" << std::endl;
+
+
     delete physicsTree;
+    delete dynamicsWorld;
+    delete solver;
+    delete collisionConfiguration;
+    delete dispatcher;
+    delete broadphase;
+
+
+    std::cout << "PHYSDESTRULOPPU" << std::endl;
+
 }
 
 void PhysicsThread::launch(void) {
@@ -35,8 +47,10 @@ void PhysicsThread::join(void) {
 }
 
 void PhysicsThread::init(void) {
-    // very basic bullet configuration, change if needed!
 
+    physicsTree = new PhysicsTree;
+
+    // very basic bullet configuration, change if needed!
     broadphase = new btDbvtBroadphase();
     collisionConfiguration = new btDefaultCollisionConfiguration();
     dispatcher = new btCollisionDispatcher(collisionConfiguration);
