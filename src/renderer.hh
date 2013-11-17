@@ -2,15 +2,15 @@
 #define RENDERER_HH
 
 
-class Renderer {
+class Renderer{
 public:
-    Renderer(void) { }
-    Renderer(const Renderer&) = delete; // Ro3
-    virtual ~Renderer(void) { }
+    Renderer(void){}
+    virtual ~Renderer(void){}
 
     virtual void render(void) = 0;
 
-    Renderer& operator=(const Renderer&) = delete; // Ro3
+    Renderer(const Renderer&) = delete;
+    Renderer& operator=(const Renderer&) = delete;
 };
 
 

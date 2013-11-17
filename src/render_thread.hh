@@ -1,22 +1,18 @@
 #ifndef RENDER_THREAD_HH
 #define RENDER_THREAD_HH
 
-
 #include "renderer.hh"
 
 #include <thread>
 #include <mutex>
 #include <vector>
 #include <SFML/Window.hpp>
-
-
 class Device;
 
 
-class RenderThread {
+class RenderThread{
 public:
     RenderThread(Device&);
-    RenderThread(const RenderThread&) = delete; //Ro3
     ~RenderThread(void);
 
     void launch(void);
@@ -25,8 +21,6 @@ public:
 
     void init(void);
     void loop(void);
-
-    RenderThread& operator=(const RenderThread&) = delete; //Ro3
 
     sf::Window* getWindowPtr(void);
     bool isWindowInitialized(void);
@@ -42,6 +36,8 @@ public:
     void addRenderer(Renderer*);
     void deleteRenderer(Renderer*);
 
+    RenderThread(const RenderThread&) = delete;
+    RenderThread& operator=(const RenderThread&) = delete;
 private:
     std::thread thread;
     bool running;

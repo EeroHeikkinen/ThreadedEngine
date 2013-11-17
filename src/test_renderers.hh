@@ -1,30 +1,23 @@
 #ifndef TEST_RENDERERS_HH
 #define TEST_RENDERERS_HH
 
-
 #include "renderer.hh"
-
 
 class SceneGraph;
 
 
-namespace test {
-
-    class Camera;
-
-
-    class TestRenderer : public Renderer {
+namespace Test{
+        class Camera;//forward declaration for TestRenderer
+    class TestRenderer : public Renderer{
     public:
-        TestRenderer(test::Camera*);
+        TestRenderer(Camera*);
         ~TestRenderer(void);
 
         void render(void);
-
     private:
         SceneGraph& sceneGraph;
-        test::Camera* pCamera;
+        Test::Camera* pCamera;
     };
-
 }
 
 

@@ -1,19 +1,17 @@
 #ifndef SCENE_GRAPH_HH
 #define SCENE_GRAPH_HH
 
-
 #include "component.hh"
 
 #include <vector>
 
 
-class SceneGraph {
+class SceneGraph{
 public:
     typedef std::vector<RenderComponent*>::iterator iterator;
 
-    SceneGraph(void) { }
-    SceneGraph(const SceneGraph&) = delete;
-    ~SceneGraph(void) { }
+    SceneGraph(void){}
+    ~SceneGraph(void){}
 
     iterator begin(void);
     iterator end(void);
@@ -24,8 +22,8 @@ public:
     // Automagically called by RenderComponent's destructor.
     void deleteRenderComponent(RenderComponent*);
 
+    SceneGraph(const SceneGraph&) = delete;
     SceneGraph& operator=(const SceneGraph&) = delete;
-
 private:
     std::vector<RenderComponent*> vpRenderComponents;
 };

@@ -16,16 +16,15 @@
 #include <map>
 
 
-class ShaderObject {
+class ShaderObject{
 public:
     explicit ShaderObject(GLenum, const std::string); //might throw an exception
-    ShaderObject(const ShaderObject&) = delete; //Ro3
     ~ShaderObject(void);
 
     GLuint getID(void) const;
 
-    ShaderObject& operator=(const ShaderObject&) = delete; //Ro3
-
+    ShaderObject(const ShaderObject&) = delete;
+    ShaderObject& operator=(const ShaderObject&) = delete;
 private:
     const GLenum type;
     const GLuint objectID;
@@ -37,10 +36,9 @@ private:
 };
 
 
-class Shader {
+class Shader{
 public:
     Shader(void);
-    Shader(const Shader&) = delete; //Ro3
     ~Shader(void);
 
     void addShaderObject(ShaderObject*);
@@ -51,8 +49,8 @@ public:
     void use(void) const;
     GLuint getID(void) const;
 
+    Shader(const Shader&) = delete; //Ro3
     Shader& operator=(const Shader&) = delete; //Ro3
-
 private:
     const GLuint programID;
 

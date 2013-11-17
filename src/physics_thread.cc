@@ -6,12 +6,13 @@
 
 
 PhysicsThread::PhysicsThread(Device& device) :
-    running(true) {
-    thread = std::thread(&PhysicsThread::launch, this);
-}
+    running(true)
+    {
+        thread = std::thread(&PhysicsThread::launch, this);
+    }
 
-PhysicsThread::~PhysicsThread(void) {
-    if (running) {
+PhysicsThread::~PhysicsThread(void){
+    if (running){
         running = false;
         thread.join();
     }
@@ -22,27 +23,24 @@ PhysicsThread::~PhysicsThread(void) {
     delete collisionConfiguration;
     delete dispatcher;
     delete broadphase;
-
 }
 
-void PhysicsThread::launch(void) {
+void PhysicsThread::launch(void){
     //New thread begins here
     init();
     while (running)
         loop();
-
 }
 
-void PhysicsThread::stop(void) {
+void PhysicsThread::stop(void){
     running = false;
 }
 
-void PhysicsThread::join(void) {
+void PhysicsThread::join(void){
     thread.join();
 }
 
-void PhysicsThread::init(void) {
-
+void PhysicsThread::init(void){
     physicsTree = new PhysicsTree;
 
     // very basic bullet configuration, change if needed!
@@ -67,8 +65,7 @@ void PhysicsThread::init(void) {
     // end of TEMP
 }
 
-void PhysicsThread::loop(void) {
-    //std::cout << "physics ";//temp
+void PhysicsThread::loop(void){
     time_physics_curr = clock::now();
     dynamicsWorld->stepSimulation((float)(std::chrono::duration_cast<std::chrono::milliseconds>(
                                         time_physics_curr - time_physics_prev).count()) / 1000.0, 10);
@@ -76,10 +73,10 @@ void PhysicsThread::loop(void) {
 }
 
 
-PhysicsTree* PhysicsThread::getPhysicsTree() const {
+PhysicsTree* PhysicsThread::getPhysicsTree() const{
     return physicsTree;
 }
 
-btDiscreteDynamicsWorld* PhysicsThread::getDynamicsWorld() const {
+btDiscreteDynamicsWorld* PhysicsThread::getDynamicsWorld() const{
     return dynamicsWorld;
 }

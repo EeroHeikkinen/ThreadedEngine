@@ -4,18 +4,11 @@
 #include <vector>
 #include <glm/glm.hpp>
 
-
 #define PI 3.14159265358979323846
 
 
-void test::makeBox(
-                   GLuint& VBO_,
-                   GLuint& IBO_,
-                   GLuint& VAO_,
-                   float xSize,
-                   float ySize,
-                   float zSize
-                   ) {
+void Test::makeBox(GLuint& VBO_, GLuint& IBO_, GLuint& VAO_,
+                   float xSize, float ySize, float zSize){
     const GLfloat vertices[24] = {
         -xSize,  -ySize,  -zSize,
         xSize,   -ySize,  -zSize,
@@ -25,7 +18,7 @@ void test::makeBox(
         xSize,   -ySize,  zSize,
         -xSize,  ySize,   zSize,
         xSize,   ySize,   zSize
-        };
+    };
 
     const GLfloat colors[24] = {
         1.0f,   0.0f,   0.0f,
@@ -36,7 +29,7 @@ void test::makeBox(
         1.0f,   0.0f,   1.0f,
         1.0f,   1.0f,   1.0f,
         0.0f,   0.0f,   0.0f,
-        };
+    };
 
     const GLshort indices[36] = {
         0,  1,  2,  1,  2,  3,
@@ -45,12 +38,12 @@ void test::makeBox(
         2,  3,  6,  3,  6,  7,
         1,  3,  5,  3,  5,  7,
         4,  5,  6,  5,  6,  7
-        };
+    };
 
     //vector for attribute data, interleaving
     std::vector<GLfloat> vertexBufferData;
 
-    for (unsigned int i=0; i<8; ++i) {
+    for (unsigned int i=0; i<8; ++i){
         vertexBufferData.push_back(vertices[i*3]);
         vertexBufferData.push_back(vertices[i*3+1]);
         vertexBufferData.push_back(vertices[i*3+2]);
@@ -85,15 +78,11 @@ void test::makeBox(
     glBindVertexArray(0);
 }
 
-void test::makeUVSphere(
-                        GLuint& VBO_,
-                        GLuint& IBO_,
-                        GLuint& VAO_,
+void Test::makeUVSphere(GLuint& VBO_, GLuint& IBO_, GLuint& VAO_,
                         size_t& numIndices_,
                         const unsigned int numSegments,
-                        const unsigned int numRings
-                        ) {
-    if (numSegments < 3) {
+                        const unsigned int numRings){
+    if (numSegments < 3){
         /*
         TODO
         Exception? Forced
@@ -101,7 +90,7 @@ void test::makeUVSphere(
         return;
     }
 
-    if (numRings < 3) {
+    if (numRings < 3){
         /*
         TODO
         Exception?

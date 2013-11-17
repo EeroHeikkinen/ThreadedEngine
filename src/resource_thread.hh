@@ -1,20 +1,16 @@
 #ifndef RESOURCE_THREAD_HH
 #define RESOURCE_THREAD_HH
 
-
 #include "test_renderers.hh"//TEMP
 #include "test_entities.hh"//TEMP
 
 #include <thread>
-
-
 class Device;
 
 
-class ResourceThread {
+class ResourceThread{
 public:
     ResourceThread(Device&);
-    ResourceThread(const ResourceThread&) = delete; //Ro3
     ~ResourceThread(void);
 
     void launch(void);
@@ -24,16 +20,16 @@ public:
     void init(void);
     void loop(void);
 
-    ResourceThread& operator=(const ResourceThread&) = delete; //Ro3
-
+    ResourceThread(const ResourceThread&) = delete;
+    ResourceThread& operator=(const ResourceThread&) = delete;
 private:
     std::thread thread;
     bool running;
 
-    test::Camera* pCamera;//TEMP
-    test::TestRenderer* pTestRenderer;//TEMP
-    test::Sphere* pSphere;//TEMP
-    test::Box* pBox;//TEMP
+    Test::Camera* pCamera;//TEMP
+    Test::TestRenderer* pTestRenderer;//TEMP
+    Test::Sphere* pSphere;//TEMP
+    Test::Box* pBox;//TEMP
 };
 
 

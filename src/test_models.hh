@@ -1,31 +1,25 @@
 #ifndef TEST_MODELS_HH
 #define TEST_MODELS_HH
 
-
 #include <GL/GLEW.h>
 
 
-namespace test {
-
-    void makeBox(
-                 GLuint& VBO_,
+namespace Test{
+    void makeBox(GLuint& VBO_,
                  GLuint& IBO_,
                  GLuint& VAO_,
                  float xSize,
                  float ySize,
-                 float zSize
-                 );
+                 float zSize);
 
-    void makeUVSphere(
-                     GLuint& VBO_,
+    void makeUVSphere(GLuint& VBO_,
                      GLuint& IBO_,
                      GLuint& VAO_,
                      size_t& numIndices_,
                      const unsigned int numSegments,
-                     const unsigned int numRings
-                     );
+                     const unsigned int numRings);
 
-} // namespace test
+} // namespace Test
 
 
 #endif // TEST_MODELS_HH

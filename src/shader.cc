@@ -2,36 +2,34 @@
 
 #include <fstream>
 #include <sstream>
-
 #include <iostream>//temp
 
 
 //ShaderObject
 
-
 ShaderObject::ShaderObject(GLenum _type, const std::string fileName) :
     type(_type),
-    objectID(glCreateShader(type)) {
+    objectID(glCreateShader(type))
+    {
+        load(fileName);
+        compile();
+    }
 
-    load(fileName);
-    compile();
-}
-
-ShaderObject::~ShaderObject(void) {
+ShaderObject::~ShaderObject(void){
     glDeleteShader(objectID);
 }
 
-GLuint ShaderObject::getID(void) const {
+GLuint ShaderObject::getID(void) const{
     return objectID;
 }
 
-void ShaderObject::load(const std::string fileName) {
+void ShaderObject::load(const std::string fileName){
     std::ifstream file(fileName);
     std::string line;
     std::stringstream ssShader;
 
-    if ( file.is_open() ) {
-        while ( file.good() ) {
+    if (file.is_open()){
+        while (file.good()){
             getline(file, line);
             ssShader << line << std::endl;
         }
@@ -39,7 +37,7 @@ void ShaderObject::load(const std::string fileName) {
         file.close();
         strShader = ssShader.str();
     }
-    else {
+    else{
         /*
         TODO
         exception (file can't be opened)
@@ -47,7 +45,7 @@ void ShaderObject::load(const std::string fileName) {
     }
 }
 
-void ShaderObject::compile(void) const {
+void ShaderObject::compile(void) const{
     //specifying the source string
     const char* srcStr = strShader.c_str();
     glShaderSource(objectID, 1, &srcStr, NULL);
@@ -59,7 +57,7 @@ void ShaderObject::compile(void) const {
     GLint compiled = GL_FALSE;
     glGetShaderiv(objectID, GL_COMPILE_STATUS, &compiled);
 
-    if (!compiled) {
+    if (!compiled){
         GLint infoLogSize;
         glGetShaderiv(objectID, GL_INFO_LOG_LENGTH, &infoLogSize);
 
@@ -76,29 +74,27 @@ void ShaderObject::compile(void) const {
 
 //Shader
 
-
 Shader::Shader(void) :
     programID(glCreateProgram()) { }
 
 Shader::~Shader(void) {
     //delete all SOHs used
-    for (auto it=vpSOs.begin(); it!=vpSOs.end(); ++it) {
+    for (auto it=vpSOs.begin(); it!=vpSOs.end(); ++it)
         delete *it;
-    }
 
     glDeleteProgram(programID);
 }
 
-void Shader::addShaderObject(ShaderObject* pSO) {
+void Shader::addShaderObject(ShaderObject* pSO){
     vpSOs.push_back(pSO);
 }
 
-void Shader::addShaderObject(GLenum type, const std::string fileName) {
+void Shader::addShaderObject(GLenum type, const std::string fileName){
     ShaderObject* pNewSO = new ShaderObject(type, fileName);
     vpSOs.push_back(pNewSO);
 }
 
-void Shader::addShaderObjects(const std::map<GLenum, const std::string>& mObjs) {
+void Shader::addShaderObjects(const std::map<GLenum, const std::string>& mObjs){
     for (auto it=mObjs.begin(); it!=mObjs.end(); ++it) {
         ShaderObject* pNewSOH = new ShaderObject(it->first, it->second);
         vpSOs.push_back(pNewSOH);
@@ -107,9 +103,8 @@ void Shader::addShaderObjects(const std::map<GLenum, const std::string>& mObjs) 
 
 void Shader::link(void) const {
     //attach all shader objects to the program
-    for (auto it=vpSOs.begin(); it!=vpSOs.end(); ++it) {
+    for (auto it=vpSOs.begin(); it!=vpSOs.end(); ++it)
         glAttachShader(programID, (*it)->getID());
-    }
 
     //linking
     glLinkProgram(programID);
@@ -118,7 +113,7 @@ void Shader::link(void) const {
     GLint linked = GL_FALSE;
     glGetProgramiv(programID, GL_LINK_STATUS, &linked);
 
-    if (!linked) {
+    if (!linked){
         //get infoLog
         GLint infoLogSize;
         glGetProgramiv(programID, GL_INFO_LOG_LENGTH, &linked);
@@ -133,10 +128,10 @@ void Shader::link(void) const {
     }
 }
 
-void Shader::use(void) const {
+void Shader::use(void) const{
     glUseProgram(programID);
 }
 
-GLuint Shader::getID(void) const {
+GLuint Shader::getID(void) const{
     return programID;
 }

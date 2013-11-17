@@ -1,7 +1,6 @@
 #ifndef TEST_ENTITIES_HH
 #define TEST_ENTITIES_HH
 
-
 #include "component.hh"
 #include "shader.hh"
 
@@ -10,39 +9,45 @@
 #include <mutex>
 
 
-namespace test {
-
-    class Camera :
-    public LogicComponent {
+namespace Test{
+    class Camera : public LogicComponent{
     public:
         Camera(void);
 
-        void logic(void);
+        virtual void logic(void);
 
         const glm::mat4& getViewMatrix(void) const;
         const glm::mat4& getProjectionMatrix(void) const;
-
-    private:
+    protected:
         float angle;
         glm::vec3 pos;
         glm::mat4 view, projection;
     };
 
 
-    class Sphere :
-    public RenderComponent,
-    public PhysicsComponent {
+        class Sphere; //forward declaration for BallWatchingCamera
+    class BallWatcherCamera : public Camera{
     public:
-        Sphere(
-               btCollisionShape* collisionMesh_,
-               PhysicsNode* parent,
-               glm::vec3 pos,
-               float mass_
-               );
+        BallWatcherCamera(Sphere* pSphere);
+
+        void logic(void);
+    private:
+        Sphere* pSphere;
+    };
+
+
+    class Sphere : public RenderComponent,
+                   public PhysicsComponent{
+    public:
+        Sphere(btCollisionShape* collisionMesh_,
+               PhysicsNode* parent_,
+               glm::vec3 initialPos_,
+               float mass_);
         ~Sphere(void);
 
         void render(const glm::mat4&, const glm::mat4&);
 
+        glm::vec3 getPosition(void);
     private:
         GLuint VBO, IBO, VAO;
         Shader shader;
@@ -51,14 +56,17 @@ namespace test {
     };
 
 
-    class Box :
-    public RenderComponent {
+    class Box : public RenderComponent,
+                public PhysicsComponent{
     public:
-        Box(float xSize, float ySize, float zSize, glm::vec3 pos);
+        Box(float xSize_, float ySize_, float zSize_,
+            btCollisionShape* collisionMesh_,
+            PhysicsNode* parent_,
+            glm::vec3 initialPos_,
+            float mass_);
         ~Box(void);
 
         void render(const glm::mat4&, const glm::mat4&);
-
     private:
         GLuint VBO, IBO, VAO;
         Shader shader;
@@ -66,7 +74,7 @@ namespace test {
         glm::mat4 model;
     };
 
-} // namespace test
+} // namespace Test
 
 
 #endif // TEST_ENTITIES_HH

@@ -1,59 +1,51 @@
 #ifndef PHYSICS_TREE_HH
 #define PHYSICS_TREE_HH
 
-
 #include "component.hh"
 
 #include <vector>
 
 
-// treenode
-class PhysicsNode {
+//treenode
+class PhysicsNode{
 public:
-    typedef std::vector<PhysicsNode*> Childvec;
-    PhysicsNode(
-                PhysicsNode* parent_,
+    typedef std::vector<PhysicsNode*> ChildVec;
+
+    PhysicsNode(PhysicsNode* parent_,
                 PhysicsComponent* component_,
-                Childvec children_ = Childvec()
-                );
-    PhysicsNode(
-                PhysicsNode* parent_,
+                ChildVec children_ = ChildVec());
+    PhysicsNode(PhysicsNode* parent_,
                 PhysicsComponent* component_,
-                PhysicsNode* child_
-                );
+                PhysicsNode* child_);
     ~PhysicsNode();
 
-    Childvec getChildren() const;
+    ChildVec getChildren() const;
     PhysicsNode* getParent() const;
     PhysicsComponent* getComponent() const;
 
-    void setChildren(Childvec);
+    void setChildren(ChildVec);
     void addChild(PhysicsNode*);
     void setParent(PhysicsNode*);
     bool removeChild(PhysicsNode*);
-
-
 private:
     PhysicsNode* parent;
     PhysicsComponent* component;
-    Childvec children;
+    ChildVec children;
 };
 
 
 class PhysicsTree {
 public:
-
     PhysicsTree();
-    PhysicsTree(const PhysicsTree&) = delete; //Ro3
-
     ~PhysicsTree();
-    PhysicsTree& operator=(PhysicsTree&) = delete; //Ro3
+
     PhysicsNode* addNode(PhysicsNode* parent, PhysicsComponent* component, PhysicsNode* child = nullptr);
     void removeNode(PhysicsNode*);
+
     PhysicsNode* getRoot() const;
 
-
-
+    PhysicsTree(const PhysicsTree&) = delete;
+    PhysicsTree& operator=(PhysicsTree&) = delete;
 private:
 	PhysicsNode* root;
 };
