@@ -8,6 +8,7 @@
 #include <glm/gtx/quaternion.hpp>
 #include <glm/gtx/transform.hpp>
 
+
 using namespace glm;
 
 
@@ -22,9 +23,16 @@ RenderComponent::~RenderComponent(void) {
 }
 
 
-PhysicsComponent::PhysicsComponent(btCollisionShape* collisionMesh_, PhysicsNode* parent,
-								   vec3 pos, float mass_) : collisionMesh(collisionMesh_),
-								   initial_pos(pos), mass(mass_) {
+PhysicsComponent::PhysicsComponent(
+                                   btCollisionShape* collisionMesh_,
+                                   PhysicsNode* parent,
+								   vec3 pos,
+								   mat4& model_,
+								   float mass_) :
+    collisionMesh(collisionMesh_),
+    initial_pos(pos),
+    model(model_),
+    mass(mass_) {
 	node = Device::getDevice().getPhysicsThread().getPhysicsTree()->addNode(parent, this);
 
 	btTransform tmp_initpos;
@@ -57,12 +65,9 @@ void PhysicsComponent::setTransformation(const btTransform& worldTrans) {
 	mutex.lock();
 	btQuaternion rot = worldTrans.getRotation();
 	btVector3 pos = worldTrans.getOrigin();
-	quat glm_rot = quat(rot.w(), rot.x(), rot.y(), rot.z());
-	to_world = toMat4(glm_rot);
-	mat4 translation = translate(pos.x(), pos.y(), pos.z());
-	to_world = to_world * translation;
-	mutex.unlock();
 
+	quat glm_rot = quat(rot.w(), rot.x(), rot.y(), rot.z());
+	model = toMat4(glm_rot) * translate(pos.x(), pos.y(), pos.z());
 }
 
 LogicComponent::LogicComponent(void) {

@@ -1,8 +1,10 @@
 #include "physics_thread.hh"
 #include "physics_tree.hh"
 
+
 #include <SFML/Window.hpp>
 #include <iostream> //temp
+
 
 PhysicsThread::PhysicsThread(Device& device) :
     running(true) {
@@ -14,7 +16,6 @@ PhysicsThread::~PhysicsThread(void) {
         running = false;
         thread.join();
     }
-
 
     delete physicsTree;
     delete dynamicsWorld;
