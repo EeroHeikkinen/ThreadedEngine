@@ -1,8 +1,10 @@
 #include "physics_thread.hh"
 #include "physics_tree.hh"
 
+
 #include <SFML/Window.hpp>
 #include <iostream> //temp
+
 
 PhysicsThread::PhysicsThread(Device& device) :
     running(true) {
@@ -15,19 +17,12 @@ PhysicsThread::~PhysicsThread(void) {
         thread.join();
     }
 
-    std::cout << "PHYSDESTRU" << std::endl;
-
-
     delete physicsTree;
     delete dynamicsWorld;
     delete solver;
     delete collisionConfiguration;
     delete dispatcher;
     delete broadphase;
-
-
-    std::cout << "PHYSDESTRULOPPU" << std::endl;
-
 }
 
 void PhysicsThread::launch(void) {

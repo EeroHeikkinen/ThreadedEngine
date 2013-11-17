@@ -20,14 +20,9 @@ void Device::stop(void) {
 
 void Device::join(void) {
     renderThread.join();
-    std::cout << "RENDER" << std::endl;
     logicThread.join();
-    std::cout << "LOG" << std::endl;
     physicsThread.join();
-    std::cout << "PHYS" << std::endl;
     resourceThread.join();
-    std::cout << "RES" << std::endl;
-
 }
 
 void Device::setGlewInitialized(bool glewInitialized_) {
