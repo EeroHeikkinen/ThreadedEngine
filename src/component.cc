@@ -62,10 +62,8 @@ PhysicsComponent::~PhysicsComponent() {
 
 void PhysicsComponent::setTransformation(const btTransform& worldTrans) {
 	
-	mutex.lock();
 	btQuaternion rot = worldTrans.getRotation();
 	btVector3 pos = worldTrans.getOrigin();
-
 	quat glm_rot = quat(rot.w(), rot.x(), rot.y(), rot.z());
 	model = toMat4(glm_rot) * translate(pos.x(), pos.y(), pos.z());
 }
