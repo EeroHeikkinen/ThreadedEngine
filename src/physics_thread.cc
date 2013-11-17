@@ -1,7 +1,6 @@
 #include "physics_thread.hh"
 #include "physics_tree.hh"
 
-
 #include <SFML/Window.hpp>
 #include <iostream> //temp
 

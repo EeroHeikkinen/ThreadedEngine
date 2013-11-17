@@ -19,6 +19,7 @@ ResourceThread::~ResourceThread(void) {
     delete pTestRenderer;//TEMP
     delete pCamera;//TEMP
     delete pSphere;//TEMP
+    delete pBox;//TEMP
 }
 
 void ResourceThread::launch(void) {
@@ -41,15 +42,23 @@ void ResourceThread::init(void) {
         sf::sleep(sf::milliseconds(5));
     }
 
+    //Begin of TEMP
+    pCamera = new test::Camera();
+    pTestRenderer = new test::TestRenderer(pCamera);
+
     Device::getDevice().getRenderThread().detachContext();
 
-    pCamera = new test::Camera();//TEMP
-    pTestRenderer = new test::TestRenderer(pCamera);//TEMP
-    pSphere = new test::Sphere(new btSphereShape(1), 
-                              Device::getDevice().getPhysicsThread().getPhysicsTree()->getRoot(),
-                              glm::vec3(0.0,0.0,0.0), 1.0);//TEMP
+    pSphere = new test::Sphere(
+                               new btSphereShape(1),
+                               Device::getDevice().getPhysicsThread().getPhysicsTree()->getRoot(),
+                               glm::vec3(0.0f, 2.0f, 0.0f),
+                               1.0f
+                               );
+
+    pBox = new test::Box(2.0f, 0.1f, 2.0f, glm::vec3(0.0f, -2.0f, 0.0f));
 
     Device::getDevice().getRenderThread().attachContext();
+    //End of TEMP
 }
 
 void ResourceThread::loop(void) {

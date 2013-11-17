@@ -28,31 +28,33 @@ namespace test {
     };
 
 
-    class Triangle :
-    public RenderComponent,
-    public LogicComponent {
-    public:
-        Triangle(void);
-        ~Triangle(void);
-
-        void render(const glm::mat4&, const glm::mat4&);
-        void logic(void);
-
-    private:
-        GLuint VBO, IBO, VAO;
-        Shader shader;
-
-        float alpha;
-        glm::vec3 pos;
-    };
-
-
     class Sphere :
     public RenderComponent,
     public PhysicsComponent {
     public:
-        Sphere(btCollisionShape* collisionMesh_, PhysicsNode* parent, glm::vec3 pos, float mass_);
+        Sphere(
+               btCollisionShape* collisionMesh_,
+               PhysicsNode* parent,
+               glm::vec3 pos,
+               float mass_
+               );
         ~Sphere(void);
+
+        void render(const glm::mat4&, const glm::mat4&);
+
+    private:
+        GLuint VBO, IBO, VAO;
+        Shader shader;
+        unsigned int numIndices;
+        glm::mat4 model;
+    };
+
+
+    class Box :
+    public RenderComponent {
+    public:
+        Box(float xSize, float ySize, float zSize, glm::vec3 pos);
+        ~Box(void);
 
         void render(const glm::mat4&, const glm::mat4&);
 

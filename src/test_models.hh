@@ -7,15 +7,22 @@
 
 namespace test {
 
-    void makeCube(GLuint&, GLuint&, GLuint&);
+    void makeBox(
+                 GLuint& VBO_,
+                 GLuint& IBO_,
+                 GLuint& VAO_,
+                 float xSize,
+                 float ySize,
+                 float zSize
+                 );
 
     void makeUVSphere(
-                     GLuint&,
-                     GLuint&,
-                     GLuint&,
-                     size_t&,
-                     const unsigned int,
-                     const unsigned int
+                     GLuint& VBO_,
+                     GLuint& IBO_,
+                     GLuint& VAO_,
+                     size_t& numIndices_,
+                     const unsigned int numSegments,
+                     const unsigned int numRings
                      );
 
 } // namespace test

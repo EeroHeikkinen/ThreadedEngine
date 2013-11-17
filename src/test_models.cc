@@ -8,16 +8,23 @@
 #define PI 3.14159265358979323846
 
 
-void test::makeCube(GLuint& VBO_, GLuint& IBO_, GLuint& VAO_) {
+void test::makeBox(
+                   GLuint& VBO_,
+                   GLuint& IBO_,
+                   GLuint& VAO_,
+                   float xSize,
+                   float ySize,
+                   float zSize
+                   ) {
     const GLfloat vertices[24] = {
-        -1.0f,  -1.0f,  -1.0f,
-        1.0f,   -1.0f,  -1.0f,
-        -1.0f,  1.0f,   -1.0f,
-        1.0f,   1.0f,   -1.0f,
-        -1.0f,  -1.0f,  1.0f,
-        1.0f,   -1.0f,  1.0f,
-        -1.0f,  1.0f,   1.0f,
-        1.0f,   1.0f,   1.0f
+        -xSize,  -ySize,  -zSize,
+        xSize,   -ySize,  -zSize,
+        -xSize,  ySize,   -zSize,
+        xSize,   ySize,   -zSize,
+        -xSize,  -ySize,  zSize,
+        xSize,   -ySize,  zSize,
+        -xSize,  ySize,   zSize,
+        xSize,   ySize,   zSize
         };
 
     const GLfloat colors[24] = {
@@ -78,7 +85,14 @@ void test::makeCube(GLuint& VBO_, GLuint& IBO_, GLuint& VAO_) {
     glBindVertexArray(0);
 }
 
-void test::makeUVSphere(GLuint& VBO_, GLuint& IBO_, GLuint& VAO_, size_t& numIndices_, const unsigned int numSegments, const unsigned int numRings) {
+void test::makeUVSphere(
+                        GLuint& VBO_,
+                        GLuint& IBO_,
+                        GLuint& VAO_,
+                        size_t& numIndices_,
+                        const unsigned int numSegments,
+                        const unsigned int numRings
+                        ) {
     if (numSegments < 3) {
         /*
         TODO
