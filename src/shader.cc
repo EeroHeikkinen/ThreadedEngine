@@ -61,13 +61,15 @@ void ShaderObject::compile(void) const{
         GLint infoLogSize;
         glGetShaderiv(objectID, GL_INFO_LOG_LENGTH, &infoLogSize);
 
-        char infoLog[infoLogSize];
-        glGetShaderInfoLog(objectID, sizeof(infoLog), &infoLogSize, infoLog);
+        char* infoLog = new char[infoLogSize];
+        glGetShaderInfoLog(objectID, infoLogSize, &infoLogSize, infoLog);
 
         /*
         TODO
         exception (shader object didn't compile[include infoLog too])
         */
+
+        delete[] infoLog;
     }
 }
 
@@ -118,13 +120,15 @@ void Shader::link(void) const {
         GLint infoLogSize;
         glGetProgramiv(programID, GL_INFO_LOG_LENGTH, &linked);
 
-        char infoLog[infoLogSize];
-        glGetProgramInfoLog(programID, sizeof(infoLog), &infoLogSize, infoLog);
+        char* infoLog = new char[infoLogSize];
+        glGetProgramInfoLog(programID, infoLogSize, &infoLogSize, infoLog);
 
         /*
         TODO
         exception (shader program didn't link[include infoLog too])
         */
+
+        delete[] infoLog;
     }
 }
 

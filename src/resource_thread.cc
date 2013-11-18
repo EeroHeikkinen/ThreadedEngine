@@ -5,7 +5,7 @@
 #include <iostream>//TEMP
 
 
-ResourceThread::ResourceThread(Device& device) :
+ResourceThread::ResourceThread(Device& device_) :
     running(true)
     {
         thread = std::thread(&ResourceThread::launch, this);
@@ -45,7 +45,7 @@ void ResourceThread::init(void){
     //Begin of TEMP
     Device::getDevice().getRenderThread().detachContext();
 
-    auto root = Device::getDevice().getPhysicsThread().getPhysicsTree()->getRoot();
+    auto root = Device::getDevice().getPhysicsThread().getPhysicsTree().getRoot();
 
     pSphere = new Test::Sphere(new btSphereShape(1),
                                root,
@@ -57,7 +57,7 @@ void ResourceThread::init(void){
                          new btBoxShape(btVector3(1.0f, 0.1f, 1.0f)),
                          root,
                          glm::vec3(0.0f, -2.0f, 0.0f),
-                         6.0f);
+                         0.5f);
 
     Device::getDevice().getRenderThread().attachContext();
     //End of TEMP
