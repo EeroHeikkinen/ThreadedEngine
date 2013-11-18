@@ -18,7 +18,7 @@
 
 class ShaderObject{
 public:
-    explicit ShaderObject(GLenum, const std::string); //might throw an exception
+    explicit ShaderObject(GLenum, const std::string&); //might throw an exception
     ~ShaderObject(void);
 
     GLuint getID(void) const;
@@ -31,7 +31,7 @@ private:
 
     std::string strShader;
 
-    void load(const std::string); //might throw an exception
+    void load(const std::string&); //might throw an exception
     void compile(void) const; //might throw an exception
 };
 
@@ -42,7 +42,7 @@ public:
     ~Shader(void);
 
     void addShaderObject(ShaderObject*);
-    void addShaderObject(GLenum, const std::string);
+    void addShaderObject(GLenum, const std::string&);
     void addShaderObjects(const std::map<GLenum, const std::string>&);
 
     void link(void) const;

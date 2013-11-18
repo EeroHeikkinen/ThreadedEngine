@@ -72,8 +72,7 @@ Test::Sphere::~Sphere(void) {
     glDeleteVertexArrays(1, &VAO);
 }
 
-void Test::Sphere::render(const glm::mat4& view, const glm::mat4& projection) {
-
+void Test::Sphere::render(const glm::mat4& view, const glm::mat4& projection){
     glm::mat4 MVP = projection * view * model;
 
     glBindVertexArray(VAO);

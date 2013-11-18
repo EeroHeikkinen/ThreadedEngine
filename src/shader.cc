@@ -7,9 +7,9 @@
 
 //ShaderObject
 
-ShaderObject::ShaderObject(GLenum _type, const std::string fileName) :
-    type(_type),
-    objectID(glCreateShader(type))
+ShaderObject::ShaderObject(GLenum type_, const std::string& fileName) :
+    type(type_),
+    objectID(glCreateShader(type_))
     {
         load(fileName);
         compile();
@@ -23,7 +23,7 @@ GLuint ShaderObject::getID(void) const{
     return objectID;
 }
 
-void ShaderObject::load(const std::string fileName){
+void ShaderObject::load(const std::string& fileName){
     std::ifstream file(fileName);
     std::string line;
     std::stringstream ssShader;
@@ -77,12 +77,13 @@ void ShaderObject::compile(void) const{
 //Shader
 
 Shader::Shader(void) :
-    programID(glCreateProgram()) { }
+    programID(glCreateProgram())
+    {}
 
-Shader::~Shader(void) {
+Shader::~Shader(void){
     //delete all SOHs used
-    for (auto it=vpSOs.begin(); it!=vpSOs.end(); ++it)
-        delete *it;
+    for (auto shaderObject : vpSOs)
+        delete shaderObject;
 
     glDeleteProgram(programID);
 }
@@ -91,7 +92,7 @@ void Shader::addShaderObject(ShaderObject* pSO){
     vpSOs.push_back(pSO);
 }
 
-void Shader::addShaderObject(GLenum type, const std::string fileName){
+void Shader::addShaderObject(GLenum type, const std::string& fileName){
     ShaderObject* pNewSO = new ShaderObject(type, fileName);
     vpSOs.push_back(pNewSO);
 }
@@ -103,10 +104,10 @@ void Shader::addShaderObjects(const std::map<GLenum, const std::string>& mObjs){
     }
 }
 
-void Shader::link(void) const {
+void Shader::link(void) const{
     //attach all shader objects to the program
-    for (auto it=vpSOs.begin(); it!=vpSOs.end(); ++it)
-        glAttachShader(programID, (*it)->getID());
+    for (auto shaderObject : vpSOs)
+        glAttachShader(programID, shaderObject->getID());
 
     //linking
     glLinkProgram(programID);
