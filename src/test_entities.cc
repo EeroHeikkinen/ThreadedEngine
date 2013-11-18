@@ -22,7 +22,7 @@ Test::Camera::Camera(void) :
     {}
 
 void Test::Camera::logic(void){
-    angle += 0.01;
+    //angle += 0.01;
     if (angle > 2*PI) angle -= 2*PI;
     pos = glm::vec3(7.0f*sin(angle), 2.0f, 5.0f*cos(angle));
     view = glm::lookAt(pos, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
@@ -117,7 +117,7 @@ Test::Box::~Box(void) {
 
 void Test::Box::render(const glm::mat4& view, const glm::mat4& projection) {
     glm::mat4 MVP = projection * view * model;
-
+    
     glBindVertexArray(VAO);
     shader.use();
 

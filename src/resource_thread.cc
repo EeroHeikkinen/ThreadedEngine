@@ -47,17 +47,19 @@ void ResourceThread::init(void){
 
     auto root = Device::getDevice().getPhysicsThread().getPhysicsTree().getRoot();
 
+    pCamera = new Test::Camera;
+    pTestRenderer = new Test::TestRenderer(pCamera);
+
+    pBox = new Test::Box(2.0f, 0.1f, 2.0f,
+                         new btBoxShape(btVector3(1.0f, 0.1f, 1.0f)),
+                         root,
+                         glm::vec3(0.0f, 0.0f, 0.0f),
+                         10.5f);
+
     pSphere = new Test::Sphere(new btSphereShape(1),
                                root,
                                glm::vec3(0.0f, 2.0f, 0.0f),
                                1.0f);
-    pCamera = new Test::BallWatcherCamera(pSphere);
-    pTestRenderer = new Test::TestRenderer(pCamera);
-    pBox = new Test::Box(2.0f, 0.1f, 2.0f,
-                         new btBoxShape(btVector3(1.0f, 0.1f, 1.0f)),
-                         root,
-                         glm::vec3(0.0f, -2.0f, 0.0f),
-                         0.5f);
 
     Device::getDevice().getRenderThread().attachContext();
     //End of TEMP

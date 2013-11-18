@@ -63,6 +63,7 @@ void PhysicsComponent::setTransformation(const btTransform& worldTrans){
 	btVector3 pos = worldTrans.getOrigin();
 	quat glm_rot = quat(rot.w(), rot.x(), rot.y(), rot.z());
 	model = toMat4(glm_rot) * translate(pos.x(), pos.y(), pos.z());
+    std::cout << "TRANSFORMATION";
 }
 
 //LogicComponent
