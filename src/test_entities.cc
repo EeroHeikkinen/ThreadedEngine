@@ -40,11 +40,13 @@ const glm::mat4& Test::Camera::getProjectionMatrix(void) const{
 //BallWatchingCamera
 
 Test::WatcherCamera::WatcherCamera(Test::Sphere* pSphere) :
-    pSphere(pSphere)
+    pSphere(pSphere),
+    pBox(nullptr)
     {}
 
 Test::WatcherCamera::WatcherCamera(Test::Box* pBox) :
-    pBox(pBox)
+    pBox(pBox),
+    pSphere(nullptr)
     {}
 
 void Test::WatcherCamera::logic(void){
