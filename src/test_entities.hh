@@ -25,7 +25,7 @@ namespace Test{
     };
 
 
-        class Sphere; //forward declaration for BallWatchingCamera
+        class Sphere; //forward declaration for WatcherCamera
         class Box;
     class WatcherCamera : public Camera{
     public:

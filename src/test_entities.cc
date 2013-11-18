@@ -49,11 +49,13 @@ Test::WatcherCamera::WatcherCamera(Test::Box* pBox) :
 
 void Test::WatcherCamera::logic(void){
     glm::vec3 target;
-    if(!pSphere)
+    if(pSphere)
+        target = pSphere->getPosition();
+    else if(pBox)
         target = pBox->getPosition();
     else
-        target = pSphere->getPosition();
-    angle += 0.01;
+        target = glm::vec3(0.0f);
+    //angle += 0.01;
     if (angle > 2*PI) angle -= 2*PI;
     pos = glm::vec3(5.0f*sin(angle), 2.0f, 5.0f*cos(angle));
     view = glm::lookAt(pos, target, glm::vec3(0.0f, 1.0f, 0.0f));
@@ -117,7 +119,7 @@ Test::Box::Box(float xSize_, float ySize_, float zSize_,
         shader.link();
     }
 
-Test::Box::~Box(void) {
+Test::Box::~Box(void){
     glDeleteBuffers(1, &VBO);
     glDeleteBuffers(1, &IBO);
     glDeleteVertexArrays(1, &VAO);
