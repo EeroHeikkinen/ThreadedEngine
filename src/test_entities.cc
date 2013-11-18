@@ -42,12 +42,12 @@ const glm::mat4& Test::Camera::getProjectionMatrix(void) const{
 Test::WatcherCamera::WatcherCamera(Test::Sphere* pSphere) :
     pSphere(pSphere),
     pBox(nullptr)
-    {}
+    {std::cout << "Sphere" << pBox << std::endl;}
 
 Test::WatcherCamera::WatcherCamera(Test::Box* pBox) :
     pSphere(nullptr),
     pBox(pBox)
-    {}
+    {std::cout << "Box" << pSphere << std::endl;}
 
 void Test::WatcherCamera::logic(void){
     glm::vec3 target;
