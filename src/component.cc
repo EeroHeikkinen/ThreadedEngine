@@ -39,7 +39,7 @@ PhysicsComponent::PhysicsComponent(btCollisionShape* collisionMesh_,
         btTransform tmp_btInitialPos;
         tmp_btInitialPos.setOrigin(btVector3(initialPos.x, initialPos.y, initialPos.z));
 
-        motionState = new PhysicsMotionState(tmp_btInitialPos, node);
+        motionState = new PhysicsMotionState(tmp_btInitialPos, this);
 
         // WUT IS THIS FALLINERTIA
         btVector3 fallInertia(0,0,0);

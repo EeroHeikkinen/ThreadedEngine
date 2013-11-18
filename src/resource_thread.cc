@@ -52,13 +52,12 @@ void ResourceThread::init(void){
                                glm::vec3(0.0f, 2.0f, 0.0f),
                                1.0f);
     pBox = new Test::Box(2.0f, 0.1f, 2.0f,
-                         new btSphereShape(0.2),
-                         //new btBoxShape(btVector3(1.0f, 0.1f, 1.0f)),
+                         new btBoxShape(btVector3(1.0f, 0.1f, 1.0f)),
                          root,
                          glm::vec3(0.0f, -2.0f, 0.0f),
                          0.5f);
 
-    pCamera = new Test::WatcherCamera(pSphere);
+    pCamera = new Test::WatcherCamera(pBox);
     pTestRenderer = new Test::TestRenderer(pCamera);
 
     Device::getDevice().getRenderThread().attachContext();
