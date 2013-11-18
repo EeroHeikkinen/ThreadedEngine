@@ -51,11 +51,14 @@ void ResourceThread::init(void){
                                root,
                                glm::vec3(0.0f, 2.0f, 0.0f),
                                1.0f);
+
     pBox = new Test::Box(2.0f, 0.1f, 2.0f,
                          new btBoxShape(btVector3(1.0f, 0.1f, 1.0f)),
                          root,
                          glm::vec3(0.0f, -2.0f, 0.0f),
                          1.0f);
+
+
 
     pCamera = new Test::WatcherCamera(pBox);
     pTestRenderer = new Test::TestRenderer(pCamera);

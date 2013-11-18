@@ -40,20 +40,24 @@ const glm::mat4& Test::Camera::getProjectionMatrix(void) const{
 //BallWatchingCamera
 
 Test::WatcherCamera::WatcherCamera(Test::Sphere* pSphere) :
-    pSphere(pSphere), pBox(nullptr)
+    pSphere(pSphere),
+    pBox(nullptr)
     {}
 
 Test::WatcherCamera::WatcherCamera(Test::Box* pBox) :
-    pSphere(nullptr), pBox(pBox)
+    pSphere(nullptr),
+    pBox(pBox)
     {}
 
 void Test::WatcherCamera::logic(void){
     glm::vec3 target;
-    if(!pSphere)
+    if(pSphere)
+        target = pSphere->getPosition();
+    else if(pBox)
         target = pBox->getPosition();
     else
-        target = pSphere->getPosition();
-    angle += 0.01;
+        target = glm::vec3(0.0f);
+    //angle += 0.01;
     if (angle > 2*PI) angle -= 2*PI;
     pos = glm::vec3(5.0f*sin(angle), 2.0f, 5.0f*cos(angle));
     view = glm::lookAt(pos, target, glm::vec3(0.0f, 1.0f, 0.0f));
@@ -106,7 +110,7 @@ Test::Box::Box(float xSize_, float ySize_, float zSize_,
                glm::vec3 initialPos_, float mass_) :
     PhysicsComponent(collisionMesh_, parent_, initialPos_, model, mass_),
     numIndices(36),
-    model(glm::translate(glm::mat4(1.0f), initialPos_))
+    model(glm::mat4(1.0f))
     {
         // Model
         Test::makeBox(VBO, IBO, VAO, xSize_, ySize_, zSize_);
@@ -117,7 +121,7 @@ Test::Box::Box(float xSize_, float ySize_, float zSize_,
         shader.link();
     }
 
-Test::Box::~Box(void) {
+Test::Box::~Box(void){
     glDeleteBuffers(1, &VBO);
     glDeleteBuffers(1, &IBO);
     glDeleteVertexArrays(1, &VAO);
