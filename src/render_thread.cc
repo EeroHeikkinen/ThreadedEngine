@@ -6,7 +6,7 @@
 #include <iostream> //TEMP
 
 
-RenderThread::RenderThread(Device& device) :
+RenderThread::RenderThread(Device& device_) :
     running(true),
     windowInitialized(false),
     deactivatingContext(false)
@@ -30,7 +30,7 @@ RenderThread::RenderThread(Device& device) :
         if (err != GLEW_OK)
             std::cout << "GLEW initialization failed." << std::endl;//TEMP
         else
-            device.setGlewInitialized(true);
+            device_.setGlewInitialized(true);
 
         /*
         TODO

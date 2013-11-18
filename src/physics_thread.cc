@@ -5,7 +5,7 @@
 #include <iostream> //temp
 
 
-PhysicsThread::PhysicsThread(Device& device) :
+PhysicsThread::PhysicsThread(Device& device_) :
     running(true)
     {
         thread = std::thread(&PhysicsThread::launch, this);
@@ -73,10 +73,10 @@ void PhysicsThread::loop(void){
 }
 
 
-PhysicsTree* PhysicsThread::getPhysicsTree() const{
-    return physicsTree;
+PhysicsTree& PhysicsThread::getPhysicsTree() const{
+    return *physicsTree;
 }
 
-btDiscreteDynamicsWorld* PhysicsThread::getDynamicsWorld() const{
-    return dynamicsWorld;
+btDiscreteDynamicsWorld& PhysicsThread::getDynamicsWorld() const{
+    return *dynamicsWorld;
 }

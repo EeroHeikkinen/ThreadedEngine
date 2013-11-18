@@ -23,8 +23,8 @@ public:
     void init(void);
     void loop(void);
 
-    PhysicsTree* getPhysicsTree() const;
-    btDiscreteDynamicsWorld* getDynamicsWorld() const;
+    PhysicsTree& getPhysicsTree() const;
+    btDiscreteDynamicsWorld& getDynamicsWorld() const;
 
     PhysicsThread(const PhysicsThread&) = delete;
     PhysicsThread& operator=(const PhysicsThread&) = delete;

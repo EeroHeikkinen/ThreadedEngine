@@ -34,7 +34,7 @@ PhysicsComponent::PhysicsComponent(btCollisionShape* collisionMesh_,
     model(model_),
     mass(mass_)
     {
-        node = Device::getDevice().getPhysicsThread().getPhysicsTree()->addNode(parent_, this);
+        node = Device::getDevice().getPhysicsThread().getPhysicsTree().addNode(parent_, this);
 
         btTransform tmp_btInitialPos;
         tmp_btInitialPos.setOrigin(btVector3(initialPos.x, initialPos.y, initialPos.z));
@@ -47,12 +47,12 @@ PhysicsComponent::PhysicsComponent(btCollisionShape* collisionMesh_,
         btRigidBody::btRigidBodyConstructionInfo fallRigidBodyCI(mass, motionState,
                                                                  collisionMesh, fallInertia);
         physicsBody = new btRigidBody(fallRigidBodyCI);
-        Device::getDevice().getPhysicsThread().getDynamicsWorld()->addRigidBody(physicsBody);
+        Device::getDevice().getPhysicsThread().getDynamicsWorld().addRigidBody(physicsBody);
     }
 
 PhysicsComponent::~PhysicsComponent(){
-	Device::getDevice().getPhysicsThread().getPhysicsTree()->removeNode(node);
-	Device::getDevice().getPhysicsThread().getDynamicsWorld()->removeRigidBody(physicsBody);
+	Device::getDevice().getPhysicsThread().getPhysicsTree().removeNode(node);
+	Device::getDevice().getPhysicsThread().getDynamicsWorld().removeRigidBody(physicsBody);
 	delete collisionMesh;
 	delete physicsBody;
 	delete motionState;
