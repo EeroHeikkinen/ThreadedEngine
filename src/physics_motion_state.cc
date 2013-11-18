@@ -2,12 +2,12 @@
 #include "physics_tree.hh"
 
 
-PhysicsMotionState::PhysicsMotionState(const btTransform& initialPos_, PhysicsNode* node_) :
-									  initialPos(initialPos_), node(node_)
+PhysicsMotionState::PhysicsMotionState(const btTransform& initialPos_, PhysicsComponent* component_) :
+									  initialPos(initialPos_), component(component_)
 									  {}
 
-void PhysicsMotionState::setNode(PhysicsNode* node_) {
-	node = node_;
+void PhysicsMotionState::setComponent(PhysicsComponent* component_) {
+	component = component_;
 }
 
 void PhysicsMotionState::getWorldTransform(btTransform& worldTrans) const{
@@ -15,7 +15,7 @@ void PhysicsMotionState::getWorldTransform(btTransform& worldTrans) const{
 }
 
 void PhysicsMotionState::setWorldTransform(const btTransform& worldTrans) {
-	if (node == nullptr)
+	if (component == nullptr)
 		return;
-	node->getComponent()->setTransformation(worldTrans);
+	component->setTransformation(worldTrans);
 }
