@@ -39,12 +39,20 @@ const glm::mat4& Test::Camera::getProjectionMatrix(void) const{
 
 //BallWatchingCamera
 
-Test::BallWatcherCamera::BallWatcherCamera(Test::Sphere* pSphere) :
+Test::WatcherCamera::WatcherCamera(Test::Sphere* pSphere) :
     pSphere(pSphere)
     {}
 
-void Test::BallWatcherCamera::logic(void){
-    glm::vec3 target = pSphere->getPosition();
+Test::WatcherCamera::WatcherCamera(Test::Box* pBox) :
+    pBox(pBox)
+    {}
+
+void Test::WatcherCamera::logic(void){
+    glm::vec3 target;
+    if(!pSphere)
+        target = pBox->getPosition();
+    else
+        target = pSphere->getPosition();
     angle += 0.01;
     if (angle > 2*PI) angle -= 2*PI;
     pos = glm::vec3(5.0f*sin(angle), 2.0f, 5.0f*cos(angle));
@@ -127,4 +135,8 @@ void Test::Box::render(const glm::mat4& view, const glm::mat4& projection) {
 
     glDrawElements(GL_TRIANGLES, numIndices, GL_UNSIGNED_SHORT, (GLvoid*)0);
     glBindVertexArray(0);
+}
+
+glm::vec3 Test::Box::getPosition(void){
+    return glm::vec3(model * glm::vec4(0.0f,0.0f,0.0f,1.0f));
 }

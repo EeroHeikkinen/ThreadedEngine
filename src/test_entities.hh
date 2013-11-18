@@ -26,13 +26,16 @@ namespace Test{
 
 
         class Sphere; //forward declaration for BallWatchingCamera
-    class BallWatcherCamera : public Camera{
+        class Box;
+    class WatcherCamera : public Camera{
     public:
-        BallWatcherCamera(Sphere* pSphere);
+        WatcherCamera(Sphere* pSphere);
+        WatcherCamera(Box* pBox);
 
         void logic(void);
     private:
         Sphere* pSphere;
+        Box* pBox;
     };
 
 
@@ -67,6 +70,8 @@ namespace Test{
         ~Box(void);
 
         void render(const glm::mat4&, const glm::mat4&);
+
+        glm::vec3 getPosition(void);
     private:
         GLuint VBO, IBO, VAO;
         Shader shader;
