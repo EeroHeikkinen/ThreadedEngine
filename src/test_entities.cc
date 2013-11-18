@@ -55,7 +55,8 @@ void Test::BallWatcherCamera::logic(void){
 // Sphere
 
 Test::Sphere::Sphere(btCollisionShape* collisionMesh_, PhysicsNode* parent_, glm::vec3 initialPos_, float mass_) :
-    PhysicsComponent(collisionMesh_, parent_, initialPos_, model, mass_), model(glm::mat4(1.0f))
+    PhysicsComponent(collisionMesh_, parent_, initialPos_, model, mass_),
+    model(glm::mat4(1.0f))
     {
         // Model
         Test::makeUVSphere(VBO, IBO, VAO, numIndices, 32, 16);
@@ -66,7 +67,7 @@ Test::Sphere::Sphere(btCollisionShape* collisionMesh_, PhysicsNode* parent_, glm
         shader.link();
     }
 
-Test::Sphere::~Sphere(void) {
+Test::Sphere::~Sphere(void){
     glDeleteBuffers(1, &VBO);
     glDeleteBuffers(1, &IBO);
     glDeleteVertexArrays(1, &VAO);
