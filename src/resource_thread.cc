@@ -3,6 +3,7 @@
 
 #include <SFML/Window.hpp>
 #include <iostream>//TEMP
+#include <glm/glm.hpp>//TEMP
 
 
 ResourceThread::ResourceThread(Device& device_) :
@@ -47,17 +48,10 @@ void ResourceThread::init(void){
 
     auto root = Device::getDevice().getPhysicsThread().getPhysicsTree().getRoot();
 
-    pSphere = new Test::Sphere(new btSphereShape(1),
-                               root,
-                               glm::vec3(0.0f, 2.0f, 0.0f),
-                               1.0f);
-    pCamera = new Test::BallWatcherCamera(pSphere);
+    pSphere = new Test::Sphere(glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.7f, 0.0f)));
+    pCamera = new Test::Camera();
     pTestRenderer = new Test::TestRenderer(pCamera);
-    pBox = new Test::Box(2.0f, 0.1f, 2.0f,
-                         new btBoxShape(btVector3(1.0f, 0.1f, 1.0f)),
-                         root,
-                         glm::vec3(0.0f, -2.0f, 0.0f),
-                         0.5f);
+    pBox = new Test::Box(2.0f, 0.1f, 2.0f, glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, -1.1f, 0.0f)));
 
     Device::getDevice().getRenderThread().attachContext();
     //End of TEMP

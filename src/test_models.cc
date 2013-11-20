@@ -133,7 +133,7 @@ void Test::makeUVSphere(GLuint& VBO_, GLuint& IBO_, GLuint& VAO_,
 
     // reconfiguring
     for (unsigned int i=0; i<numVertices; ++i) {
-        vertices[i].position.z = sinf(vertices[i].position.x) * cosf(vertices[i].position.y);
+        vertices[i].position.z = -sinf(vertices[i].position.x) * cosf(vertices[i].position.y);
         vertices[i].position.x = cosf(vertices[i].position.x) * cosf(vertices[i].position.y);
         vertices[i].position.y = sinf(vertices[i].position.y);
         vertices[i].normal = glm::normalize(vertices[i].position);

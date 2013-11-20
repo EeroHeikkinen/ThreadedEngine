@@ -3,6 +3,7 @@
 
 #include "component.hh"
 #include "shader.hh"
+#include "texture.hh"
 
 #include <GL/GLEW.h>
 #include <glm/glm.hpp>
@@ -10,6 +11,7 @@
 
 
 namespace Test{
+
     class Camera : public LogicComponent{
     public:
         Camera(void);
@@ -25,24 +27,9 @@ namespace Test{
     };
 
 
-        class Sphere; //forward declaration for BallWatchingCamera
-    class BallWatcherCamera : public Camera{
+    class Sphere : public RenderComponent{
     public:
-        BallWatcherCamera(Sphere* pSphere);
-
-        void logic(void);
-    private:
-        Sphere* pSphere;
-    };
-
-
-    class Sphere : public RenderComponent,
-                   public PhysicsComponent{
-    public:
-        Sphere(btCollisionShape* collisionMesh_,
-               PhysicsNode* parent_,
-               glm::vec3 initialPos_,
-               float mass_);
+        Sphere(glm::mat4 model_);
         ~Sphere(void);
 
         void render(const glm::mat4&, const glm::mat4&);
@@ -53,17 +40,13 @@ namespace Test{
         Shader shader;
         unsigned int numIndices;
         glm::mat4 model;
+        Texture texture;
     };
 
 
-    class Box : public RenderComponent,
-                public PhysicsComponent{
+    class Box : public RenderComponent{
     public:
-        Box(float xSize_, float ySize_, float zSize_,
-            btCollisionShape* collisionMesh_,
-            PhysicsNode* parent_,
-            glm::vec3 initialPos_,
-            float mass_);
+        Box(float xSize_, float ySize_, float zSize_, glm::mat4 model_);
         ~Box(void);
 
         void render(const glm::mat4&, const glm::mat4&);
