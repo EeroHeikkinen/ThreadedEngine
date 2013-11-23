@@ -12,14 +12,16 @@
 
 namespace Test{
 
-    class Camera : public LogicComponent{
+    class Camera : public LogicComponent {
     public:
         Camera(void);
 
-        virtual void logic(void);
+        void render(const glm::mat4&, const glm::mat4&);
+        void logic(void);
 
         const glm::mat4& getViewMatrix(void) const;
         const glm::mat4& getProjectionMatrix(void) const;
+
     protected:
         float angle;
         glm::vec3 pos;
@@ -27,20 +29,26 @@ namespace Test{
     };
 
 
-    class Sphere : public RenderComponent{
+    class Sphere : public RenderComponent,
+                   public LogicComponent{
     public:
         Sphere(glm::mat4 model_);
         ~Sphere(void);
 
         void render(const glm::mat4&, const glm::mat4&);
+        void logic(void);
 
         glm::vec3 getPosition(void);
+
     private:
         GLuint VBO, IBO, VAO;
         Shader shader;
         unsigned int numIndices;
         glm::mat4 model;
         Texture texture;
+
+        glm::vec3 pos;
+        float angle;
     };
 
 
@@ -50,6 +58,7 @@ namespace Test{
         ~Box(void);
 
         void render(const glm::mat4&, const glm::mat4&);
+
     private:
         GLuint VBO, IBO, VAO;
         Shader shader;

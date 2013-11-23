@@ -5,7 +5,7 @@
 
 #include <thread>
 #include <mutex>
-#include <vector>
+#include <tbb/tbb.h>
 #include <SFML/Window.hpp>
 class Device;
 
@@ -34,22 +34,25 @@ public:
 
     // Adds a new Renderer pointer to vpRenderers vector.
     void addRenderer(Renderer*);
-    void deleteRenderer(Renderer*);
+    void addRenderers(tbb::concurrent_vector<Renderer*>&);
+    //void deleteRenderer(Renderer*);
 
     RenderThread(const RenderThread&) = delete;
     RenderThread& operator=(const RenderThread&) = delete;
 private:
+    // Thread
     std::thread thread;
     bool running;
 
+    // Window & context
     sf::ContextSettings settings;
     sf::Window* pWindow;
     bool windowInitialized;
-
-    bool deactivatingContext;
     std::mutex glContextMutex;
+    bool deactivatingContext;
 
-    std::vector<Renderer*> vpRenderers;
+    // Renderer container vector
+    tbb::concurrent_vector<Renderer*> vpRenderers;
 };
 
 

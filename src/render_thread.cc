@@ -20,7 +20,7 @@ RenderThread::RenderThread(Device& device_) :
         settings.minorVersion = 3;
 
         // create the window
-        pWindow = new sf::Window(sf::VideoMode(800, 600), "OpenGL", sf::Style::Default, settings);
+        pWindow = new sf::Window(sf::VideoMode(1280, 960), "OpenGL", sf::Style::Default, settings);
         pWindow->setVerticalSyncEnabled(true);
         windowInitialized = true;
 
@@ -96,20 +96,19 @@ void RenderThread::loop(void){
     if (deactivatingContext){
         while (!pWindow->setActive(false))
             sf::sleep(sf::milliseconds(5));
-
         glContextMutex.unlock(); // deactivated succesfully
-        deactivatingContext = false;
 
         // another thread does its thing
 
         glContextMutex.lock();
+        deactivatingContext = false;
+
         while (!pWindow->setActive(true))
             sf::sleep(sf::milliseconds(5));
     }
 
     // delay
     sf::sleep(sf::milliseconds(10));
-
     /*
     TODO
     Improve the delay
@@ -143,11 +142,8 @@ void RenderThread::addRenderer(Renderer* pRenderer){
     vpRenderers.push_back(pRenderer);
 }
 
-void RenderThread::deleteRenderer(Renderer* pRenderer){
-    for (auto it = vpRenderers.begin(); it != vpRenderers.end(); it++){
-        if (*it == pRenderer){
-            vpRenderers.erase(it);
-            return;
-        }
+void RenderThread::addRenderers(tbb::concurrent_vector<Renderer*>& vpRenderers_){
+    for (auto it = vpRenderers_.begin(); it != vpRenderers_.end(); it++) {
+        vpRenderers.push_back(*it);
     }
 }

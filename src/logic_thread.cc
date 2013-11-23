@@ -46,15 +46,21 @@ void LogicThread::loop(void){
     */
 }
 
-void LogicThread::addLogicComponent(LogicComponent* pLogicComponent){
-    vpLogicComponents.push_back(pLogicComponent);
+void LogicThread::addLogicComponent(LogicComponent* pComponent){
+    vpLogicComponents.push_back(pComponent);
 }
 
-void LogicThread::deleteLogicComponent(LogicComponent* pLogicComponent){
+void LogicThread::addLogicComponents(tbb::concurrent_vector<LogicComponent*>& vpComponents){
+    for (auto it = vpComponents.begin(); it != vpComponents.end(); it++) {
+        vpLogicComponents.push_back(*it);
+    }
+}
+
+/*void LogicThread::deleteLogicComponent(LogicComponent* pLogicComponent){
     for (auto it = vpLogicComponents.begin(); it != vpLogicComponents.end(); it++){
         if (*it == pLogicComponent){
             vpLogicComponents.erase(it);
             return;
         }
     }
-}
+}*/

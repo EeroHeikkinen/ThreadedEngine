@@ -4,7 +4,7 @@
 #include "component.hh"
 
 #include <thread>
-#include <vector>
+#include <tbb/tbb.h>
 class Device;
 
 
@@ -21,10 +21,9 @@ public:
     void loop(void);
 
     // Adds a new LogicComponent pointer to vpLogicComponents vector.
-    void addLogicComponent(LogicComponent*);
-    // Seeks for given LogicComponent pointer and if found, deletes it.
-    // Automagically called by LogicComponent's destructor.
-    void deleteLogicComponent(LogicComponent*);
+    void addLogicComponent(LogicComponent* pComponent);
+    void addLogicComponents(tbb::concurrent_vector<LogicComponent*>& vpComponents);
+    //void deleteLogicComponent(LogicComponent*);
 
     LogicThread(const LogicThread&) = delete;
     LogicThread& operator=(const LogicThread&) = delete;
@@ -32,7 +31,7 @@ private:
     std::thread thread;
     bool running;
 
-    std::vector<LogicComponent*> vpLogicComponents;
+    tbb::concurrent_vector<LogicComponent*> vpLogicComponents;
 };
 
 

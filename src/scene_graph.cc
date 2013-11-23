@@ -9,15 +9,21 @@ SceneGraph::iterator SceneGraph::end(void){
     return vpRenderComponents.end();
 }
 
-void SceneGraph::addRenderComponent(RenderComponent* pRenderComponent){
-    vpRenderComponents.push_back(pRenderComponent);
+void SceneGraph::addRenderComponent(RenderComponent* pComponent){
+    vpRenderComponents.push_back(pComponent);
 }
 
-void SceneGraph::deleteRenderComponent(RenderComponent* pRenderComponent){
+void SceneGraph::addRenderComponents(tbb::concurrent_vector<RenderComponent*>& vpComponents){
+    for (auto it = vpComponents.begin(); it != vpComponents.end(); it++) {
+        vpRenderComponents.push_back(*it);
+    }
+}
+
+/*void SceneGraph::deleteRenderComponent(RenderComponent* pRenderComponent){
     for (auto it = vpRenderComponents.begin(); it != vpRenderComponents.end(); it++){
         if (*it == pRenderComponent){
             vpRenderComponents.erase(it);
             return;
         }
     }
-}
+}*/

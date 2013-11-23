@@ -13,13 +13,17 @@ using namespace glm;
 //RenderComponent
 
 RenderComponent::RenderComponent(void){
-    //add the component to the render thread
-    Device::getDevice().getSceneGraph().addRenderComponent(this);
+    // Add the component to ResourceLoader's containers
+    // Device::getDevice().getSceneGraph().addRenderComponent(this);
 }
 
 RenderComponent::~RenderComponent(void){
     //delete the component from the render thread
-    Device::getDevice().getSceneGraph().deleteRenderComponent(this);
+    //Device::getDevice().getSceneGraph().deleteRenderComponent(this);
+    /*
+    TODO
+    Implement proper component destruction routine.
+    */
 }
 
 //PhysicsComponent
@@ -69,10 +73,10 @@ void PhysicsComponent::setTransformation(const btTransform& worldTrans){
 
 LogicComponent::LogicComponent(void) {
     //add the component to the logic thread
-    Device::getDevice().getLogicThread().addLogicComponent(this);
+    //Device::getDevice().getLogicThread().addLogicComponent(this);
 }
 
 LogicComponent::~LogicComponent(void) {
     //delete the component from the logic thread
-    Device::getDevice().getLogicThread().deleteLogicComponent(this);
+    //Device::getDevice().getLogicThread().deleteLogicComponent(this);
 }
