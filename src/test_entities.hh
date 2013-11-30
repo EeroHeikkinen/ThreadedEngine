@@ -1,6 +1,7 @@
 #ifndef TEST_ENTITIES_HH
 #define TEST_ENTITIES_HH
 
+
 #include "component.hh"
 #include "shader.hh"
 #include "texture.hh"
@@ -10,13 +11,15 @@
 #include <mutex>
 
 
+class Mesh;
+
+
 namespace Test{
 
     class Camera : public LogicComponent {
     public:
         Camera(void);
 
-        void render(const glm::mat4&, const glm::mat4&);
         void logic(void);
 
         const glm::mat4& getViewMatrix(void) const;
@@ -29,40 +32,15 @@ namespace Test{
     };
 
 
-    class Sphere : public RenderComponent,
-                   public LogicComponent{
+    class SingleMeshEntity : public RenderComponent {
     public:
-        Sphere(glm::mat4 model_);
-        ~Sphere(void);
+        SingleMeshEntity(Mesh* pMesh_, glm::mat4 model_);
 
         void render(const glm::mat4&, const glm::mat4&);
         void logic(void);
 
-        glm::vec3 getPosition(void);
-
     private:
-        GLuint VBO, IBO, VAO;
-        Shader shader;
-        unsigned int numIndices;
-        glm::mat4 model;
-        Texture texture;
-
-        glm::vec3 pos;
-        float angle;
-    };
-
-
-    class Box : public RenderComponent{
-    public:
-        Box(float xSize_, float ySize_, float zSize_, glm::mat4 model_);
-        ~Box(void);
-
-        void render(const glm::mat4&, const glm::mat4&);
-
-    private:
-        GLuint VBO, IBO, VAO;
-        Shader shader;
-        unsigned int numIndices;
+        Mesh* pMesh;
         glm::mat4 model;
     };
 

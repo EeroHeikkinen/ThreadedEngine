@@ -81,7 +81,7 @@ Shader::Shader(void) :
     {}
 
 Shader::~Shader(void){
-    //delete all SOHs used
+    //delete all SOs used
     for (auto shaderObject : vpSOs)
         delete shaderObject;
 
@@ -99,8 +99,8 @@ void Shader::addShaderObject(GLenum type, const std::string& fileName){
 
 void Shader::addShaderObjects(const std::map<GLenum, const std::string>& mObjs){
     for (auto it=mObjs.begin(); it!=mObjs.end(); ++it) {
-        ShaderObject* pNewSOH = new ShaderObject(it->first, it->second);
-        vpSOs.push_back(pNewSOH);
+        ShaderObject* pNewSO = new ShaderObject(it->first, it->second);
+        vpSOs.push_back(pNewSO);
     }
 }
 

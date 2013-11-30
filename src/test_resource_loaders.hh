@@ -9,6 +9,12 @@
 #include <vector>
 
 
+class Texture;
+class Shader;
+class Material;
+class Mesh;
+
+
 namespace Test {
 
     class TestResourceLoader : public ResourceLoader {
@@ -19,10 +25,16 @@ namespace Test {
         void loadResources(void);
 
     private:
-        Test::Camera* pCamera;//TEMP
-        Test::TestRenderer* pTestRenderer;//TEMP
-        Test::Sphere* pSphere;//TEMP
-        Test::Box* pBox;//TEMP
+        Test::Camera* pCamera;
+        Test::TestRenderer* pTestRenderer;
+        //Test::Box* pBox;
+
+        Texture* pTexture;
+        Shader* pShader;
+        Material* pMaterial;
+        Mesh* pMesh;
+
+        std::vector<Test::SingleMeshEntity*> vpSingleMeshEntities;
     };
 
 }

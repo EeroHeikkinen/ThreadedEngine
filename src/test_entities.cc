@@ -1,5 +1,6 @@
 #include "test_entities.hh"
 #include "test_models.hh"
+#include "mesh.hh"
 
 #include <glm/gtc/matrix_transform.hpp>
 #include <iostream>//TEMP
@@ -11,7 +12,7 @@
 
 Test::Camera::Camera(void) :
     angle(0.0f),
-    pos(7.0f*sin(angle), 0.0f, 3.0f*cos(angle)),
+    pos(25.0f*sin(angle), 0.0f, 20.0f*cos(angle)),
     view(glm::lookAt(pos,                           // camera position
                      glm::vec3(0.0f, 0.0f, 0.0f),   // spot to look at
                      glm::vec3(0.0f, 1.0f, 0.0f))), // up vector
@@ -22,9 +23,9 @@ Test::Camera::Camera(void) :
     {}
 
 void Test::Camera::logic(void){
-    angle += 0.01;
+    angle += 0.0035;
     if (angle > 2*PI) angle -= 2*PI;
-    pos = glm::vec3(7.0f*sin(angle), 0.0f, 3.0f*cos(angle));
+    pos = glm::vec3(25.0f*sin(angle), 0.0f, 20.0f*cos(angle));
     view = glm::lookAt(pos, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
     projection = glm::perspective(60.0f, 4.0f / 3.0f, 0.1f, 100.0f);
 }
@@ -37,99 +38,12 @@ const glm::mat4& Test::Camera::getProjectionMatrix(void) const{
     return projection;
 }
 
-// Sphere
+// SingleMeshEntity
 
-Test::Sphere::Sphere(glm::mat4 model_) :
-    model(model_),
-    texture(GL_LINEAR_MIPMAP_LINEAR, GL_NEAREST, GL_WRAP_BORDER, GL_WRAP_BORDER, 8),
-    angle(0.0f)
-{
-    // Model
-    Test::makeUVSphere(VBO, IBO, VAO, numIndices, 64, 32);
+Test::SingleMeshEntity::SingleMeshEntity(Mesh* pMesh_, glm::mat4 model_) :
+    pMesh(pMesh_),
+    model(model_) { }
 
-    // Shader
-    shader.addShaderObject(GL_VERTEX_SHADER, "shaders/VS_texture_normal.glsl");
-    shader.addShaderObject(GL_FRAGMENT_SHADER, "shaders/FS_texture_normal.glsl");
-    shader.link();
-
-    // Texture
-    texture.loadFromFile("res/textures/edwerd.png");
-}
-
-Test::Sphere::~Sphere(void){
-    glDeleteBuffers(1, &VBO);
-    glDeleteBuffers(1, &IBO);
-    glDeleteVertexArrays(1, &VAO);
-}
-
-void Test::Sphere::render(const glm::mat4& view, const glm::mat4& projection){
-    glm::mat4 MVP = projection * view * model;
-
-    glBindVertexArray(VAO);
-
-    shader.use();
-
-    // model matrix
-    GLint MVPLoc = glGetUniformLocation(shader.getID(), "MVP");
-    glUniformMatrix4fv(MVPLoc, 1, GL_FALSE, &MVP[0][0]);
-
-    // texture
-    glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, texture.getTexture());
-
-    // draw
-    glDrawElements(GL_TRIANGLES, numIndices, GL_UNSIGNED_SHORT, (GLvoid*)0);
-
-    glBindVertexArray(0);
-}
-
-void Test::Sphere::logic(void) {
-    angle += 0.02387946;
-    if (angle>2*PI) angle -= 2*PI;
-    pos = glm::vec3(0.5f*sin(angle), 0.5f*cos(angle), 0.0f);
-
-    model[3][0] = 0.0f;
-    model[3][1] = 0.0f;
-    model[3][2] = 0.0f;
-
-    model = glm::translate(model, pos);
-}
-
-glm::vec3 Test::Sphere::getPosition(void){
-    return glm::vec3(model * glm::vec4(0.0f, 0.0f, 0.0f, 1.0f));
-}
-
-//Box
-
-Test::Box::Box(float xSize_, float ySize_, float zSize_, glm::mat4 model_) :
-    numIndices(36),
-    model(model_)
-{
-    // Model
-    Test::makeBox(VBO, IBO, VAO, xSize_, ySize_, zSize_);
-
-    // Shader
-    shader.addShaderObject(GL_VERTEX_SHADER, "shaders/VS_color.glsl");
-    shader.addShaderObject(GL_FRAGMENT_SHADER, "shaders/FS_color.glsl");
-    shader.link();
-}
-
-Test::Box::~Box(void) {
-    glDeleteBuffers(1, &VBO);
-    glDeleteBuffers(1, &IBO);
-    glDeleteVertexArrays(1, &VAO);
-}
-
-void Test::Box::render(const glm::mat4& view, const glm::mat4& projection) {
-    glm::mat4 MVP = projection * view * model;
-
-    glBindVertexArray(VAO);
-    shader.use();
-
-    GLint MVPLoc = glGetUniformLocation(shader.getID(), "MVP");
-
-    glUniformMatrix4fv(MVPLoc, 1, GL_FALSE, &MVP[0][0]);
-
-    glDrawElements(GL_TRIANGLES, numIndices, GL_UNSIGNED_SHORT, (GLvoid*)0);
-    glBindVertexArray(0);
+void Test::SingleMeshEntity::render(const glm::mat4& view, const glm::mat4& projection) {
+    pMesh->render(view, projection, model);
 }

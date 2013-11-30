@@ -26,7 +26,8 @@ protected:
     void addComponent(RenderComponent*);
     void addComponent(PhysicsComponent*);
     void addComponent(LogicComponent*);
-    // For the lazy ones:
+
+    // For the lazy ones who want to generate new function for every entity class:
     template <typename T>
     void addEntity(T pEntity) {
         RenderComponent* pRenderComponent = dynamic_cast<RenderComponent*>(pEntity);
