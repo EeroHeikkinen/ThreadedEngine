@@ -40,8 +40,8 @@ void LogicThread::init(void){
 
 void LogicThread::loop(void){
     // render
-    for (auto it = vpLogicComponents.begin(); it != vpLogicComponents.end(); it++)
-        (*it)->logic();
+    for(auto pLogicComponent : vpLogicComponents)
+        pLogicComponent->logic();
 
     sf::sleep(sf::milliseconds(10));
     /*
@@ -55,9 +55,8 @@ void LogicThread::addLogicComponent(LogicComponent* pComponent){
 }
 
 void LogicThread::addLogicComponents(tbb::concurrent_vector<LogicComponent*>& vpComponents){
-    for (auto it = vpComponents.begin(); it != vpComponents.end(); it++) {
-        vpLogicComponents.push_back(*it);
-    }
+    for(auto pComponent : vpComponents)
+        vpLogicComponents.push_back(pComponent);
 }
 
 /*void LogicThread::deleteLogicComponent(LogicComponent* pLogicComponent){

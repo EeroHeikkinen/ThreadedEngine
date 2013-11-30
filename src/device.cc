@@ -52,9 +52,9 @@ Device::Device(void) :
     glewInitialized(false),
     running(true),
     renderThread(*this),
-    logicThread(*this),
     physicsThread(*this),
-    resourceThread(*this)
+    resourceThread(*this),
+    logicThread(*this)
     {}
 
 void Device::eventLoop(void){

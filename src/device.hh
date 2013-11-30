@@ -29,8 +29,8 @@ public:
 
     friend void RenderThread::init(void);
     friend void PhysicsThread::init(void);
-    friend void LogicThread::init(void);
     friend void ResourceThread::init(void);
+    friend void LogicThread::init(void);
 
     Device(const Device&) = delete;
     Device& operator=(const Device&) = delete;
@@ -45,8 +45,8 @@ private:
     // threads
     RenderThread renderThread;
     PhysicsThread physicsThread;
-    LogicThread logicThread;
     ResourceThread resourceThread;
+    LogicThread logicThread;
 
     // scene graph
     SceneGraph sceneGraph;
