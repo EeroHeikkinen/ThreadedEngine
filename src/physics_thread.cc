@@ -43,6 +43,7 @@ void PhysicsThread::join(void){
 
 void PhysicsThread::init(void){
     std::lock_guard<std::mutex> initLock(Device::getDevice().initMutex);
+    std::cout << "PhysInitBegin" << std::endl; //temp
 
     physicsTree = new PhysicsTree;
 
@@ -66,6 +67,8 @@ void PhysicsThread::init(void){
         }
     }*/
     // end of TEMP
+
+    std::cout << "PhysInitEnd" << std::endl; //temp
 }
 
 void PhysicsThread::loop(void){

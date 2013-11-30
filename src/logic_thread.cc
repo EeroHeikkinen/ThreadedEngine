@@ -1,4 +1,6 @@
 #include "logic_thread.hh"
+#include "device.hh"
+#include <iostream> //temp
 
 #include <SFML/Window.hpp>
 
@@ -32,6 +34,8 @@ void LogicThread::join(void){
 }
 
 void LogicThread::init(void){
+    std::lock_guard<std::mutex> initLock(Device::getDevice().initMutex);
+    std::cout << "LogicInit" << std::endl; //temp
 }
 
 void LogicThread::loop(void){

@@ -37,6 +37,7 @@ void ResourceThread::join(void){
 
 void ResourceThread::init(void){
     std::lock_guard<std::mutex> initLock(Device::getDevice().initMutex);
+    std::cout << "ResInitBegin" << std::endl; //temp
 
     while (!Device::getDevice().isGlewInitialized())
         sf::sleep(sf::milliseconds(5));
@@ -50,6 +51,7 @@ void ResourceThread::init(void){
 
     Device::getDevice().getRenderThread().attachContext();
     //End of TEMP
+    std::cout << "ResInitEnd" << std::endl; //temp
 }
 
 void ResourceThread::loop(void){

@@ -70,6 +70,7 @@ void RenderThread::join(void){
 
 void RenderThread::init(void){
     std::lock_guard<std::mutex> initLock(Device::getDevice().initMutex);
+    std::cout << "RenderInitBegin" << std::endl; //temp
     // set GL context active for render thread
     glContextMutex.lock();
     while (!pWindow->setActive(true))
@@ -79,6 +80,7 @@ void RenderThread::init(void){
     glEnable(GL_DEPTH_TEST);
     // accept fragment if it closer to the camera than the former one
     glDepthFunc(GL_LESS);
+    std::cout << "RenderInitEnd" << std::endl; //temp
 }
 
 void RenderThread::loop(void){

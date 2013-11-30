@@ -19,10 +19,9 @@ void Device::stop(void){
 
 void Device::join(void){
     renderThread.join();
-    logicThread.join();
     physicsThread.join();
+    logicThread.join();
     resourceThread.join();
-
 }
 
 void Device::setGlewInitialized(bool glewInitialized_){
