@@ -69,6 +69,7 @@ void RenderThread::join(void){
 }
 
 void RenderThread::init(void){
+    std::lock_guard<std::mutex> initLock(Device::getDevice().initMutex);
     // set GL context active for render thread
     glContextMutex.lock();
     while (!pWindow->setActive(true))
@@ -86,8 +87,8 @@ void RenderThread::loop(void){
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     // render
-    for (auto it = vpRenderers.begin(); it != vpRenderers.end(); it++)
-        (*it)->render();
+    for(auto pRenderer : vpRenderers)
+        pRenderer->render();
 
     // show the rendered stuff
     pWindow->display();
@@ -125,13 +126,13 @@ bool RenderThread::isWindowInitialized(void){
 
 void RenderThread::detachContext(void){
     deactivatingContext = true;
-    // once deactivated successfully, glContextMutex lock is gained by another thread:
+    // once deactivated successfully, glContextMutex lock is gained by another thread calling this function:
     glContextMutex.lock();
     while (!pWindow->setActive(true))
         sf::sleep(sf::milliseconds(5));
 }
 
-void RenderThread::attachContext(void){
+void RenderThread::attachContext(void){ //the same thread that detached the context shall call this function as well
     while (!pWindow->setActive(false))
         sf::sleep(sf::milliseconds(5));
 
@@ -143,7 +144,6 @@ void RenderThread::addRenderer(Renderer* pRenderer){
 }
 
 void RenderThread::addRenderers(tbb::concurrent_vector<Renderer*>& vpRenderers_){
-    for (auto it = vpRenderers_.begin(); it != vpRenderers_.end(); it++) {
-        vpRenderers.push_back(*it);
-    }
+    for(auto pRenderer : vpRenderers_)
+        vpRenderers.push_back(pRenderer);
 }

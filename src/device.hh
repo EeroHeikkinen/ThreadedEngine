@@ -27,11 +27,16 @@ public:
 
     SceneGraph& getSceneGraph(void);
 
+    friend void RenderThread::init(void);
+    friend void PhysicsThread::init(void);
+    friend void LogicThread::init(void);
+    friend void ResourceThread::init(void);
+
     Device(const Device&) = delete;
     Device& operator=(const Device&) = delete;
 private:
     Device(void); // private constructor
-    std::mutex mutex;
+    std::mutex initMutex;
 
     // flags
     bool glewInitialized;
@@ -39,8 +44,8 @@ private:
 
     // threads
     RenderThread renderThread;
-    LogicThread logicThread;
     PhysicsThread physicsThread;
+    LogicThread logicThread;
     ResourceThread resourceThread;
 
     // scene graph

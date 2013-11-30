@@ -36,6 +36,8 @@ void ResourceThread::join(void){
 }
 
 void ResourceThread::init(void){
+    std::lock_guard<std::mutex> initLock(Device::getDevice().initMutex);
+
     while (!Device::getDevice().isGlewInitialized())
         sf::sleep(sf::milliseconds(5));
 

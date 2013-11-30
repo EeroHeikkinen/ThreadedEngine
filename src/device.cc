@@ -26,7 +26,6 @@ void Device::join(void){
 }
 
 void Device::setGlewInitialized(bool glewInitialized_){
-    std::lock_guard<std::mutex> lock(mutex);
     glewInitialized = glewInitialized_;
 }
 

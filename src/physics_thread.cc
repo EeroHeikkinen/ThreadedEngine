@@ -1,5 +1,6 @@
 #include "physics_thread.hh"
 #include "physics_tree.hh"
+#include "device.hh"
 
 #include <SFML/Window.hpp>
 #include <iostream> //temp
@@ -41,6 +42,8 @@ void PhysicsThread::join(void){
 }
 
 void PhysicsThread::init(void){
+    std::lock_guard<std::mutex> initLock(Device::getDevice().initMutex);
+
     physicsTree = new PhysicsTree;
 
     // very basic bullet configuration, change if needed!
