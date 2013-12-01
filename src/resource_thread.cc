@@ -22,7 +22,7 @@ ResourceThread::~ResourceThread(void){
 
 void ResourceThread::launch(void){
     //New thread begins here
-    init();
+    Device::getDevice().initSequencer.resourceThread(this, &ResourceThread::init);
     while (running)
         loop();
 }
@@ -36,7 +36,6 @@ void ResourceThread::join(void){
 }
 
 void ResourceThread::init(void){
-    std::lock_guard<std::mutex> initLock(Device::getDevice().initMutex);
     std::cout << "ResInitBegin" << std::endl; //temp
 
     while (!Device::getDevice().isGlewInitialized())

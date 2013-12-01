@@ -20,7 +20,7 @@ LogicThread::~LogicThread(void){
 
 void LogicThread::launch(void){
     //New thread begins here
-    init();
+    Device::getDevice().initSequencer.logicThread(this, &LogicThread::init);
     while (running)
         loop();
 }
@@ -34,7 +34,6 @@ void LogicThread::join(void){
 }
 
 void LogicThread::init(void){
-    std::lock_guard<std::mutex> initLock(Device::getDevice().initMutex);
     std::cout << "LogicInit" << std::endl; //temp
 }
 

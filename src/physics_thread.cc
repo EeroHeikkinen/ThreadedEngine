@@ -28,7 +28,7 @@ PhysicsThread::~PhysicsThread(void){
 
 void PhysicsThread::launch(void){
     //New thread begins here
-    init();
+    Device::getDevice().initSequencer.physicsThread(this, &PhysicsThread::init);
     while (running)
         loop();
 }
@@ -42,7 +42,6 @@ void PhysicsThread::join(void){
 }
 
 void PhysicsThread::init(void){
-    std::lock_guard<std::mutex> initLock(Device::getDevice().initMutex);
     std::cout << "PhysInitBegin" << std::endl; //temp
 
     physicsTree = new PhysicsTree;

@@ -6,8 +6,7 @@
 #include "physics_thread.hh"
 #include "resource_thread.hh"
 #include "scene_graph.hh"
-
-#include <mutex>
+#include "init_sequencer.hh"
 
 
 class Device{
@@ -27,16 +26,17 @@ public:
 
     SceneGraph& getSceneGraph(void);
 
-    friend void RenderThread::init(void);
-    friend void PhysicsThread::init(void);
-    friend void ResourceThread::init(void);
-    friend void LogicThread::init(void);
+    friend void RenderThread::launch(void);
+    friend void PhysicsThread::launch(void);
+    friend void ResourceThread::launch(void);
+    friend void LogicThread::launch(void);
 
     Device(const Device&) = delete;
     Device& operator=(const Device&) = delete;
 private:
     Device(void); // private constructor
-    std::mutex initMutex;
+
+    InitSequencer initSequencer;
 
     // flags
     bool glewInitialized;

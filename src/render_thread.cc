@@ -55,7 +55,7 @@ RenderThread::~RenderThread(void){
 
 void RenderThread::launch(void){
     // render thread begins here
-    init();
+    Device::getDevice().initSequencer.renderThread(this, &RenderThread::init);
     while (running)
         loop();
 }
@@ -69,7 +69,6 @@ void RenderThread::join(void){
 }
 
 void RenderThread::init(void){
-    std::lock_guard<std::mutex> initLock(Device::getDevice().initMutex);
     std::cout << "RenderInitBegin" << std::endl; //temp
     // set GL context active for render thread
     glContextMutex.lock();
