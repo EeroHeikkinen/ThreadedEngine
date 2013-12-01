@@ -38,7 +38,7 @@ void ResourceThread::join(void){
 void ResourceThread::init(void){
     { // init mutex
         std::unique_lock<std::mutex> initLock(DEVICE.initMutex);
-        DEVICE.initCV.wait(initLock, []{ return DEVICE.initThreadID == 3; });
+        DEVICE.initCV.wait(initLock, []{ return DEVICE.initThreadID == 2; });
     }
 
     std::cout << "ResInitBegin" << std::endl; //temp
@@ -59,8 +59,8 @@ void ResourceThread::init(void){
 
     { // notify other threads
         std::lock_guard<std::mutex> initLock(DEVICE.initMutex);
-        DEVICE.initThreadID = 4;
-        DEVICE.initCV.notify_one();
+        DEVICE.initThreadID = 3;
+        DEVICE.initCV.notify_all();
     }
 }
 

@@ -89,7 +89,7 @@ void RenderThread::init(void){
     { // notify other threads
         std::lock_guard<std::mutex> initLock(DEVICE.initMutex);
         DEVICE.initThreadID = 1;
-        DEVICE.initCV.notify_one();
+        DEVICE.initCV.notify_all();
     }
 }
 

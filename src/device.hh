@@ -33,8 +33,8 @@ public:
     SceneGraph& getSceneGraph(void);
 
     friend void RenderThread::init(void);
-    friend void PhysicsThread::init(void);
     friend void LogicThread::init(void);
+    friend void PhysicsThread::init(void);
     friend void ResourceThread::init(void);
 
     Device(const Device&) = delete;
@@ -47,9 +47,9 @@ private:
     /*
     ID of last successfully initialized thread
     RenderThread: 1
-    LogicThread: 2
-    PhysicsThread: 3
-    ResourceThread: 4
+    PhysicsThread: 2
+    ResourceThread: 3
+    LogicThread: 4
     */
     unsigned int initThreadID;
 
@@ -59,9 +59,9 @@ private:
 
     // threads
     RenderThread renderThread;
-    LogicThread logicThread;
     PhysicsThread physicsThread;
     ResourceThread resourceThread;
+    LogicThread logicThread;
 
     // scene graph
     SceneGraph sceneGraph;

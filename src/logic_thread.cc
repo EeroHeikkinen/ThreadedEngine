@@ -36,22 +36,22 @@ void LogicThread::join(void){
 void LogicThread::init(void){
     { // init mutex
         std::unique_lock<std::mutex> initLock(DEVICE.initMutex);
-        DEVICE.initCV.wait(initLock, []{ return DEVICE.initThreadID == 1; });
+        DEVICE.initCV.wait(initLock, []{ return DEVICE.initThreadID == 3; });
     }
 
     std::cout << "LogicInit" << std::endl; //temp
 
     { // notify other threads
         std::lock_guard<std::mutex> initLock(DEVICE.initMutex);
-        DEVICE.initThreadID = 2;
-        DEVICE.initCV.notify_one();
+        DEVICE.initThreadID = 4;
+        DEVICE.initCV.notify_all();
     }
 }
 
 void LogicThread::loop(void){
     // render
-    for (auto it = vpLogicComponents.begin(); it != vpLogicComponents.end(); it++)
-        (*it)->logic();
+    for(auto pLogicComponent : vpLogicComponents)
+        pLogicComponent->logic();
 
     sf::sleep(sf::milliseconds(10));
     /*
@@ -65,9 +65,8 @@ void LogicThread::addLogicComponent(LogicComponent* pComponent){
 }
 
 void LogicThread::addLogicComponents(tbb::concurrent_vector<LogicComponent*>& vpComponents){
-    for (auto it = vpComponents.begin(); it != vpComponents.end(); it++) {
-        vpLogicComponents.push_back(*it);
-    }
+    for(auto pComponent : vpComponents)
+        vpLogicComponents.push_back(pComponent);
 }
 
 /*void LogicThread::deleteLogicComponent(LogicComponent* pLogicComponent){
