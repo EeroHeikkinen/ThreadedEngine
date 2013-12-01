@@ -1,12 +1,15 @@
 #ifndef DEVICE_HH
 #define DEVICE_HH
 
+
 #include "render_thread.hh"
 #include "logic_thread.hh"
 #include "physics_thread.hh"
 #include "resource_thread.hh"
 #include "scene_graph.hh"
 #include "init_sequencer.hh"
+
+#define DEVICE Device::getDevice()
 
 
 class Device{
@@ -33,6 +36,7 @@ public:
 
     Device(const Device&) = delete;
     Device& operator=(const Device&) = delete;
+
 private:
     Device(void); // private constructor
 

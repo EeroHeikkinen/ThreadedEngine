@@ -38,17 +38,17 @@ void ResourceThread::join(void){
 void ResourceThread::init(void){
     std::cout << "ResInitBegin" << std::endl; //temp
 
-    while (!Device::getDevice().isGlewInitialized())
+    while (!DEVICE.isGlewInitialized())
         sf::sleep(sf::milliseconds(5));
 
     //Begin of TEMP
-    Device::getDevice().getRenderThread().detachContext();
+    DEVICE.getRenderThread().detachContext();
 
     testResLoader = new Test::TestResourceLoader();
     testResLoader->loadResources();
     testResLoader->pushResources();
 
-    Device::getDevice().getRenderThread().attachContext();
+    DEVICE.getRenderThread().attachContext();
     //End of TEMP
     std::cout << "ResInitEnd" << std::endl; //temp
 }
