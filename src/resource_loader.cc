@@ -3,13 +3,13 @@
 
 
 void ResourceLoader::pushResources(void) {
-    Device::getDevice().getRenderThread().addRenderers(vpRenderers);
-    Device::getDevice().getSceneGraph().addRenderComponents(vpRenderComponents);
+    DEVICE.getRenderThread().addRenderers(vpRenderers);
+    DEVICE.getSceneGraph().addRenderComponents(vpRenderComponents);
     /*
     TODO
     phusics too
     */
-    Device::getDevice().getLogicThread().addLogicComponents(vpLogicComponents);
+    DEVICE.getLogicThread().addLogicComponents(vpLogicComponents);
 
     vpRenderers.clear();
     vpRenderComponents.clear();

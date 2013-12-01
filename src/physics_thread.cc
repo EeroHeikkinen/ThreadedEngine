@@ -42,7 +42,11 @@ void PhysicsThread::join(void){
 }
 
 void PhysicsThread::init(void){
-    std::lock_guard<std::mutex> initLock(Device::getDevice().initMutex);
+    { // init mutex
+        std::unique_lock<std::mutex> initLock(DEVICE.initMutex);
+        DEVICE.initCV.wait(initLock, []{ return DEVICE.initThreadID == 2; });
+    }
+
     std::cout << "PhysInitBegin" << std::endl; //temp
 
     physicsTree = new PhysicsTree;
@@ -69,6 +73,12 @@ void PhysicsThread::init(void){
     // end of TEMP
 
     std::cout << "PhysInitEnd" << std::endl; //temp
+
+    { // notify other threads
+        std::lock_guard<std::mutex> initLock(DEVICE.initMutex);
+        DEVICE.initThreadID = 3;
+        DEVICE.initCV.notify_one();
+    }
 }
 
 void PhysicsThread::loop(void){

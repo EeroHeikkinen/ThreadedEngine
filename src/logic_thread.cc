@@ -34,8 +34,18 @@ void LogicThread::join(void){
 }
 
 void LogicThread::init(void){
-    std::lock_guard<std::mutex> initLock(Device::getDevice().initMutex);
+    { // init mutex
+        std::unique_lock<std::mutex> initLock(DEVICE.initMutex);
+        DEVICE.initCV.wait(initLock, []{ return DEVICE.initThreadID == 1; });
+    }
+
     std::cout << "LogicInit" << std::endl; //temp
+
+    { // notify other threads
+        std::lock_guard<std::mutex> initLock(DEVICE.initMutex);
+        DEVICE.initThreadID = 2;
+        DEVICE.initCV.notify_one();
+    }
 }
 
 void LogicThread::loop(void){

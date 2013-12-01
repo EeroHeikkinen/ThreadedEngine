@@ -36,22 +36,32 @@ void ResourceThread::join(void){
 }
 
 void ResourceThread::init(void){
-    std::lock_guard<std::mutex> initLock(Device::getDevice().initMutex);
+    { // init mutex
+        std::unique_lock<std::mutex> initLock(DEVICE.initMutex);
+        DEVICE.initCV.wait(initLock, []{ return DEVICE.initThreadID == 3; });
+    }
+
     std::cout << "ResInitBegin" << std::endl; //temp
 
-    while (!Device::getDevice().isGlewInitialized())
+    while (!DEVICE.isGlewInitialized())
         sf::sleep(sf::milliseconds(5));
 
     //Begin of TEMP
-    Device::getDevice().getRenderThread().detachContext();
+    DEVICE.getRenderThread().detachContext();
 
     testResLoader = new Test::TestResourceLoader();
     testResLoader->loadResources();
     testResLoader->pushResources();
 
-    Device::getDevice().getRenderThread().attachContext();
+    DEVICE.getRenderThread().attachContext();
     //End of TEMP
     std::cout << "ResInitEnd" << std::endl; //temp
+
+    { // notify other threads
+        std::lock_guard<std::mutex> initLock(DEVICE.initMutex);
+        DEVICE.initThreadID = 4;
+        DEVICE.initCV.notify_one();
+    }
 }
 
 void ResourceThread::loop(void){

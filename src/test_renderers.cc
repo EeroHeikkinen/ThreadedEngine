@@ -4,13 +4,11 @@
 
 
 Test::TestRenderer::TestRenderer(Test::Camera* pCamera_) :
-    sceneGraph(Device::getDevice().getSceneGraph()),
+    sceneGraph(DEVICE.getSceneGraph()),
     pCamera(pCamera_)
     {}
 
-Test::TestRenderer::~TestRenderer(void){
-    //Device::getDevice().getRenderThread().deleteRenderer(this);
-}
+Test::TestRenderer::~TestRenderer(void){}
 
 void Test::TestRenderer::render(void){
     for (auto it = sceneGraph.begin(); it != sceneGraph.end(); it++) {
