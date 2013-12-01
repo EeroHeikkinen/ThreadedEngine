@@ -1,5 +1,6 @@
 #include "physics_thread.hh"
 #include "physics_tree.hh"
+#include "device.hh"
 
 #include <SFML/Window.hpp>
 #include <iostream> //temp
@@ -27,7 +28,7 @@ PhysicsThread::~PhysicsThread(void){
 
 void PhysicsThread::launch(void){
     //New thread begins here
-    init();
+    Device::getDevice().initSequencer.physicsThread(this, &PhysicsThread::init);
     while (running)
         loop();
 }
@@ -41,6 +42,8 @@ void PhysicsThread::join(void){
 }
 
 void PhysicsThread::init(void){
+    std::cout << "PhysInitBegin" << std::endl; //temp
+
     physicsTree = new PhysicsTree;
 
     // very basic bullet configuration, change if needed!
@@ -63,6 +66,8 @@ void PhysicsThread::init(void){
         }
     }*/
     // end of TEMP
+
+    std::cout << "PhysInitEnd" << std::endl; //temp
 }
 
 void PhysicsThread::loop(void){

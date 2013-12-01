@@ -3,12 +3,12 @@
 
 #include "component.hh"
 
-#include <vector>
+#include <tbb/tbb.h>
 
 
 class SceneGraph{
 public:
-    typedef std::vector<RenderComponent*>::iterator iterator;
+    typedef tbb::concurrent_vector<RenderComponent*>::iterator iterator;
 
     SceneGraph(void){}
     ~SceneGraph(void){}
@@ -18,14 +18,18 @@ public:
 
     // Adds a new RenderComponent pointer to vpRenderComponents vector.
     void addRenderComponent(RenderComponent*);
-    // Seeks for given RenderComponent pointer and if found, deletes it.
-    // Automagically called by RenderComponent's destructor.
-    void deleteRenderComponent(RenderComponent*);
+    void addRenderComponents(tbb::concurrent_vector<RenderComponent*>&);
+    //void deleteRenderComponent(RenderComponent*);
+    /*
+    TODO
+    implement properly
+    */
+
 
     SceneGraph(const SceneGraph&) = delete;
     SceneGraph& operator=(const SceneGraph&) = delete;
 private:
-    std::vector<RenderComponent*> vpRenderComponents;
+    tbb::concurrent_vector<RenderComponent*> vpRenderComponents;
 };
 
 

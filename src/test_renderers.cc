@@ -4,17 +4,14 @@
 
 
 Test::TestRenderer::TestRenderer(Test::Camera* pCamera_) :
-    sceneGraph(Device::getDevice().getSceneGraph()),
+    sceneGraph(DEVICE.getSceneGraph()),
     pCamera(pCamera_)
-    {
-        Device::getDevice().getRenderThread().addRenderer(this);
-    }
+    {}
 
-Test::TestRenderer::~TestRenderer(void){
-    Device::getDevice().getRenderThread().deleteRenderer(this);
-}
+Test::TestRenderer::~TestRenderer(void){}
 
 void Test::TestRenderer::render(void){
-    for (auto it = sceneGraph.begin(); it != sceneGraph.end(); it++)
+    for (auto it = sceneGraph.begin(); it != sceneGraph.end(); it++) {
         (*it)->render(pCamera->getViewMatrix(), pCamera->getProjectionMatrix());
+    }
 }

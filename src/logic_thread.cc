@@ -1,4 +1,6 @@
 #include "logic_thread.hh"
+#include "device.hh"
+#include <iostream> //temp
 
 #include <SFML/Window.hpp>
 
@@ -18,7 +20,7 @@ LogicThread::~LogicThread(void){
 
 void LogicThread::launch(void){
     //New thread begins here
-    init();
+    Device::getDevice().initSequencer.logicThread(this, &LogicThread::init);
     while (running)
         loop();
 }
@@ -32,12 +34,13 @@ void LogicThread::join(void){
 }
 
 void LogicThread::init(void){
+    std::cout << "LogicInit" << std::endl; //temp
 }
 
 void LogicThread::loop(void){
     // render
-    for (auto it = vpLogicComponents.begin(); it != vpLogicComponents.end(); it++)
-        (*it)->logic();
+    for(auto pLogicComponent : vpLogicComponents)
+        pLogicComponent->logic();
 
     sf::sleep(sf::milliseconds(10));
     /*
@@ -46,15 +49,20 @@ void LogicThread::loop(void){
     */
 }
 
-void LogicThread::addLogicComponent(LogicComponent* pLogicComponent){
-    vpLogicComponents.push_back(pLogicComponent);
+void LogicThread::addLogicComponent(LogicComponent* pComponent){
+    vpLogicComponents.push_back(pComponent);
 }
 
-void LogicThread::deleteLogicComponent(LogicComponent* pLogicComponent){
+void LogicThread::addLogicComponents(tbb::concurrent_vector<LogicComponent*>& vpComponents){
+    for(auto pComponent : vpComponents)
+        vpLogicComponents.push_back(pComponent);
+}
+
+/*void LogicThread::deleteLogicComponent(LogicComponent* pLogicComponent){
     for (auto it = vpLogicComponents.begin(); it != vpLogicComponents.end(); it++){
         if (*it == pLogicComponent){
             vpLogicComponents.erase(it);
             return;
         }
     }
-}
+}*/

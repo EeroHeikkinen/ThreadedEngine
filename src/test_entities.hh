@@ -1,23 +1,30 @@
 #ifndef TEST_ENTITIES_HH
 #define TEST_ENTITIES_HH
 
+
 #include "component.hh"
 #include "shader.hh"
+#include "texture.hh"
 
 #include <GL/GLEW.h>
 #include <glm/glm.hpp>
 #include <mutex>
 
 
+class Mesh;
+
+
 namespace Test{
-    class Camera : public LogicComponent{
+
+    class Camera : public LogicComponent {
     public:
         Camera(void);
 
-        virtual void logic(void);
+        void logic(void);
 
         const glm::mat4& getViewMatrix(void) const;
         const glm::mat4& getProjectionMatrix(void) const;
+
     protected:
         float angle;
         glm::vec3 pos;
@@ -25,52 +32,15 @@ namespace Test{
     };
 
 
-        class Sphere; //forward declaration for BallWatchingCamera
-    class BallWatcherCamera : public Camera{
+    class SingleMeshEntity : public RenderComponent {
     public:
-        BallWatcherCamera(Sphere* pSphere);
+        SingleMeshEntity(Mesh* pMesh_, glm::mat4 model_);
 
+        void render(const glm::mat4&, const glm::mat4&);
         void logic(void);
+
     private:
-        Sphere* pSphere;
-    };
-
-
-    class Sphere : public RenderComponent,
-                   public PhysicsComponent{
-    public:
-        Sphere(btCollisionShape* collisionMesh_,
-               PhysicsNode* parent_,
-               glm::vec3 initialPos_,
-               float mass_);
-        ~Sphere(void);
-
-        void render(const glm::mat4&, const glm::mat4&);
-
-        glm::vec3 getPosition(void);
-    private:
-        GLuint VBO, IBO, VAO;
-        Shader shader;
-        unsigned int numIndices;
-        glm::mat4 model;
-    };
-
-
-    class Box : public RenderComponent,
-                public PhysicsComponent{
-    public:
-        Box(float xSize_, float ySize_, float zSize_,
-            btCollisionShape* collisionMesh_,
-            PhysicsNode* parent_,
-            glm::vec3 initialPos_,
-            float mass_);
-        ~Box(void);
-
-        void render(const glm::mat4&, const glm::mat4&);
-    private:
-        GLuint VBO, IBO, VAO;
-        Shader shader;
-        unsigned int numIndices;
+        Mesh* pMesh;
         glm::mat4 model;
     };
 

@@ -17,15 +17,12 @@ ResourceThread::~ResourceThread(void){
         thread.join();
     }
 
-    delete pTestRenderer;//TEMP
-    delete pCamera;//TEMP
-    delete pSphere;//TEMP
-    delete pBox;//TEMP
+    delete testResLoader;
 }
 
 void ResourceThread::launch(void){
     //New thread begins here
-    init();
+    Device::getDevice().initSequencer.resourceThread(this, &ResourceThread::init);
     while (running)
         loop();
 }
@@ -39,30 +36,21 @@ void ResourceThread::join(void){
 }
 
 void ResourceThread::init(void){
-    while (!Device::getDevice().isGlewInitialized())
+    std::cout << "ResInitBegin" << std::endl; //temp
+
+    while (!DEVICE.isGlewInitialized())
         sf::sleep(sf::milliseconds(5));
 
     //Begin of TEMP
-    Device::getDevice().getRenderThread().detachContext();
+    DEVICE.getRenderThread().detachContext();
 
-    auto root = Device::getDevice().getPhysicsThread().getPhysicsTree().getRoot();
+    testResLoader = new Test::TestResourceLoader();
+    testResLoader->loadResources();
+    testResLoader->pushResources();
 
-    pCamera = new Test::Camera;
-    pTestRenderer = new Test::TestRenderer(pCamera);
-
-    pBox = new Test::Box(2.0f, 0.1f, 2.0f,
-                         new btBoxShape(btVector3(1.0f, 0.1f, 1.0f)),
-                         root,
-                         glm::vec3(0.0f, 0.0f, 0.0f),
-                         10.5f);
-
-    pSphere = new Test::Sphere(new btSphereShape(1),
-                               root,
-                               glm::vec3(0.0f, 2.0f, 0.0f),
-                               1.0f);
-
-    Device::getDevice().getRenderThread().attachContext();
+    DEVICE.getRenderThread().attachContext();
     //End of TEMP
+    std::cout << "ResInitEnd" << std::endl; //temp
 }
 
 void ResourceThread::loop(void){

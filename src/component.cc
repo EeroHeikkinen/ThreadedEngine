@@ -12,15 +12,9 @@ using namespace glm;
 
 //RenderComponent
 
-RenderComponent::RenderComponent(void){
-    //add the component to the render thread
-    Device::getDevice().getSceneGraph().addRenderComponent(this);
-}
+RenderComponent::RenderComponent(void){}
 
-RenderComponent::~RenderComponent(void){
-    //delete the component from the render thread
-    Device::getDevice().getSceneGraph().deleteRenderComponent(this);
-}
+RenderComponent::~RenderComponent(void){}
 
 //PhysicsComponent
 
@@ -34,7 +28,7 @@ PhysicsComponent::PhysicsComponent(btCollisionShape* collisionMesh_,
     model(model_),
     mass(mass_)
     {
-        node = Device::getDevice().getPhysicsThread().getPhysicsTree().addNode(parent_, this);
+        node = DEVICE.getPhysicsThread().getPhysicsTree().addNode(parent_, this);
 
         btTransform tmp_btInitialPos;
         tmp_btInitialPos.setOrigin(btVector3(initialPos.x, initialPos.y, initialPos.z));
@@ -47,12 +41,12 @@ PhysicsComponent::PhysicsComponent(btCollisionShape* collisionMesh_,
         btRigidBody::btRigidBodyConstructionInfo fallRigidBodyCI(mass, motionState,
                                                                  collisionMesh, fallInertia);
         physicsBody = new btRigidBody(fallRigidBodyCI);
-        Device::getDevice().getPhysicsThread().getDynamicsWorld().addRigidBody(physicsBody);
+        DEVICE.getPhysicsThread().getDynamicsWorld().addRigidBody(physicsBody);
     }
 
 PhysicsComponent::~PhysicsComponent(){
-	Device::getDevice().getPhysicsThread().getPhysicsTree().removeNode(node);
-	Device::getDevice().getPhysicsThread().getDynamicsWorld().removeRigidBody(physicsBody);
+	DEVICE.getPhysicsThread().getPhysicsTree().removeNode(node);
+	DEVICE.getPhysicsThread().getDynamicsWorld().removeRigidBody(physicsBody);
 	delete collisionMesh;
 	delete physicsBody;
 	delete motionState;
@@ -68,12 +62,6 @@ void PhysicsComponent::setTransformation(const btTransform& worldTrans){
 
 //LogicComponent
 
-LogicComponent::LogicComponent(void) {
-    //add the component to the logic thread
-    Device::getDevice().getLogicThread().addLogicComponent(this);
-}
+LogicComponent::LogicComponent(void) {}
 
-LogicComponent::~LogicComponent(void) {
-    //delete the component from the logic thread
-    Device::getDevice().getLogicThread().deleteLogicComponent(this);
-}
+LogicComponent::~LogicComponent(void) {}

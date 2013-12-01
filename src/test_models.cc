@@ -53,17 +53,17 @@ void Test::makeBox(GLuint& VBO_, GLuint& IBO_, GLuint& VAO_,
     }
 
     //Index Buffer Object
-    glGenBuffers(1, &IBO_);
+    //glGenBuffers(1, &IBO_);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO_);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), &indices[0], GL_STATIC_DRAW);
 
     //Vertex Buffer Object
-    glGenBuffers(1, &VBO_);
+    //glGenBuffers(1, &VBO_);
     glBindBuffer(GL_ARRAY_BUFFER, VBO_);
     glBufferData(GL_ARRAY_BUFFER, vertexBufferData.size() * 4, &vertexBufferData[0], GL_STATIC_DRAW);
 
     //The Vertex Array Object
-    glGenVertexArrays(1, &VAO_);
+    //glGenVertexArrays(1, &VAO_);
     glBindVertexArray(VAO_);
 
     glBindBuffer(GL_ARRAY_BUFFER, VBO_);
@@ -133,7 +133,7 @@ void Test::makeUVSphere(GLuint& VBO_, GLuint& IBO_, GLuint& VAO_,
 
     // reconfiguring
     for (unsigned int i=0; i<numVertices; ++i) {
-        vertices[i].position.z = sinf(vertices[i].position.x) * cosf(vertices[i].position.y);
+        vertices[i].position.z = -sinf(vertices[i].position.x) * cosf(vertices[i].position.y);
         vertices[i].position.x = cosf(vertices[i].position.x) * cosf(vertices[i].position.y);
         vertices[i].position.y = sinf(vertices[i].position.y);
         vertices[i].normal = glm::normalize(vertices[i].position);
@@ -172,16 +172,16 @@ void Test::makeUVSphere(GLuint& VBO_, GLuint& IBO_, GLuint& VAO_,
         }
     }
 
-    glGenBuffers(1, &VBO_);
+    //glGenBuffers(1, &VBO_);
     glBindBuffer(GL_ARRAY_BUFFER, VBO_);
     glBufferData(GL_ARRAY_BUFFER, numVertices * 32, vertices, GL_STATIC_DRAW);
 
-    glGenBuffers(1, &IBO_);
+    //glGenBuffers(1, &IBO_);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO_);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, numIndices_ * 2, indices, GL_STATIC_DRAW);
 
     // vertex array object
-    glGenVertexArrays(1, &VAO_);
+    //glGenVertexArrays(1, &VAO_);
     glBindVertexArray(VAO_);
 
     glBindBuffer(GL_ARRAY_BUFFER, VBO_);

@@ -19,14 +19,12 @@ void Device::stop(void){
 
 void Device::join(void){
     renderThread.join();
-    logicThread.join();
     physicsThread.join();
+    logicThread.join();
     resourceThread.join();
-
 }
 
 void Device::setGlewInitialized(bool glewInitialized_){
-    std::lock_guard<std::mutex> lock(mutex);
     glewInitialized = glewInitialized_;
 }
 
@@ -53,10 +51,11 @@ SceneGraph& Device::getSceneGraph(void){
 Device::Device(void) :
     glewInitialized(false),
     running(true),
+
     renderThread(*this),
-    logicThread(*this),
     physicsThread(*this),
-    resourceThread(*this)
+    resourceThread(*this),
+    logicThread(*this)
     {}
 
 void Device::eventLoop(void){
