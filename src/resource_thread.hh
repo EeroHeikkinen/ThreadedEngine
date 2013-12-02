@@ -29,7 +29,7 @@ private:
     Test::Camera* pCamera;//TEMP
     Test::TestRenderer* pTestRenderer;//TEMP
     Test::Sphere* pSphere;//TEMP
-    Test::Box* pBox;//TEMP
+    Test::Sphere* pBox;//TEMP
 };
 
 

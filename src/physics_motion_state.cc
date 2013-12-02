@@ -26,17 +26,17 @@ void PhysicsMotionState::setWorldTransform(const btTransform& worldTrans){
 	}
 	btMatrix3x3 B = worldTrans.getBasis();
 	btVector3 O = worldTrans.getOrigin();
-	std::cout << "Component: " << component << std::endl << std::endl;
-	std::cout << "Basis: " << std::endl;
-	for(size_t i = 0; i < 3; ++i){
-        for(size_t j = 0; j < 3; ++j)
-            std::cout << B[i][j] << " ";
-        std::cout << std::endl;
-	}
-	std::cout << std::endl;
-	std::cout << "Origin: ";
-    for(size_t i = 0; i < 3; ++i)
-        std::cout << O[i] << " ";
-    std::cout << std::endl << std::endl;
+	// std::cout << "Component: " << component << std::endl << std::endl;
+	// std::cout << "Basis: " << std::endl;
+	// for(size_t i = 0; i < 3; ++i){
+ //        for(size_t j = 0; j < 3; ++j)
+ //            std::cout << B[i][j] << " ";
+ //        std::cout << std::endl;
+	// }
+	// std::cout << std::endl;
+	// std::cout << "Origin: ";
+    // for(size_t i = 0; i < 3; ++i)
+    //     std::cout << O[i] << " ";
+    // std::cout << std::endl << std::endl;
 	component->setTransformation(worldTrans);
 }

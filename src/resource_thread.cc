@@ -41,7 +41,6 @@ void ResourceThread::join(void){
 void ResourceThread::init(void){
     while (!Device::getDevice().isGlewInitialized())
         sf::sleep(sf::milliseconds(5));
-
     //Begin of TEMP
     Device::getDevice().getRenderThread().detachContext();
 
@@ -49,18 +48,16 @@ void ResourceThread::init(void){
 
     pSphere = new Test::Sphere(new btSphereShape(1),
                                root,
+                               glm::vec3(0.0f, 500.0f, 0.0f),
+                               0.1f);
+
+    pBox = new Test::Sphere(new btSphereShape(1),
+                               root,
                                glm::vec3(0.0f, 2.0f, 0.0f),
-                               1.0f);
-
-    pBox = new Test::Box(2.0f, 0.1f, 2.0f,
-                         new btBoxShape(btVector3(1.0f, 0.1f, 1.0f)),
-                         root,
-                         glm::vec3(0.0f, -2.0f, 0.0f),
-                         1.0f);
+                               0.1f);
 
 
-
-    pCamera = new Test::WatcherCamera(pBox);
+    pCamera = new Test::Camera();
     pTestRenderer = new Test::TestRenderer(pCamera);
 
     Device::getDevice().getRenderThread().attachContext();

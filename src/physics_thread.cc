@@ -28,6 +28,7 @@ PhysicsThread::~PhysicsThread(void){
 void PhysicsThread::launch(void){
     //New thread begins here
     init();
+    sf::sleep(sf::milliseconds(200));
     while (running)
         loop();
 }
@@ -41,13 +42,13 @@ void PhysicsThread::join(void){
 }
 
 void PhysicsThread::init(void){
-    physicsTree = new PhysicsTree;
+    physicsTree = new PhysicsTree();
 
     // very basic bullet configuration, change if needed!
     broadphase = new btDbvtBroadphase();
     collisionConfiguration = new btDefaultCollisionConfiguration();
     dispatcher = new btCollisionDispatcher(collisionConfiguration);
-    solver = new btSequentialImpulseConstraintSolver;
+    solver = new btSequentialImpulseConstraintSolver();
     dynamicsWorld = new btDiscreteDynamicsWorld(dispatcher, broadphase, solver, collisionConfiguration);
 
     dynamicsWorld->setGravity(btVector3(0,-9.81,0));

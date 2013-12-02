@@ -47,7 +47,11 @@ PhysicsComponent::PhysicsComponent(btCollisionShape* collisionMesh_,
         btRigidBody::btRigidBodyConstructionInfo fallRigidBodyCI(mass, motionState,
                                                                  collisionMesh, fallInertia);
         physicsBody = new btRigidBody(fallRigidBodyCI);
+        std::cout << "collision shape: " << physicsBody->getCollisionShape() << std::endl;
+        std::cout << "Is it static?: " << physicsBody->isStaticObject() << std::endl;
+
         Device::getDevice().getPhysicsThread().getDynamicsWorld().addRigidBody(physicsBody);
+        std::cout << "PhysicsComponent " << this << " initialized." << std::endl;
     }
 
 PhysicsComponent::~PhysicsComponent(){
@@ -63,7 +67,8 @@ void PhysicsComponent::setTransformation(const btTransform& worldTrans){
 	btVector3 pos = worldTrans.getOrigin();
 	quat glm_rot = quat(rot.w(), rot.x(), rot.y(), rot.z());
 	model = toMat4(glm_rot) * translate(pos.x(), pos.y(), pos.z());
-    std::cout << pos.x() << std::endl << pos.y() << std::endl << pos.z() << std::endl << std::endl;
+    std::cout << this << pos.y() << std::endl;
+    //std::cout << pos.x() << std::endl << pos.y() << std::endl << pos.z() << std::endl << std::endl;
 }
 
 //LogicComponent
