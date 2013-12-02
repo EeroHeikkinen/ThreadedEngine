@@ -11,7 +11,7 @@
 
 Test::Camera::Camera(void) :
     angle(0.0f),
-    pos(7.0f*sin(angle), 2.0f, 5.0f*cos(angle)),
+    pos(10.0f*sin(angle), 4.0f, 10.0f*cos(angle)),
     view(glm::lookAt(pos,                           // camera position
                      glm::vec3(0.0f, 0.0f, 0.0f),   // spot to look at
                      glm::vec3(0.0f, 1.0f, 0.0f))), // up vector
@@ -22,9 +22,9 @@ Test::Camera::Camera(void) :
     {}
 
 void Test::Camera::logic(void){
-    angle += 0.01;
+    //angle += 0.01;
     if (angle > 2*PI) angle -= 2*PI;
-    pos = glm::vec3(7.0f*sin(angle), 2.0f, 5.0f*cos(angle));
+    pos = glm::vec3(10.0f*sin(angle), 4.0f, 10.0f*cos(angle));
     view = glm::lookAt(pos, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
     projection = glm::perspective(60.0f, 4.0f / 3.0f, 0.1f, 100.0f);
 }
@@ -66,8 +66,13 @@ void Test::WatcherCamera::logic(void){
 
 // Sphere
 
-Test::Sphere::Sphere(btCollisionShape* collisionMesh_, PhysicsNode* parent_, glm::vec3 initialPos_, float mass_) :
-    PhysicsComponent(collisionMesh_, parent_, initialPos_, model, mass_),
+Test::Sphere::Sphere(btCollisionShape* collisionMesh_,
+                     PhysicsNode* parent_,
+                     glm::vec3 initialPos_,
+                     glm::vec3 initialVel_,
+                     float mass_,
+                     float restitution_) :
+    PhysicsComponent(collisionMesh_, parent_, initialPos_, initialVel_, model, mass_, restitution_),
     model(glm::translate(glm::mat4(1.0f), initialPos_))
     {
         std::cout << "TrueSphereInit" << std::endl;
@@ -107,9 +112,13 @@ glm::vec3 Test::Sphere::getPosition(void){
 //Box
 
 Test::Box::Box(float xSize_, float ySize_, float zSize_,
-               btCollisionShape* collisionMesh_, PhysicsNode* parent_,
-               glm::vec3 initialPos_, float mass_) :
-    PhysicsComponent(collisionMesh_, parent_, initialPos_, model, mass_),
+               btCollisionShape* collisionMesh_,
+               PhysicsNode* parent_,
+               glm::vec3 initialPos_,
+               glm::vec3 initialVel_,
+               float mass_,
+               float restitution_) :
+    PhysicsComponent(collisionMesh_, parent_, initialPos_, initialVel_, model, mass_, restitution_),
     numIndices(36),
     model(glm::translate(glm::mat4(1.0f), initialPos_))
     {

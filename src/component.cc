@@ -27,8 +27,10 @@ RenderComponent::~RenderComponent(void){
 PhysicsComponent::PhysicsComponent(btCollisionShape* collisionMesh_,
                                    PhysicsNode* parent_,
 								   vec3 initialPos_,
+								   vec3 initialVel_,
 								   mat4& model_,
-								   float mass_) :
+								   float mass_,
+								   float restitution_) :
     collisionMesh(collisionMesh_),
     initialPos(initialPos_),
     model(model_),
@@ -62,6 +64,8 @@ PhysicsComponent::PhysicsComponent(btCollisionShape* collisionMesh_,
         btRigidBody::btRigidBodyConstructionInfo fallRigidBodyCI(mass, motionState,
                                                                  collisionMesh, fallInertia);
         physicsBody = new btRigidBody(fallRigidBodyCI);
+        physicsBody->setRestitution(restitution_);
+        physicsBody->setLinearVelocity(btVector3(initialVel_.x, initialVel_.y, initialVel_.z));
         Device::getDevice().getPhysicsThread().getDynamicsWorld().addRigidBody(physicsBody);
     }
 
