@@ -68,8 +68,9 @@ void Test::WatcherCamera::logic(void){
 
 Test::Sphere::Sphere(btCollisionShape* collisionMesh_, PhysicsNode* parent_, glm::vec3 initialPos_, float mass_) :
     PhysicsComponent(collisionMesh_, parent_, initialPos_, model, mass_),
-    model(glm::mat4(1.0f))
+    model(glm::translate(glm::mat4(1.0f), initialPos_))
     {
+        std::cout << "TrueSphereInit" << std::endl;
         // Model
         Test::makeUVSphere(VBO, IBO, VAO, numIndices, 32, 16);
 
@@ -110,7 +111,7 @@ Test::Box::Box(float xSize_, float ySize_, float zSize_,
                glm::vec3 initialPos_, float mass_) :
     PhysicsComponent(collisionMesh_, parent_, initialPos_, model, mass_),
     numIndices(36),
-    model(glm::mat4(1.0f))
+    model(glm::translate(glm::mat4(1.0f), initialPos_))
     {
         // Model
         Test::makeBox(VBO, IBO, VAO, xSize_, ySize_, zSize_);
