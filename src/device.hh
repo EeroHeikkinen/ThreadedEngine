@@ -8,6 +8,7 @@
 #include "scene_graph.hh"
 
 #include <mutex>
+#include <condition_variable>
 
 
 class Device{
@@ -27,11 +28,17 @@ public:
 
     SceneGraph& getSceneGraph(void);
 
+    friend void PhysicsThread::init(void);
+    friend void ResourceThread::init(void);
+    friend void PhysicsThread::loop(void);
+
     Device(const Device&) = delete;
     Device& operator=(const Device&) = delete;
 private:
     Device(void); // private constructor
     std::mutex mutex;
+    std::condition_variable CV;
+    bool resInitReady;
 
     // flags
     bool glewInitialized;

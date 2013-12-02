@@ -20,7 +20,9 @@ ResourceThread::~ResourceThread(void){
     delete pTestRenderer;//TEMP
     delete pCamera;//TEMP
     delete pSphere;//TEMP
-    delete pBox;//TEMP
+    delete pBox1;//TEMP
+    delete pBox2;//TEMP
+    delete pBox3;//TEMP
 }
 
 void ResourceThread::launch(void){
@@ -39,6 +41,8 @@ void ResourceThread::join(void){
 }
 
 void ResourceThread::init(void){
+    std::lock_guard<std::mutex> lock(Device::getDevice().mutex);
+    std::cout << "resInitBegin" << std::endl;
     while (!Device::getDevice().isGlewInitialized())
         sf::sleep(sf::milliseconds(5));
     //Begin of TEMP
@@ -46,21 +50,40 @@ void ResourceThread::init(void){
 
     auto root = Device::getDevice().getPhysicsThread().getPhysicsTree().getRoot();
 
+    pBox1 = new Test::Box(1.0f, 0.5f, 1.0f,
+                         new btBoxShape(btVector3(1.0f, 0.5f, 1.0f)),
+                         root,
+                         glm::vec3(4.0f, -0.25f, 0.0f),
+                         glm::vec3(0,0,0),
+                         0, 0.4);
+
+    pBox2 = new Test::Box(1.0f, 0.5f, 1.0f,
+                         new btBoxShape(btVector3(1.0f, 0.5f, 1.0f)),
+                         root,
+                         glm::vec3(5.0f, 2.0f, 0.0f),
+                         glm::vec3(0,0,0),
+                         1.0, 1.0);
+
+    pBox3 = new Test::Box(1.0f, 0.5f, 1.0f,
+                         new btBoxShape(btVector3(1.0f, 0.5f, 1.0f)),
+                         root,
+                         glm::vec3(-4.0f, -0.25f, 0.0f),
+                         glm::vec3(0,0,0),
+                         0.0, 1.0);
+
     pSphere = new Test::Sphere(new btSphereShape(1),
                                root,
-                               glm::vec3(0.0f, 500.0f, 0.0f),
-                               0.1f);
-
-    pBox = new Test::Sphere(new btSphereShape(1),
-                               root,
-                               glm::vec3(0.0f, 2.0f, 0.0f),
-                               0.1f);
-
+                               glm::vec3(-4.0f, 2.0f, 0.0f),
+                               glm::vec3(0.0f, 4.0f, 0.0f),
+                               1.0, 1.0);
 
     pCamera = new Test::Camera();
     pTestRenderer = new Test::TestRenderer(pCamera);
 
     Device::getDevice().getRenderThread().attachContext();
+    Device::getDevice().resInitReady = true;
+    Device::getDevice().CV.notify_all();
+    std::cout << "resInitEnd" << std::endl;
     //End of TEMP
 }
 

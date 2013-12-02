@@ -27,17 +27,34 @@ RenderComponent::~RenderComponent(void){
 PhysicsComponent::PhysicsComponent(btCollisionShape* collisionMesh_,
                                    PhysicsNode* parent_,
 								   vec3 initialPos_,
+								   vec3 initialVel_,
 								   mat4& model_,
-								   float mass_) :
+								   float mass_,
+								   float restitution_) :
     collisionMesh(collisionMesh_),
     initialPos(initialPos_),
     model(model_),
     mass(mass_)
     {
+        std::cout << "PhysCompConstruct" << std::endl;
         node = Device::getDevice().getPhysicsThread().getPhysicsTree().addNode(parent_, this);
 
-        btTransform tmp_btInitialPos;
-        tmp_btInitialPos.setOrigin(btVector3(initialPos.x, initialPos.y, initialPos.z));
+        btTransform tmp_btInitialPos(btQuaternion(0,0,0),
+                                     btVector3(initialPos.x, initialPos.y, initialPos.z));
+
+    	btMatrix3x3 B = tmp_btInitialPos.getBasis();
+        btVector3 O = tmp_btInitialPos.getOrigin();
+        std::cout << "InitialBasis: " << std::endl;
+        for(size_t i = 0; i < 3; ++i){
+            for(size_t j = 0; j < 3; ++j)
+                std::cout << B[i][j] << " ";
+            std::cout << std::endl;
+        }
+        std::cout << std::endl;
+        std::cout << "InitialOrigin: ";
+        for(size_t i = 0; i < 3; ++i)
+            std::cout << O[i] << " ";
+        std::cout << std::endl << std::endl;
 
         motionState = new PhysicsMotionState(tmp_btInitialPos, this);
 
@@ -47,9 +64,9 @@ PhysicsComponent::PhysicsComponent(btCollisionShape* collisionMesh_,
         btRigidBody::btRigidBodyConstructionInfo fallRigidBodyCI(mass, motionState,
                                                                  collisionMesh, fallInertia);
         physicsBody = new btRigidBody(fallRigidBodyCI);
-        std::cout << "collision shape: " << physicsBody->getCollisionShape() << std::endl;
-        std::cout << "Is it static?: " << physicsBody->isStaticObject() << std::endl;
 
+        physicsBody->setRestitution(restitution_);
+        physicsBody->setLinearVelocity(btVector3(initialVel_.x, initialVel_.y, initialVel_.z));
         Device::getDevice().getPhysicsThread().getDynamicsWorld().addRigidBody(physicsBody);
         std::cout << "PhysicsComponent " << this << " initialized." << std::endl;
     }
@@ -67,7 +84,7 @@ void PhysicsComponent::setTransformation(const btTransform& worldTrans){
 	btVector3 pos = worldTrans.getOrigin();
 	quat glm_rot = quat(rot.w(), rot.x(), rot.y(), rot.z());
 	model = toMat4(glm_rot) * translate(pos.x(), pos.y(), pos.z());
-    std::cout << this << pos.y() << std::endl;
+
     //std::cout << pos.x() << std::endl << pos.y() << std::endl << pos.z() << std::endl << std::endl;
 }
 

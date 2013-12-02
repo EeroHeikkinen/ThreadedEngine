@@ -1,5 +1,6 @@
 #include "physics_thread.hh"
 #include "physics_tree.hh"
+#include "device.hh"
 
 #include <SFML/Window.hpp>
 #include <iostream> //temp
@@ -42,7 +43,9 @@ void PhysicsThread::join(void){
 }
 
 void PhysicsThread::init(void){
-    physicsTree = new PhysicsTree();
+    std::lock_guard<std::mutex> lock(Device::getDevice().mutex);
+    std::cout << "physInitBegin" << std::endl;
+    physicsTree = new PhysicsTree;
 
     // very basic bullet configuration, change if needed!
     broadphase = new btDbvtBroadphase();
@@ -63,10 +66,17 @@ void PhysicsThread::init(void){
             parent = physicsTree->addNode(parent, component);
         }
     }*/
+    std::cout << "physInitEnd" << std::endl;
     // end of TEMP
 }
 
 void PhysicsThread::loop(void){
+    std::unique_lock<std::mutex> lock(Device::getDevice().mutex);
+    while(!Device::getDevice().resInitReady){
+        std::cout << "Variable in use" << std::endl;
+        Device::getDevice().CV.wait(lock);
+    }
+
     time_physics_curr = clock::now();
     dynamicsWorld->stepSimulation((float)(std::chrono::duration_cast<std::chrono::milliseconds>(
                                         time_physics_curr - time_physics_prev).count()) / 1000.0, 10);

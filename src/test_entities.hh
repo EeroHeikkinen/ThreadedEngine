@@ -45,7 +45,9 @@ namespace Test{
         Sphere(btCollisionShape* collisionMesh_,
                PhysicsNode* parent_,
                glm::vec3 initialPos_,
-               float mass_);
+               glm::vec3 initialVel_,
+               float mass_,
+               float restitution_);
         ~Sphere(void);
 
         void render(const glm::mat4&, const glm::mat4&);
@@ -66,7 +68,9 @@ namespace Test{
             btCollisionShape* collisionMesh_,
             PhysicsNode* parent_,
             glm::vec3 initialPos_,
-            float mass_);
+            glm::vec3 initialVel_,
+            float mass_,
+            float restitution_);
         ~Box(void);
 
         void render(const glm::mat4&, const glm::mat4&);
