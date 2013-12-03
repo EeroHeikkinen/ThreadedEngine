@@ -81,16 +81,15 @@ void QueuedInterruptMutex::lock(void){
     std::unique_lock<std::mutex>* lockPtr = new std::unique_lock<std::mutex>(mutex);
     while(notifiedCvPtr != cvPtr)
         cvPtr->wait(*lockPtr);
-    interruptLockPtr = lockPtr;
+    interruptLockPtr = lockPtr; //storing the lock pointer into a member variable for transfer into unlock call
 }
 
 void QueuedInterruptMutex::unlock(void){
     std::cout << "Unlocking" << std::endl;
-    delete notifiedCvPtr;
-    delete interruptLockPtr;
 
+    delete notifiedCvPtr; //this destructs the lock-call-specific condition variable
     if(!cvQueue.try_pop(notifiedCvPtr))
         notifiedCvPtr = &ownerCv;
-
     notifiedCvPtr->notify_all();
+    delete interruptLockPtr; //this destructs the unique_lock and unlocks the mutex
 }

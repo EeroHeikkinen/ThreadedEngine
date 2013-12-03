@@ -9,7 +9,6 @@
 RenderThread::RenderThread(Device& device_) :
     running(true),
     windowInitialized(false)
-    //deactivatingContext(false)
     {
         // window settings
         sf::ContextSettings settings;

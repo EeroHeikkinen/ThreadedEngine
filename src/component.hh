@@ -9,7 +9,7 @@
 class PhysicsNode;
 
 
-class RenderComponent {
+class RenderComponent{
 public:
     RenderComponent(void);
     virtual ~RenderComponent(void);
@@ -21,7 +21,7 @@ public:
 };
 
 
-class LogicComponent {
+class LogicComponent{
 public:
     LogicComponent(void);
     virtual ~LogicComponent(void);
@@ -33,7 +33,7 @@ public:
 };
 
 
-class PhysicsComponent {
+class PhysicsComponent{
 public:
     PhysicsComponent(btCollisionShape* collisionMesh_,
                      PhysicsNode* parent_,
