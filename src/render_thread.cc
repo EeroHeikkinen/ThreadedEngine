@@ -8,8 +8,8 @@
 
 RenderThread::RenderThread(Device& device_) :
     running(true),
-    windowInitialized(false),
-    deactivatingContext(false)
+    windowInitialized(false)
+    //deactivatingContext(false)
     {
         // window settings
         sf::ContextSettings settings;
@@ -71,7 +71,7 @@ void RenderThread::join(void){
 void RenderThread::init(void){
     std::cout << "RenderInitBegin" << std::endl; //temp
     // set GL context active for render thread
-    glContextMutex.lock();
+    glContextMutex.own();
     while (!pWindow->setActive(true))
         sf::sleep(sf::milliseconds(5));
 
@@ -94,18 +94,16 @@ void RenderThread::loop(void){
     // show the rendered stuff
     pWindow->display();
 
-    // check if another thread(resource) wants to deactivate GL context
-    if (deactivatingContext){
-        while (!pWindow->setActive(false))
+    // check if other threads want to borrow the GL context
+    if(glContextMutex.checkInterrupts()){
+        while(!pWindow->setActive(false)) //get ridda dis spinlock!
             sf::sleep(sf::milliseconds(5));
-        glContextMutex.unlock(); // deactivated succesfully
+        std::cout << "Interrupts found! Dispatching..." << std::endl;
+        //wait for other threads to do their work
+        glContextMutex.dispatchInterrupts();
+        std::cout << "Interrupts dispatched successfully!" << std::endl;
 
-        // another thread does its thing
-
-        glContextMutex.lock();
-        deactivatingContext = false;
-
-        while (!pWindow->setActive(true))
+        while(!pWindow->setActive(true)) //und dis too!
             sf::sleep(sf::milliseconds(5));
     }
 
@@ -125,16 +123,17 @@ bool RenderThread::isWindowInitialized(void){
     return windowInitialized;
 }
 
+//a thread can call this to borrow the glContext
 void RenderThread::detachContext(void){
-    deactivatingContext = true;
-    // once deactivated successfully, glContextMutex lock is gained by another thread calling this function:
     glContextMutex.lock();
-    while (!pWindow->setActive(true))
+
+    while (!pWindow->setActive(true)) //omg dees spinlox!
         sf::sleep(sf::milliseconds(5));
 }
 
-void RenderThread::attachContext(void){ //the same thread that detached the context shall call this function as well
-    while (!pWindow->setActive(false))
+//the same thread that detached the context shall call this function as well
+void RenderThread::attachContext(void){
+    while (!pWindow->setActive(false)) //even moar of 'em basterdz!
         sf::sleep(sf::milliseconds(5));
 
     glContextMutex.unlock();

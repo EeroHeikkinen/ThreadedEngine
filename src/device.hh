@@ -7,7 +7,7 @@
 #include "physics_thread.hh"
 #include "resource_thread.hh"
 #include "scene_graph.hh"
-#include "init_sequencer.hh"
+#include "threading_utils.hh"
 
 #define DEVICE Device::getDevice()
 

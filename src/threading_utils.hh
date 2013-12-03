@@ -1,8 +1,9 @@
-#ifndef INIT_SEQUENCER_HH
-#define INIT_SEQUENCER_HH
+#ifndef THREADING_UTILS_HH
+#define THREADING_UTILS_HH
 
 #include <mutex>
 #include <condition_variable>
+#include <tbb/tbb.h>
 class RenderThread;
 class PhysicsThread;
 class ResourceThread;
@@ -27,5 +28,26 @@ private:
     bool logicInitialized;
 };
 
+class QueuedInterruptMutex{
+public:
+    QueuedInterruptMutex(void);
 
-#endif // INIT_SEQUENCER_HH
+    //for owner thread to use
+    void own(void);
+    bool checkInterrupts(void);
+    void dispatchInterrupts(void);
+
+    //for other threads to use
+    void lock(void);
+    void unlock(void);
+private:
+    std::mutex mutex;
+    std::unique_lock<std::mutex> ownerLock;
+    std::condition_variable ownerCv;
+    std::unique_lock<std::mutex>* interruptLockPtr;
+    std::condition_variable* notifiedCvPtr;
+    tbb::concurrent_queue<std::condition_variable*> cvQueue;
+};
+
+
+#endif // THREADING_UTILS_HH

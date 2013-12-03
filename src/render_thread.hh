@@ -2,6 +2,7 @@
 #define RENDER_THREAD_HH
 
 #include "renderer.hh"
+#include "threading_utils.hh"
 
 #include <thread>
 #include <mutex>
@@ -48,8 +49,9 @@ private:
     sf::ContextSettings settings;
     sf::Window* pWindow;
     bool windowInitialized;
-    std::mutex glContextMutex;
-    bool deactivatingContext;
+    QueuedInterruptMutex glContextMutex;
+    //std::mutex glContextMutex;
+    //bool deactivatingContext;
 
     // Renderer container vector
     tbb::concurrent_vector<Renderer*> vpRenderers;
