@@ -20,7 +20,7 @@ LogicThread::~LogicThread(void){
 
 void LogicThread::launch(void){
     //New thread begins here
-    Device::getDevice().initSequencer.logicThread(this, &LogicThread::init);
+    Device::getDevice().initSequencer.initialize<4>(this);
     while (running)
         loop();
 }

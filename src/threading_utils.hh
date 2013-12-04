@@ -4,28 +4,25 @@
 #include <mutex>
 #include <condition_variable>
 #include <tbb/tbb.h>
-class RenderThread;
-class PhysicsThread;
-class ResourceThread;
-class LogicThread;
 
 
 class InitSequencer{
 public:
-    InitSequencer(void);
+    InitSequencer(void) : currentNumber(1){}
 
-    void renderThread(RenderThread*, void (RenderThread::*)(void));
-    void physicsThread(PhysicsThread*, void (PhysicsThread::*)(void));
-    void resourceThread(ResourceThread*, void (ResourceThread::*)(void));
-    void logicThread(LogicThread*, void (LogicThread::*)(void));
+    template<unsigned int orderNumber, typename Thread>
+    void initialize(Thread* thread){
+        std::unique_lock<std::mutex> lock(mutex);
+        while(currentNumber < orderNumber)
+            cv.wait(lock);
+        thread->init();
+        ++currentNumber;
+        cv.notify_all();
+    }
 private:
     std::mutex mutex;
     std::condition_variable cv;
-
-    bool renderInitialized;
-    bool physicsInitialized;
-    bool resourceInitialized;
-    bool logicInitialized;
+    unsigned int currentNumber;
 };
 
 class QueuedInterruptMutex{
@@ -33,7 +30,7 @@ public:
     QueuedInterruptMutex(void);
 
     //for owner thread to use
-    void own(void);
+    void gainOwnership(void);
     bool checkInterrupts(void);
     void dispatchInterrupts(void);
 
@@ -44,8 +41,8 @@ private:
     std::mutex mutex;
     std::unique_lock<std::mutex> ownerLock;
     std::condition_variable ownerCv;
-    std::unique_lock<std::mutex>* interruptLockPtr;
-    std::condition_variable* notifiedCvPtr;
+    std::unique_lock<std::mutex>* pCurrentLock;
+    std::condition_variable* pCurrentCv;
     tbb::concurrent_queue<std::condition_variable*> cvQueue;
 };
 

@@ -28,7 +28,7 @@ PhysicsThread::~PhysicsThread(void){
 
 void PhysicsThread::launch(void){
     //New thread begins here
-    Device::getDevice().initSequencer.physicsThread(this, &PhysicsThread::init);
+    Device::getDevice().initSequencer.initialize<2>(this);
     while (running)
         loop();
 }

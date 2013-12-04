@@ -54,7 +54,7 @@ RenderThread::~RenderThread(void){
 
 void RenderThread::launch(void){
     // render thread begins here
-    Device::getDevice().initSequencer.renderThread(this, &RenderThread::init);
+    Device::getDevice().initSequencer.initialize<1>(this);
     while (running)
         loop();
 }
@@ -70,7 +70,7 @@ void RenderThread::join(void){
 void RenderThread::init(void){
     std::cout << "RenderInitBegin" << std::endl; //temp
     // set GL context active for render thread
-    glContextMutex.own();
+    glContextMutex.gainOwnership();
     while (!pWindow->setActive(true))
         sf::sleep(sf::milliseconds(5));
 

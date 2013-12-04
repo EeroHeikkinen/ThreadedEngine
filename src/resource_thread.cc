@@ -22,7 +22,7 @@ ResourceThread::~ResourceThread(void){
 
 void ResourceThread::launch(void){
     //New thread begins here
-    Device::getDevice().initSequencer.resourceThread(this, &ResourceThread::init);
+    Device::getDevice().initSequencer.initialize<3>(this);
     while (running)
         loop();
 }
