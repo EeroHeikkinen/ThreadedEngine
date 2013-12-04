@@ -4,25 +4,35 @@
 #include <mutex>
 #include <condition_variable>
 #include <tbb/tbb.h>
+#include <iostream>
 
-
-class InitSequencer{
+class Sequencer{
 public:
-    InitSequencer(void) : currentNumber(1){}
+    Sequencer(void) : currentNumber(1){}
 
-    template<unsigned int orderNumber, typename Thread>
-    void initialize(Thread* thread){
+    template<unsigned int orderNumber, typename Function>
+    void runInSequence(Function func){
         std::unique_lock<std::mutex> lock(mutex);
         while(currentNumber < orderNumber)
             cv.wait(lock);
-        thread->init();
+        func();
         ++currentNumber;
         cv.notify_all();
     }
-private:
+protected:
     std::mutex mutex;
     std::condition_variable cv;
     unsigned int currentNumber;
+};
+
+class InitSequencer : public Sequencer{
+public:
+    InitSequencer(){}
+
+    template<unsigned int orderNumber, typename Thread>
+    void initialize(Thread* pThread){
+        runInSequence<orderNumber>([pThread](){pThread->init();});
+    }
 };
 
 class QueuedInterruptMutex{
