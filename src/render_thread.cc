@@ -54,7 +54,7 @@ RenderThread::~RenderThread(void){
 
 void RenderThread::launch(void){
     // render thread begins here
-    Device::getDevice().initSequencer.initialize<1>(this);
+    DEVICE.initSequencer.initialize(this, 1);
     while (running)
         loop();
 }
@@ -68,7 +68,6 @@ void RenderThread::join(void){
 }
 
 void RenderThread::init(void){
-    std::cout << "RenderInitBegin" << std::endl; //temp
     // set GL context active for render thread
     glContextMutex.gainOwnership();
     while (!pWindow->setActive(true))
@@ -78,7 +77,6 @@ void RenderThread::init(void){
     glEnable(GL_DEPTH_TEST);
     // accept fragment if it closer to the camera than the former one
     glDepthFunc(GL_LESS);
-    std::cout << "RenderInitEnd" << std::endl; //temp
 }
 
 void RenderThread::loop(void){
@@ -97,10 +95,8 @@ void RenderThread::loop(void){
     if(glContextMutex.checkInterrupts()){
         while(!pWindow->setActive(false)) //get ridda dis spinlock!
             sf::sleep(sf::milliseconds(5));
-        std::cout << "Interrupts found! Dispatching..." << std::endl;
         //wait for other threads to do their work
         glContextMutex.dispatchInterrupts();
-        std::cout << "Interrupts dispatched successfully!" << std::endl;
 
         while(!pWindow->setActive(true)) //und dis too!
             sf::sleep(sf::milliseconds(5));

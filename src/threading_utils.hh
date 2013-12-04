@@ -6,14 +6,14 @@
 #include <tbb/tbb.h>
 
 
-class Sequencer{
+class FunctionSequencer{
 public:
-    Sequencer(void) : currentNumber(1){}
+    FunctionSequencer(void) : currentNumber(1){}
 
-    template<unsigned int orderNumber, typename Function>
-    void runInSequence(Function func){
+    template<typename Function>
+    void runInSequence(Function func, unsigned int orderNumber){
         std::unique_lock<std::mutex> lock(mutex);
-        while(currentNumber < orderNumber)
+        while(currentNumber != orderNumber)
             cv.wait(lock);
         func();
         ++currentNumber;
@@ -23,16 +23,6 @@ protected:
     std::mutex mutex;
     std::condition_variable cv;
     unsigned int currentNumber;
-};
-
-class InitSequencer : public Sequencer{
-public:
-    InitSequencer(){}
-
-    template<unsigned int orderNumber, typename Thread>
-    void initialize(Thread* pThread){
-        runInSequence<orderNumber>([pThread](){pThread->init();});
-    }
 };
 
 class QueuedInterruptMutex{
@@ -54,6 +44,16 @@ private:
     std::unique_lock<std::mutex>* pCurrentLock;
     std::condition_variable* pCurrentCv;
     tbb::concurrent_queue<std::condition_variable*> cvQueue;
+};
+
+class InitSequencer : private FunctionSequencer{
+public:
+    InitSequencer(){}
+
+    template<typename Thread>
+    void initialize(Thread* pThread, unsigned int orderNumber){
+        runInSequence([pThread](){pThread->init();}, orderNumber);
+    }
 };
 
 

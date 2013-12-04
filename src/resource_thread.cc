@@ -22,7 +22,7 @@ ResourceThread::~ResourceThread(void){
 
 void ResourceThread::launch(void){
     //New thread begins here
-    Device::getDevice().initSequencer.initialize<3>(this);
+    DEVICE.initSequencer.initialize(this, 3);
     while (running)
         loop();
 }
@@ -36,8 +36,6 @@ void ResourceThread::join(void){
 }
 
 void ResourceThread::init(void){
-    std::cout << "ResInitBegin" << std::endl; //temp
-
     while (!DEVICE.isGlewInitialized())
         sf::sleep(sf::milliseconds(5));
 
@@ -50,7 +48,6 @@ void ResourceThread::init(void){
 
     DEVICE.getRenderThread().attachContext();
     //End of TEMP
-    std::cout << "ResInitEnd" << std::endl; //temp
 }
 
 void ResourceThread::loop(void){

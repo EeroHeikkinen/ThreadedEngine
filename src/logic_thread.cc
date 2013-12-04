@@ -20,7 +20,7 @@ LogicThread::~LogicThread(void){
 
 void LogicThread::launch(void){
     //New thread begins here
-    Device::getDevice().initSequencer.initialize<4>(this);
+    DEVICE.initSequencer.initialize(this, 4);
     while (running)
         loop();
 }
@@ -34,7 +34,6 @@ void LogicThread::join(void){
 }
 
 void LogicThread::init(void){
-    std::cout << "LogicInit" << std::endl; //temp
 }
 
 void LogicThread::loop(void){
