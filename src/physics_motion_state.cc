@@ -16,14 +16,10 @@ void PhysicsMotionState::setComponent(PhysicsComponent* component_) {
 
 void PhysicsMotionState::getWorldTransform(btTransform& worldTrans) const{
 	worldTrans = initialPos;
-	std::cout << "GETTER" << std::endl;
 }
 
 void PhysicsMotionState::setWorldTransform(const btTransform& worldTrans){
-	if (!component){
-        std::cout << "NULULULULLLLUUUU" << std::endl;
-		return;
-	}
+
 	btMatrix3x3 B = worldTrans.getBasis();
 	btVector3 O = worldTrans.getOrigin();
 	// std::cout << "Component: " << component << std::endl << std::endl;

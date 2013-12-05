@@ -53,29 +53,29 @@ void ResourceThread::init(void){
     pBox1 = new Test::Box(1.0f, 0.5f, 1.0f,
                          new btBoxShape(btVector3(1.0f, 0.5f, 1.0f)),
                          root,
-                         glm::vec3(4.0f, -0.25f, 0.0f),
+                         glm::vec3(14.0f, -0.25f, 0.0f),
                          glm::vec3(0,0,0),
-                         0, 0.4);
+                         0, 0.2);
 
     pBox2 = new Test::Box(1.0f, 0.5f, 1.0f,
                          new btBoxShape(btVector3(1.0f, 0.5f, 1.0f)),
                          root,
-                         glm::vec3(5.0f, 2.0f, 0.0f),
+                         glm::vec3(15.5f, 2.0f, 0.0f),
                          glm::vec3(0,0,0),
-                         1.0, 1.0);
+                         1.0, 0.2);
 
     pBox3 = new Test::Box(1.0f, 0.5f, 1.0f,
                          new btBoxShape(btVector3(1.0f, 0.5f, 1.0f)),
                          root,
                          glm::vec3(-4.0f, -0.25f, 0.0f),
                          glm::vec3(0,0,0),
-                         0.0, 1.0);
+                         0.0, 0.80);
 
     pSphere = new Test::Sphere(new btSphereShape(1),
                                root,
-                               glm::vec3(-4.0f, 2.0f, 0.0f),
-                               glm::vec3(0.0f, 4.0f, 0.0f),
-                               1.0, 1.0);
+                               glm::vec3(-4.0f, 10.0f, 0.0f),
+                               glm::vec3(0.0f, 0.0f, 0.0f),
+                               10.0, 0.80);
 
     pCamera = new Test::Camera();
     pTestRenderer = new Test::TestRenderer(pCamera);

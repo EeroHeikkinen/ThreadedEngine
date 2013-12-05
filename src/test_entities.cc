@@ -11,7 +11,7 @@
 
 Test::Camera::Camera(void) :
     angle(0.0f),
-    pos(10.0f*sin(angle), 4.0f, 10.0f*cos(angle)),
+    pos(0.0f, 4.0f, 40.0f),
     view(glm::lookAt(pos,                           // camera position
                      glm::vec3(0.0f, 0.0f, 0.0f),   // spot to look at
                      glm::vec3(0.0f, 1.0f, 0.0f))), // up vector
@@ -22,11 +22,11 @@ Test::Camera::Camera(void) :
     {}
 
 void Test::Camera::logic(void){
-    //angle += 0.01;
-    if (angle > 2*PI) angle -= 2*PI;
-    pos = glm::vec3(10.0f*sin(angle), 4.0f, 10.0f*cos(angle));
-    view = glm::lookAt(pos, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-    projection = glm::perspective(60.0f, 4.0f / 3.0f, 0.1f, 100.0f);
+    //angle += 0.01;mi
+    //if (angle > 2*PI) angle -= 2*PI;
+    //pos = glm::vec3(10.0f*sin(angle), 4.0f, 10.0f*cos(angle));
+    //view = glm::lookAt(pos, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+    //projection = glm::perspective(60.0f, 4.0f / 3.0f, 0.1f, 100.0f);
 }
 
 const glm::mat4& Test::Camera::getViewMatrix(void) const{

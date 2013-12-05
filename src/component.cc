@@ -36,43 +36,42 @@ PhysicsComponent::PhysicsComponent(btCollisionShape* collisionMesh_,
     model(model_),
     mass(mass_)
     {
-        std::cout << "PhysCompConstruct" << std::endl;
         node = Device::getDevice().getPhysicsThread().getPhysicsTree().addNode(parent_, this);
 
-        btTransform tmp_btInitialPos(btQuaternion(0,0,0),
+        btTransform tmp_btInitialPos(btQuaternion(0,0,0,1),
                                      btVector3(initialPos.x, initialPos.y, initialPos.z));
 
-    	btMatrix3x3 B = tmp_btInitialPos.getBasis();
-        btVector3 O = tmp_btInitialPos.getOrigin();
-        std::cout << "InitialBasis: " << std::endl;
-        for(size_t i = 0; i < 3; ++i){
-            for(size_t j = 0; j < 3; ++j)
-                std::cout << B[i][j] << " ";
-            std::cout << std::endl;
-        }
-        std::cout << std::endl;
-        std::cout << "InitialOrigin: ";
-        for(size_t i = 0; i < 3; ++i)
-            std::cout << O[i] << " ";
-        std::cout << std::endl << std::endl;
+    	// btMatrix3x3 B = tmp_btInitialPos.getBasis();
+        // btVector3 O = tmp_btInitialPos.getOrigin();
+        // std::cout << "InitialBasis: " << std::endl;
+        // for(size_t i = 0; i < 3; ++i){
+        //     for(size_t j = 0; j < 3; ++j)
+        //         std::cout << B[i][j] << " ";
+        //     std::cout << std::endl;
+        // }
+        // std::cout << std::endl;
+        // std::cout << "InitialOrigin: ";
+        // for(size_t i = 0; i < 3; ++i)
+        //     std::cout << O[i] << " ";
+        // std::cout << std::endl << std::endl;
 
         motionState = new PhysicsMotionState(tmp_btInitialPos, this);
 
         // WUT IS THIS FALLINERTIA
-        btVector3 fallInertia(0,0,0);
-        collisionMesh->calculateLocalInertia(mass, fallInertia);
-        btRigidBody::btRigidBodyConstructionInfo fallRigidBodyCI(mass, motionState,
+        btVector3 fallInertia = btVector3(0.0,0.0,0.0);
+        collisionMesh->calculateLocalInertia(btScalar(mass), fallInertia);
+        std::cout << "Inertia: " << fallInertia.x() << " " << fallInertia.y() << " " << fallInertia.z() << std::endl;
+        btRigidBody::btRigidBodyConstructionInfo RigidBodyCI(mass, motionState,
                                                                  collisionMesh, fallInertia);
-        physicsBody = new btRigidBody(fallRigidBodyCI);
+        physicsBody = new btRigidBody(RigidBodyCI);
 
         physicsBody->setRestitution(restitution_);
-        physicsBody->setLinearVelocity(btVector3(initialVel_.x, initialVel_.y, initialVel_.z));
+        //physicsBody->setLinearVelocity(btVector3(initialVel_.x, initialVel_.y, initialVel_.z));
         Device::getDevice().getPhysicsThread().getDynamicsWorld().addRigidBody(physicsBody);
-        std::cout << "PhysicsComponent " << this << " initialized." << std::endl;
     }
 
 PhysicsComponent::~PhysicsComponent(){
-	Device::getDevice().getPhysicsThread().getPhysicsTree().removeNode(node);
+	delete node;
 	Device::getDevice().getPhysicsThread().getDynamicsWorld().removeRigidBody(physicsBody);
 	delete collisionMesh;
 	delete physicsBody;
@@ -83,7 +82,7 @@ void PhysicsComponent::setTransformation(const btTransform& worldTrans){
 	btQuaternion rot = worldTrans.getRotation();
 	btVector3 pos = worldTrans.getOrigin();
 	quat glm_rot = quat(rot.w(), rot.x(), rot.y(), rot.z());
-	model = toMat4(glm_rot) * translate(pos.x(), pos.y(), pos.z());
+	model = translate(pos.x(), pos.y(), pos.z()) * toMat4(glm_rot);
 
     //std::cout << pos.x() << std::endl << pos.y() << std::endl << pos.z() << std::endl << std::endl;
 }
