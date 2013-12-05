@@ -83,7 +83,7 @@ void PhysicsComponent::setTransformation(const btTransform& worldTrans){
 	btQuaternion rot = worldTrans.getRotation();
 	btVector3 pos = worldTrans.getOrigin();
 	quat glm_rot = quat(rot.w(), rot.x(), rot.y(), rot.z());
-	model = toMat4(glm_rot) * translate(pos.x(), pos.y(), pos.z());
+	model = translate(pos.x(), pos.y(), pos.z()) * toMat4(glm_rot);
 
     //std::cout << pos.x() << std::endl << pos.y() << std::endl << pos.z() << std::endl << std::endl;
 }
