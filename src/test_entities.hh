@@ -37,7 +37,6 @@ namespace Test{
         SingleMeshEntity(Mesh* pMesh_, glm::mat4 model_);
 
         void render(const glm::mat4&, const glm::mat4&);
-        void logic(void);
 
     private:
         Mesh* pMesh;
