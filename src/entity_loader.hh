@@ -1,5 +1,5 @@
-#ifndef RESOURCE_LOADER_HH
-#define RESOURCE_LOADER_HH
+#ifndef ENTITY_LOADER_HH
+#define ENTITY_LOADER_HH
 
 
 #include <tbb/tbb.h>
@@ -12,13 +12,13 @@ class PhysicsComponent;
 class LogicComponent;
 
 
-class ResourceLoader {
+class EntityLoader {
 public:
-    ResourceLoader(void) {}
-    virtual ~ResourceLoader(void) {}
+    EntityLoader(void) {}
+    virtual ~EntityLoader(void) {}
 
     // Pushes loaded resources from internal storage to specified data containers
-    void pushResources(void);
+    void pushEntities(void);
 
 protected:
     // Inherited class implementations will use these functions to add resources
@@ -51,4 +51,4 @@ private:
 };
 
 
-#endif // RESOURCE_LOADER_HH
+#endif // ENTITY_LOADER_HH

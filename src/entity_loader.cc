@@ -1,8 +1,8 @@
-#include "resource_loader.hh"
+#include "entity_loader.hh"
 #include "device.hh"
 
 
-void ResourceLoader::pushResources(void) {
+void EntityLoader::pushEntities(void) {
     DEVICE.getRenderThread().addRenderers(vpRenderers);
     DEVICE.getSceneGraph().addRenderComponents(vpRenderComponents);
     /*
@@ -17,18 +17,18 @@ void ResourceLoader::pushResources(void) {
     vpLogicComponents.clear();
 }
 
-void ResourceLoader::addRenderer(Renderer* pRenderer) {
+void EntityLoader::addRenderer(Renderer* pRenderer) {
     vpRenderers.push_back(pRenderer);
 }
 
-void ResourceLoader::addComponent(RenderComponent* pComponent) {
+void EntityLoader::addComponent(RenderComponent* pComponent) {
     vpRenderComponents.push_back(pComponent);
 }
 
-void ResourceLoader::addComponent(PhysicsComponent* pComponent) {
+void EntityLoader::addComponent(PhysicsComponent* pComponent) {
     vpPhysicsComponents.push_back(pComponent);
 }
 
-void ResourceLoader::addComponent(LogicComponent* pComponent) {
+void EntityLoader::addComponent(LogicComponent* pComponent) {
     vpLogicComponents.push_back(pComponent);
 }

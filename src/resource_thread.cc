@@ -17,7 +17,7 @@ ResourceThread::~ResourceThread(void){
         thread.join();
     }
 
-    delete testResLoader;
+    delete testEntLoader;
 }
 
 void ResourceThread::launch(void){
@@ -42,9 +42,9 @@ void ResourceThread::init(void){
     //Begin of TEMP
     DEVICE.getRenderThread().detachContext();
 
-    testResLoader = new Test::TestResourceLoader();
-    testResLoader->loadResources();
-    testResLoader->pushResources();
+    testEntLoader = new Test::TestEntityLoader();
+    testEntLoader->loadEntities();
+    testEntLoader->pushEntities();
 
     DEVICE.getRenderThread().attachContext();
     //End of TEMP

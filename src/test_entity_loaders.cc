@@ -1,4 +1,4 @@
-#include "test_resource_loaders.hh"
+#include "test_entity_loaders.hh"
 #include "texture.hh"
 #include "shader.hh"
 #include "material.hh"
@@ -9,9 +9,9 @@
 #include <time.h>
 
 
-Test::TestResourceLoader::TestResourceLoader(void) {}
+Test::TestEntityLoader::TestEntityLoader(void) {}
 
-Test::TestResourceLoader::~TestResourceLoader(void) {
+Test::TestEntityLoader::~TestEntityLoader(void) {
     delete pCamera;
     delete pTestRenderer;
     //delete pBox;
@@ -26,7 +26,7 @@ Test::TestResourceLoader::~TestResourceLoader(void) {
     }
 }
 
-void Test::TestResourceLoader::loadResources(void) {
+void Test::TestEntityLoader::loadEntities(void) {
     srand(time(NULL));
 
     pCamera = new Test::Camera();
