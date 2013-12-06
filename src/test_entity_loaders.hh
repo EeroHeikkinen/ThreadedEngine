@@ -1,8 +1,8 @@
-#ifndef TEST_RESOURCE_LOADERS_HH
-#define TEST_RESOURCE_LODAERS_HH
+#ifndef TEST_ENTITY_LOADERS_HH
+#define TEST_ENTITY_LODAERS_HH
 
 
-#include "resource_loader.hh"
+#include "entity_loader.hh"
 #include "test_renderers.hh"
 #include "test_entities.hh"
 
@@ -17,12 +17,12 @@ class Mesh;
 
 namespace Test {
 
-    class TestResourceLoader : public ResourceLoader {
+    class TestEntityLoader : public EntityLoader {
     public:
-        TestResourceLoader(void);
-        ~TestResourceLoader(void);
+        TestEntityLoader(void);
+        ~TestEntityLoader(void);
 
-        void loadResources(void);
+        void loadEntities(void);
 
     private:
         Test::Camera* pCamera;
@@ -40,4 +40,4 @@ namespace Test {
 }
 
 
-#endif // TEST_RESOURCE_LOADERS_HH
+#endif // TEST_ENTITY_LOADERS_HH

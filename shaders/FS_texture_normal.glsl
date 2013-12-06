@@ -12,5 +12,5 @@ void main(void) {
 	vec3 a = (texture(texture_, uv_).rgb + position_.xyz)/2;
 	color = a;
 	a = floor(a*4)/4;
-	color = (color-a)*4;
+	color = texture(texture_, uv_).rgb;
 }

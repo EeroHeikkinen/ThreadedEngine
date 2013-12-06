@@ -17,13 +17,7 @@ ResourceThread::~ResourceThread(void){
         thread.join();
     }
 
-    delete testResLoader;
-    // delete pTestRenderer;//TEMP
-    // delete pCamera;//TEMP
-    // delete pSphere;//TEMP
-    // delete pBox1;//TEMP
-    // delete pBox2;//TEMP
-    // delete pBox3;//TEMP
+    delete testEntLoader;
 }
 
 void ResourceThread::launch(void){
@@ -48,9 +42,9 @@ void ResourceThread::init(void){
     //Begin of TEMP
     DEVICE.getRenderThread().detachContext();
 
-    testResLoader = new Test::TestResourceLoader();
-    testResLoader->loadResources();
-    testResLoader->pushResources();
+    testEntLoader = new Test::TestEntityLoader();
+    testEntLoader->loadEntities();
+    testEntLoader->pushEntities();
 
     DEVICE.getRenderThread().attachContext();
 

@@ -1,7 +1,7 @@
 #ifndef RESOURCE_THREAD_HH
 #define RESOURCE_THREAD_HH
 
-#include "test_resource_loaders.hh"//TEMP
+#include "test_entity_loaders.hh"//TEMP
 
 #include <thread>
 class Device;
@@ -26,8 +26,7 @@ private:
     std::thread thread;
     bool running;
 
-    Test::TestResourceLoader* testResLoader;
-
+    Test::TestEntityLoader* testEntLoader;
 };
 
 
