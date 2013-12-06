@@ -5,6 +5,7 @@ CFLAGS := -c -g -std=c++0x -Wall -Wextra -pedantic
 LDFLAGS := -static-libgcc -static-libstdc++ \
 		   -lsfml-system -lsfml-window -lsfml-graphics \
 		   -lglew32 -lopengl32 \
+		   -ltbb \
 		   -Wl,-Bstatic -lBulletSoftBody -lBulletDynamics -lBulletCollision -lLinearMath
 SOURCEDIR := src
 OBJDIR := obj

@@ -18,6 +18,12 @@ ResourceThread::~ResourceThread(void){
     }
 
     delete testResLoader;
+    // delete pTestRenderer;//TEMP
+    // delete pCamera;//TEMP
+    // delete pSphere;//TEMP
+    // delete pBox1;//TEMP
+    // delete pBox2;//TEMP
+    // delete pBox3;//TEMP
 }
 
 void ResourceThread::launch(void){
@@ -47,6 +53,7 @@ void ResourceThread::init(void){
     testResLoader->pushResources();
 
     DEVICE.getRenderThread().attachContext();
+
     //End of TEMP
 }
 

@@ -35,12 +35,69 @@ namespace Test{
     class SingleMeshEntity : public RenderComponent {
     public:
         SingleMeshEntity(Mesh* pMesh_, glm::mat4 model_);
+        void render(const glm::mat4&, const glm::mat4&);
+    private:
+        Mesh* pMesh;
+        glm::mat4 model;
+    };
+
+    class Sphere; //forward declaration for WatcherCamera
+    class Box;
+    class WatcherCamera : public Camera{
+    public:
+        WatcherCamera(Sphere* pSphere);
+        WatcherCamera(Box* pBox);
+
+        void logic(void);
+    private:
+        Sphere* pSphere;
+        Box* pBox;
+    };
+
+
+    class Sphere : public RenderComponent,
+                   public PhysicsComponent{
+    public:
+        Sphere(btCollisionShape* collisionMesh_,
+               PhysicsNode* parent_,
+               glm::vec3 initialPos_,
+               glm::vec3 initialVel_,
+               float mass_,
+               float restitution_);
+        ~Sphere(void);
 
         void render(const glm::mat4&, const glm::mat4&);
         void logic(void);
 
+
+        glm::vec3 getPosition(void);
     private:
-        Mesh* pMesh;
+        GLuint VBO, IBO, VAO;
+        Shader shader;
+        unsigned int numIndices;
+        glm::mat4 model;
+    };
+
+
+    class Box : public RenderComponent,
+                public PhysicsComponent{
+    public:
+        Box(float xSize_, float ySize_, float zSize_,
+            btCollisionShape* collisionMesh_,
+            PhysicsNode* parent_,
+            glm::vec3 initialPos_,
+            glm::vec3 initialVel_,
+            float mass_,
+            float restitution_);
+        ~Box(void);
+
+        void render(const glm::mat4&, const glm::mat4&);
+
+        glm::vec3 getPosition(void);
+    private:
+        GLuint VBO, IBO, VAO;
+        Shader shader;
+        unsigned int numIndices;
         glm::mat4 model;
     };
 

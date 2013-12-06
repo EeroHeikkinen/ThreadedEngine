@@ -27,6 +27,7 @@ private:
     bool running;
 
     Test::TestResourceLoader* testResLoader;
+
 };
 
 

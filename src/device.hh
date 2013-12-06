@@ -11,7 +11,6 @@
 
 #define DEVICE Device::getDevice()
 
-
 class Device{
 public:
     static Device& getDevice(void);
@@ -41,6 +40,7 @@ private:
     Device(void); // private constructor
 
     InitSequencer initSequencer;
+
 
     // flags
     bool glewInitialized;

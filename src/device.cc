@@ -51,7 +51,6 @@ SceneGraph& Device::getSceneGraph(void){
 Device::Device(void) :
     glewInitialized(false),
     running(true),
-
     renderThread(*this),
     physicsThread(*this),
     resourceThread(*this),

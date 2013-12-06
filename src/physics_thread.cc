@@ -48,7 +48,7 @@ void PhysicsThread::init(void){
     broadphase = new btDbvtBroadphase();
     collisionConfiguration = new btDefaultCollisionConfiguration();
     dispatcher = new btCollisionDispatcher(collisionConfiguration);
-    solver = new btSequentialImpulseConstraintSolver;
+    solver = new btSequentialImpulseConstraintSolver();
     dynamicsWorld = new btDiscreteDynamicsWorld(dispatcher, broadphase, solver, collisionConfiguration);
 
     dynamicsWorld->setGravity(btVector3(0,-9.81,0));
@@ -63,10 +63,12 @@ void PhysicsThread::init(void){
             parent = physicsTree->addNode(parent, component);
         }
     }*/
+    std::cout << "physInitEnd" << std::endl;
     // end of TEMP
 }
 
 void PhysicsThread::loop(void){
+
     time_physics_curr = clock::now();
     dynamicsWorld->stepSimulation((float)(std::chrono::duration_cast<std::chrono::milliseconds>(
                                         time_physics_curr - time_physics_prev).count()) / 1000.0, 10);
