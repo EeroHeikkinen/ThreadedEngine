@@ -19,9 +19,6 @@ public:
     void stop(void);
     void join(void);
 
-    void setGlewInitialized(bool);
-    bool isGlewInitialized(void) const;
-
     RenderThread& getRenderThread(void);
     LogicThread& getLogicThread(void);
     PhysicsThread& getPhysicsThread(void);
@@ -39,11 +36,10 @@ public:
 private:
     Device(void); // private constructor
 
+    // initialization
     InitSequencer initSequencer;
 
-
     // flags
-    bool glewInitialized;
     bool running;
 
     // threads
