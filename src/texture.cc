@@ -1,15 +1,19 @@
 #include "texture.hh"
-
+#include "device.hh"
 
 #include <SFML/Graphics.hpp>
+#include <iostream> //temp
 
 
 Texture::Texture(GLenum minFilter_, GLenum magFilter_,
                  GLenum sWrap_, GLenum tWrap_,
-                 GLuint AFLevel_) :
-    minFilter(minFilter_), magFilter(magFilter_),
-    sWrap(sWrap_), tWrap(tWrap_), AFLevel(AFLevel_)
+                 GLuint AFLevel_)
     {
+        info.minFilter = minFilter_;
+        info.magFilter = magFilter_;
+        info.sWrap = sWrap_;
+        info.tWrap = tWrap_;
+        info.AFLevel = AFLevel_;
         glGenTextures(1, &texture);
     }
 
@@ -18,6 +22,9 @@ GLuint Texture::getTexture(void) {
 }
 
 void Texture::loadFromFile(const std::string& fileName) {
+    //activate GL context if not active
+    std::cout << "assdasd" << std::endl;
+
     sf::Image img;
     img.loadFromFile(fileName);
 
@@ -31,16 +38,19 @@ void Texture::loadFromFile(const std::string& fileName) {
                  img.getPixelsPtr());
 
     // wrapping
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, sWrap);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, tWrap);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, info.sWrap);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, info.tWrap);
 
     // minification/magnification filtering
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, minFilter);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, magFilter);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, info.minFilter);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, info.magFilter);
 
     // anisotropic filtering
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, AFLevel);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, info.AFLevel);
 
     // mipmaps
     glGenerateMipmap(GL_TEXTURE_2D);
+
+    //attach the GL context back to the render thread
+    DEVICE.getRenderThread().attachContext();
 }

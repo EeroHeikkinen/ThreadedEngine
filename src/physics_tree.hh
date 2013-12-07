@@ -47,6 +47,7 @@ public:
     PhysicsTree(const PhysicsTree&) = delete;
     PhysicsTree& operator=(PhysicsTree&) = delete;
 private:
+    void destroyTree(PhysicsNode* node);
 	PhysicsNode* root;
 };
 

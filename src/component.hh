@@ -38,8 +38,10 @@ public:
     PhysicsComponent(btCollisionShape* collisionMesh_,
                      PhysicsNode* parent_,
                      glm::vec3 initialPos_,
+                     glm::vec3 initialVel_,
                      glm::mat4& model_,
-                     float mass_);
+                     float mass_,
+                     float restitution_);
     virtual ~PhysicsComponent(void);
 
     void setTransformation(const btTransform& worldTrans);

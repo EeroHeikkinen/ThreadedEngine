@@ -36,12 +36,16 @@ RenderThread& Device::getRenderThread(void){
     return renderThread;
 }
 
-LogicThread& Device::getLogicThread(void){
-    return logicThread;
-}
-
 PhysicsThread& Device::getPhysicsThread(void){
     return physicsThread;
+}
+
+ResourceThread& Device::getResourceThread(void){
+    return resourceThread;
+}
+
+LogicThread& Device::getLogicThread(void){
+    return logicThread;
 }
 
 SceneGraph& Device::getSceneGraph(void){
@@ -51,7 +55,6 @@ SceneGraph& Device::getSceneGraph(void){
 Device::Device(void) :
     glewInitialized(false),
     running(true),
-
     renderThread(*this),
     physicsThread(*this),
     resourceThread(*this),

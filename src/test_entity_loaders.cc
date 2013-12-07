@@ -1,8 +1,5 @@
 #include "test_entity_loaders.hh"
-#include "texture.hh"
-#include "shader.hh"
-#include "material.hh"
-#include "mesh.hh"
+#include "resource_loader.hh"
 #include "test_models.hh"
 
 #include <stdlib.h>
@@ -38,15 +35,21 @@ void Test::TestEntityLoader::loadEntities(void) {
     addEntity(pCamera);
 
     // resources
-    pTexture = new Texture(GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR, GL_WRAP_BORDER, GL_WRAP_BORDER, 4);
-    pTexture->loadFromFile("res/textures/edwerd.png");
+    StandardResourceLoader* pResLoader = new StandardResourceLoader();
+    pResLoader->setTextureInfo("edwerd", "res/textures/edwerd.png",
+                              GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR, GL_WRAP_BORDER, GL_WRAP_BORDER, 4);
+    pResLoader->loadResource(TEXTURE_IMG, "edwerd");
+
+
+    //pTexture = new Texture(GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR, GL_WRAP_BORDER, GL_WRAP_BORDER, 4);
+    //pTexture->loadFromFile("res/textures/edwerd.png");
 
     pShader = new Shader();
     pShader->addShaderObject(GL_VERTEX_SHADER, "shaders/VS_texture_normal.glsl");
     pShader->addShaderObject(GL_FRAGMENT_SHADER, "shaders/FS_texture_normal.glsl");
     pShader->link();
 
-    pMaterial = new Material(GL_TEXTURE0, pTexture, pShader, "MVP");
+    pMaterial = new Material(GL_TEXTURE0, pResLoader->getTexturePtr("edwerd"), pShader, "MVP");
 
     pMesh = new Mesh(pMaterial);
     makeUVSphere(pMesh->getVBO(), pMesh->getIBO(), pMesh->getVAO(), pMesh->getNIndices(), 32, 16);

@@ -24,10 +24,11 @@ PhysicsNode::PhysicsNode(PhysicsNode* parent_,
 
 PhysicsNode::~PhysicsNode(){
 	//delete all children (which recursively deletes the whole subtree)
-	for (auto i : children)
-		delete i;
 
 	if (parent != NULL)
+		for (auto i : children) {
+			parent->addChild(i);
+		}
 		parent->removeChild(this);
 }
 
@@ -72,8 +73,9 @@ PhysicsTree::PhysicsTree(){
 }
 
 PhysicsTree::~PhysicsTree(){
-	delete root;
 }
+
+
 
 // Adds node to the tree.
 // Child argument should be existing node in the tree.
@@ -91,7 +93,6 @@ PhysicsNode* PhysicsTree::addNode(PhysicsNode* parent_, PhysicsComponent* compon
 }
 
 void PhysicsTree::removeNode(PhysicsNode* node){
-	node->getParent()->removeChild(node);
 	delete node;
 }
 

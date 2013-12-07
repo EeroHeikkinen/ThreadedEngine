@@ -13,6 +13,13 @@
 
 class Texture{
 public:
+    struct Info {
+        GLenum
+            minFilter, magFilter,   // filters for minification and magnification
+            sWrap, tWrap,           // wrapping
+            AFLevel;                // anisotropic filtering
+    };
+
     Texture(GLenum minFilter_, GLenum magFilter_,
             GLenum sWrap_, GLenum tWrap_,
             GLuint AFLevel_);
@@ -23,11 +30,7 @@ public:
 
 private:
     GLuint texture;
-
-    GLenum
-        minFilter, magFilter,   // filters for minification and magnification
-        sWrap, tWrap,           // wrapping
-        AFLevel;                // anisotropic filtering
+    Info info;
 };
 
 

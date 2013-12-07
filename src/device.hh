@@ -11,7 +11,6 @@
 
 #define DEVICE Device::getDevice()
 
-
 class Device{
 public:
     static Device& getDevice(void);
@@ -24,8 +23,9 @@ public:
     bool isGlewInitialized(void) const;
 
     RenderThread& getRenderThread(void);
-    LogicThread& getLogicThread(void);
     PhysicsThread& getPhysicsThread(void);
+    ResourceThread& getResourceThread(void);
+    LogicThread& getLogicThread(void);
 
     SceneGraph& getSceneGraph(void);
 
@@ -41,6 +41,7 @@ private:
     Device(void); // private constructor
 
     InitSequencer initSequencer;
+
 
     // flags
     bool glewInitialized;
