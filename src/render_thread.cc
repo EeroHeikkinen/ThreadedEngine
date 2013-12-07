@@ -28,8 +28,6 @@ RenderThread::RenderThread(Device& device_) :
         GLenum err = glewInit();
         if (err != GLEW_OK)
             std::cout << "GLEW initialization failed." << std::endl;//TEMP
-        else
-            device_.setGlewInitialized(true);
 
         /*
         TODO

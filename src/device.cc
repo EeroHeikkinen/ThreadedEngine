@@ -24,14 +24,6 @@ void Device::join(void){
     resourceThread.join();
 }
 
-void Device::setGlewInitialized(bool glewInitialized_){
-    glewInitialized = glewInitialized_;
-}
-
-bool Device::isGlewInitialized(void) const{
-    return glewInitialized;
-}
-
 RenderThread& Device::getRenderThread(void){
     return renderThread;
 }
@@ -53,7 +45,6 @@ SceneGraph& Device::getSceneGraph(void){
 }
 
 Device::Device(void) :
-    glewInitialized(false),
     running(true),
     renderThread(*this),
     physicsThread(*this),

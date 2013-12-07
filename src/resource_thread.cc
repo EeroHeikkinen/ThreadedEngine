@@ -40,9 +40,6 @@ void ResourceThread::join(void){
 }
 
 void ResourceThread::init(void){
-    while (!DEVICE.isGlewInitialized())
-        sf::sleep(sf::milliseconds(5));
-
     //Begin of TEMP
     DEVICE.getRenderThread().detachContext();
 

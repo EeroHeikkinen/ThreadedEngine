@@ -67,7 +67,6 @@ void PhysicsThread::init(void){
 }
 
 void PhysicsThread::loop(void){
-
     time_physics_curr = clock::now();
     dynamicsWorld->stepSimulation((float)(std::chrono::duration_cast<std::chrono::milliseconds>(
                                         time_physics_curr - time_physics_prev).count()) / 1000.0, 10);
