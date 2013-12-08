@@ -1,16 +1,13 @@
 #include "entity.hh"
 
-Entity::Entity(void){}
-
-virtual Entity::~Entity(){}
 
 void Entity::eraseChild(Entity* pChild){
     mpChildren.erase(pChild);
 }
 
-void Entity::eraseThisTree(void){
+void Entity::eraseThisSubtree(void){
     if(parent == nullptr)
-        return; //this shouldn't happen
+        return; //this shouldn't happen; one should never erase the Universe explicitly
     parent->eraseChild(this);
 }
 

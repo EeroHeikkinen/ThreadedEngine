@@ -4,8 +4,8 @@
 
 class Entity{
 public:
-    Entity(void);
-    virtual ~Entity();
+    Entity(void){}
+    virtual ~Entity(){}
     Entity(const Entity&) = delete; //add these later
     Entity& operator=(const Entity&) = delete;
 
@@ -13,7 +13,7 @@ public:
     DerivedEntity* addChild(std::unique_ptr<DerivedEntity>);
 
     void eraseChild(Entity*);
-    void eraseThisTree(void);
+    void eraseThisSubtree(void);
     void eraseThisAlone(void);
 
     void addComponent(std::unique_ptr<Component>);
@@ -29,7 +29,7 @@ template<typename DerivedEntity>
 DerivedEntity* Entity::addChild(std::unique_ptr<DerivedEntity> pChild){
     DerivedEntity* pAdded = pChild.get();
     if(pAdded == nullptr)
-        return nullptr;
+        return nullptr; //this means the user is somewhat stupid
 
     pChild->parent = this;
     mpChildren.emplace(pAdded, std::move(pChild));
