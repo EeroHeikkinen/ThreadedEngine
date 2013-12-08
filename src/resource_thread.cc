@@ -5,8 +5,9 @@
 #include <iostream>//TEMP
 
 
-ResourceThread::ResourceThread(Device& device_) :
-    running(true)
+ResourceThread::ResourceThread(Device* pDevice, unsigned int initOrderNumber) :
+    running(true),
+    initOrderNumber(initOrderNumber)
     {
         thread = std::thread(&ResourceThread::launch, this);
     }
@@ -22,7 +23,7 @@ ResourceThread::~ResourceThread(void){
 
 void ResourceThread::launch(void){
     //New thread begins here
-    DEVICE.initSequencer.initialize(this, 3);
+    DEVICE.initSequencer.initialize(this, initOrderNumber);
     while (running)
         loop();
 }

@@ -5,8 +5,9 @@
 #include <SFML/Window.hpp>
 
 
-LogicThread::LogicThread(Device& device_) :
-    running(true)
+LogicThread::LogicThread(Device* pDevice, unsigned int initOrderNumber) :
+    running(true),
+    initOrderNumber(initOrderNumber)
     {
         thread = std::thread(&LogicThread::launch, this);
     }
@@ -20,7 +21,7 @@ LogicThread::~LogicThread(void){
 
 void LogicThread::launch(void){
     //New thread begins here
-    DEVICE.initSequencer.initialize(this, 4);
+    DEVICE.initSequencer.initialize(this, initOrderNumber);
     while (running)
         loop();
 }

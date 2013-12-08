@@ -9,7 +9,7 @@ class Device;
 
 class ResourceThread{
 public:
-    ResourceThread(Device&);
+    ResourceThread(Device*, unsigned int);
     ~ResourceThread(void);
 
     void launch(void);
@@ -25,6 +25,7 @@ public:
 private:
     std::thread thread;
     bool running;
+    unsigned int initOrderNumber;
 
     Test::TestEntityLoader* testEntLoader;
 };

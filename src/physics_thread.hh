@@ -13,7 +13,7 @@ class Device;
 
 class PhysicsThread{
 public:
-    PhysicsThread(Device&);
+    PhysicsThread(Device*, unsigned int);
     ~PhysicsThread(void);
 
     void launch(void);
@@ -31,6 +31,7 @@ public:
 private:
     std::thread thread;
     bool running;
+    unsigned int initOrderNumber;
     PhysicsTree* physicsTree;
 
     //Bullet stuff

@@ -13,7 +13,7 @@ class Device;
 
 class RenderThread{
 public:
-    RenderThread(Device&);
+    RenderThread(Device*, unsigned int);
     ~RenderThread(void);
 
     void launch(void);
@@ -44,6 +44,7 @@ private:
     // Thread
     std::thread thread;
     bool running;
+    unsigned int initOrderNumber;
 
     // Window & context
     sf::ContextSettings settings;

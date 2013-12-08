@@ -48,8 +48,8 @@ private:
     ResourceThread resourceThread;
     LogicThread logicThread;
 
-    // scene graph
-    SceneGraph sceneGraph;
+    // entity graph
+    EntityGraph entityGraph;
 };
 
 

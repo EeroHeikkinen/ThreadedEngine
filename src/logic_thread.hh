@@ -10,7 +10,7 @@ class Device;
 
 class LogicThread{
 public:
-    LogicThread(Device&);
+    LogicThread(Device*, unsigned int);
     ~LogicThread(void);
 
     void launch(void);
@@ -30,6 +30,7 @@ public:
 private:
     std::thread thread;
     bool running;
+    unsigned int initOrderNumber;
 
     tbb::concurrent_vector<LogicComponent*> vpLogicComponents;
 };

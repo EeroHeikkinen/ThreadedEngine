@@ -42,10 +42,10 @@ SceneGraph& Device::getSceneGraph(void){
 
 Device::Device(void) :
     running(true),
-    renderThread(*this),
-    physicsThread(*this),
-    resourceThread(*this),
-    logicThread(*this)
+    renderThread(this, 1),
+    physicsThread(this, 2),
+    resourceThread(this, 3),
+    logicThread(this, 4)
     {}
 
 void Device::eventLoop(void){

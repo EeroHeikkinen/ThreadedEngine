@@ -6,8 +6,9 @@
 #include <iostream> //TEMP
 
 
-RenderThread::RenderThread(Device& device_) :
+RenderThread::RenderThread(Device* pDevice, unsigned int initOrderNumber) :
     running(true),
+    initOrderNumber(initOrderNumber),
     windowInitialized(false)
     {
         // window settings
@@ -52,7 +53,7 @@ RenderThread::~RenderThread(void){
 
 void RenderThread::launch(void){
     // render thread begins here
-    DEVICE.initSequencer.initialize(this, 1);
+    DEVICE.initSequencer.initialize(this, initOrderNumber);
     while (running)
         loop();
 }
