@@ -79,7 +79,7 @@ void Test::makeBox(GLuint& VBO_, GLuint& IBO_, GLuint& VAO_,
 }
 
 void Test::makeUVSphere(GLuint& VBO_, GLuint& IBO_, GLuint& VAO_,
-                        size_t& numIndices_,
+                        unsigned int& numIndices_,
                         const unsigned int numSegments,
                         const unsigned int numRings){
     if (numSegments < 3){

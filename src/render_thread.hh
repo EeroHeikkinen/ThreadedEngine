@@ -38,8 +38,6 @@ public:
     template<typename DerivedRenderer>
     DerivedRenderer* addRenderer(std::unique_ptr<DerivedRenderer>);
 
-    void addRenderers(tbb::concurrent_vector<Renderer*>&);
-
     //deletion has to be implemented carefully, as it's not a thread-safe operation
     //void deleteRenderer(Renderer*);
 

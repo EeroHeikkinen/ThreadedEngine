@@ -135,8 +135,3 @@ void RenderThread::attachContext(void){
 
     glContextMutex.unlock();
 }
-
-/*void RenderThread::addRenderers(tbb::concurrent_vector<Renderer*>& vpRenderers_){
-    for(auto pRenderer : vpRenderers_)
-        vpRenderers.push_back(pRenderer);
-}*/

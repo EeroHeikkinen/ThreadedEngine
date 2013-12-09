@@ -4,6 +4,7 @@
 #include "test_entity_loaders.hh"//TEMP
 
 #include <thread>
+
 class Device;
 
 
@@ -26,8 +27,6 @@ private:
     std::thread thread;
     bool running;
     unsigned int initOrderNumber;
-
-    Test::TestEntityLoader* testEntLoader;
 };
 
 

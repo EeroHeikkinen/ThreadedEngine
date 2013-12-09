@@ -29,19 +29,28 @@ void Test::TestEntityLoader::loadEntities(void){
         make_unique<Test::Camera>(pRenderer));
 
     // resources (non-RAII)
-    pTexture = new Texture(GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR, GL_WRAP_BORDER, GL_WRAP_BORDER, 4);
-    pTexture->loadFromFile("res/textures/edwerd.png");
+    DEVICE.getRenderThread().detachContext();
 
-    pShader = new Shader();
-    pShader->addShaderObject(GL_VERTEX_SHADER, "shaders/VS_texture_normal.glsl");
-    pShader->addShaderObject(GL_FRAGMENT_SHADER, "shaders/FS_texture_normal.glsl");
-    pShader->link();
+        pTexture = new Texture(GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR, GL_WRAP_BORDER, GL_WRAP_BORDER, 4);
+        pTexture->loadFromFile("res/textures/edwerd.png");
 
-    pMaterial = new Material(GL_TEXTURE0, pTexture, pShader, "MVP");
+        pShader = new Shader();
+        pShader->addShaderObject(GL_VERTEX_SHADER, "shaders/VS_texture_normal.glsl");
+        pShader->addShaderObject(GL_FRAGMENT_SHADER, "shaders/FS_texture_normal.glsl");
+        pShader->link();
 
-    pMesh = new Mesh(pMaterial);
-    makeUVSphere(pMesh->getVBO(), pMesh->getIBO(), pMesh->getVAO(), pMesh->getNIndices(), 32, 16);
+        pMaterial = new Material(GL_TEXTURE0, pTexture, pShader, "MVP");
 
+        pMesh = new Mesh(pMaterial);
+        makeUVSphere(pMesh->getVBO(), pMesh->getIBO(), pMesh->getVAO(), pMesh->getNIndices(), 32, 16);
+
+    DEVICE.getRenderThread().attachContext();
+
+    /* this is rather stupid, as it adds these      *
+     * directly to the universe. ideally you should *
+     * add these to be the children of a world      *
+     * entity, which itself is a child of the       *
+     * universe                                     */
     for(int i = 0; i < 100; i++){
         DEVICE.getUniverse().addChild(
             make_unique<Test::SingleMeshEntity>(

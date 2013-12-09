@@ -1,6 +1,8 @@
 #ifndef TEST_ENTITY_LOADERS_HH
 #define TEST_ENTITY_LOADERS_HH
 
+#include "entity.hh"
+
 class Texture;
 class Shader;
 class Material;
@@ -9,7 +11,7 @@ class Mesh;
 
 namespace Test
 {
-    class TestEntityLoader{
+    class TestEntityLoader : public Entity{
     public:
         TestEntityLoader(void){}
         ~TestEntityLoader(void);

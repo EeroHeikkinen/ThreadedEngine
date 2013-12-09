@@ -23,8 +23,6 @@ public:
     // Adds a new LogicComponent pointer to vpLogicComponents vector.
     void addComponent(LogicComponent* pComponent);
     void removeComponent(LogicComponent* pComponent);
-    /*void addComponents(tbb::concurrent_vector<LogicComponent*>& vpComponents);*/
-    //void deleteLogicComponent(LogicComponent*);
 
     LogicThread(const LogicThread&) = delete;
     LogicThread& operator=(const LogicThread&) = delete;

@@ -35,6 +35,10 @@ void LogicThread::join(void){
 }
 
 void LogicThread::init(void){
+    Test::TestEntityLoader* entLoader =
+        DEVICE.getUniverse().addChild(make_unique<Test::TestEntityLoader>());
+
+    entLoader->loadEntities();
 }
 
 void LogicThread::loop(void){
@@ -69,18 +73,3 @@ void LogicThread::removeComponent(LogicComponent* pComponent){
     else
         spLogicComponents.erase(pComponent);
 }
-
-
-/*void LogicThread::addLogicComponents(tbb::concurrent_vector<LogicComponent*>& vpComponents){
-    for(auto pComponent : vpComponents)
-        vpLogicComponents.push_back(pComponent);
-}*/
-
-/*void LogicThread::deleteLogicComponent(LogicComponent* pLogicComponent){
-    for (auto it = vpLogicComponents.begin(); it != vpLogicComponents.end(); it++){
-        if (*it == pLogicComponent){
-            vpLogicComponents.erase(it);
-            return;
-        }
-    }
-}*/

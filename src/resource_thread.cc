@@ -2,7 +2,6 @@
 #include "device.hh"
 
 #include <SFML/Window.hpp>
-#include <iostream>//TEMP
 
 
 ResourceThread::ResourceThread(Device* pDevice, unsigned int initOrderNumber) :
@@ -17,8 +16,6 @@ ResourceThread::~ResourceThread(void){
         running = false;
         thread.join();
     }
-
-    delete testEntLoader;
 }
 
 void ResourceThread::launch(void){
@@ -37,14 +34,6 @@ void ResourceThread::join(void){
 }
 
 void ResourceThread::init(void){
-    //Begin of TEMP
-    DEVICE.getRenderThread().detachContext();
-
-    testEntLoader = new Test::TestEntityLoader();
-    testEntLoader->loadEntities();
-
-    DEVICE.getRenderThread().attachContext();
-    //End of TEMP
 }
 
 void ResourceThread::loop(void){
