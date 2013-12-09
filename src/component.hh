@@ -8,10 +8,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 class PhysicsNode;
-namespace Test
-{
-    class StupidRenderer;
-}
+namespace Test{class StupidRenderer;}
 
 
 class Component{

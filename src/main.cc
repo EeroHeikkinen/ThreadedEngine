@@ -1,9 +1,8 @@
 #include "device.hh"
 
 
-int main()
+int main(void)
 {
-    DEVICE;
     DEVICE.eventLoop();
     DEVICE.join();
 

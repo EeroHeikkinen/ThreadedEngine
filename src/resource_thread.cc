@@ -44,7 +44,6 @@ void ResourceThread::init(void){
     testEntLoader->loadEntities();
 
     DEVICE.getRenderThread().attachContext();
-
     //End of TEMP
 }
 
