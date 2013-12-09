@@ -23,7 +23,7 @@ Test::Camera::Camera(Test::StupidRenderer* pStupidRenderer) :
         addComponent(makeLogicComponent([this](){this->logic();}));
         addComponent(makeStupidCameraComponent(pStupidRenderer,
                                                view,
-                                               proj);
+                                               proj));
     }
 
 void Test::Camera::logic(void){
@@ -36,14 +36,16 @@ void Test::Camera::logic(void){
 }
 
 // SingleMeshEntity
-Test::SingleMeshEntity::SingleMeshEntity(Mesh* pMesh, glm::mat4 _model) :
+Test::SingleMeshEntity::SingleMeshEntity(Test::StupidRenderer* pStupidRenderer,
+                                         Mesh* pMesh,
+                                         glm::mat4 _model) :
     pMesh(pMesh),
-    model(_model)
+    model(std::move(_model))
     {
         auto rfunc = [this](const glm::mat4& view, const glm::mat4& proj){
             this->render(view, proj);
-        }
-        addComponent(makeStupidRenderComponent(rfunc));
+        };
+        addComponent(makeStupidRenderComponent(pStupidRenderer, rfunc));
     }
 
 void Test::SingleMeshEntity::render(const glm::mat4& view, const glm::mat4& projection){
@@ -51,7 +53,8 @@ void Test::SingleMeshEntity::render(const glm::mat4& view, const glm::mat4& proj
 }
 
 // Sphere
-Test::Sphere::Sphere(std::unique_ptr<btCollisionShape> pCollisionMesh,
+Test::Sphere::Sphere(Test::StupidRenderer* pStupidRenderer,
+                     std::unique_ptr<btCollisionShape> pCollisionMesh,
                      PhysicsNode* pParent,
                      glm::vec3 initialPos,
                      glm::vec3 initialVel,
@@ -71,12 +74,13 @@ Test::Sphere::Sphere(std::unique_ptr<btCollisionShape> pCollisionMesh,
                                           pParent,
                                           std::move(initialPos),
                                           std::move(initialVel),
+                                          model,
                                           mass,
                                           restitution));
         auto rfunc = [this](const glm::mat4& view, const glm::mat4& proj){
             this->render(view, proj);
-        }
-        addComponent(makeStupidRenderComponent(rfunc));
+        };
+        addComponent(makeStupidRenderComponent(pStupidRenderer, rfunc));
     }
 
 Test::Sphere::~Sphere(void){
@@ -104,7 +108,8 @@ glm::vec3 Test::Sphere::getPosition(void){
 }
 
 //Box
-Test::Box::Box(float xHalfSize, float yHalfSize, float zHalfSize,
+Test::Box::Box(Test::StupidRenderer* pStupidRenderer,
+               float xHalfSize, float yHalfSize, float zHalfSize,
                std::unique_ptr<btCollisionShape>pCollisionMesh,
                PhysicsNode* pParent,
                glm::vec3 initialPos,
@@ -115,7 +120,7 @@ Test::Box::Box(float xHalfSize, float yHalfSize, float zHalfSize,
     model(glm::translate(glm::mat4(1.0f), initialPos))
     {
         // Model
-        Test::makeBox(VBO, IBO, VAO, xSize, ySize, zSize);
+        Test::makeBox(VBO, IBO, VAO, xHalfSize, yHalfSize, zHalfSize);
 
         // Shader
         shader.addShaderObject(GL_VERTEX_SHADER, "shaders/VS_color.glsl");
@@ -126,12 +131,13 @@ Test::Box::Box(float xHalfSize, float yHalfSize, float zHalfSize,
                                           pParent,
                                           std::move(initialPos),
                                           std::move(initialVel),
+                                          model,
                                           mass,
                                           restitution));
         auto rfunc = [this](const glm::mat4& view, const glm::mat4& proj){
             this->render(view, proj);
-        }
-        addComponent(makeStupidRenderComponent(rfunc));
+        };
+        addComponent(makeStupidRenderComponent(pStupidRenderer, rfunc));
     }
 
 Test::Box::~Box(void){

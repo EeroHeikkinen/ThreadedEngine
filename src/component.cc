@@ -1,5 +1,6 @@
 #include "component.hh"
 #include "device.hh"
+#include "test_renderers.hh"
 
 #include <iostream>//TEMP
 #include <glm/glm.hpp>
@@ -7,12 +8,30 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/quaternion.hpp>
 #include <glm/gtx/transform.hpp>
+
 using namespace glm;
 
+//RenderComponent
+void StupidRenderComponent::addToStructure(void){
+    pTargetStructure->addComponent(this);
+}
+void StupidRenderComponent::removeFromStructure(void){
+    pTargetStructure->removeComponent(this);
+}
+void StupidCameraComponent::addToStructure(void){
+    pTargetStructure->addComponent(this);
+}
+void StupidCameraComponent::removeFromStructure(void){
+    pTargetStructure->removeComponent(this);
+}
 
-void StupidRenderComponent::addToStructure(void){}
-
-
+//LogicComponent
+void LogicComponent::addToStructure(void){
+    DEVICE.getLogicThread().addComponent(this);
+}
+void LogicComponent::removeFromStructure(void){
+    DEVICE.getLogicThread().removeComponent(this);
+}
 
 //PhysicsComponent
 PhysicsComponent::PhysicsComponent(std::unique_ptr<btCollisionShape> _pCollisionMesh,
@@ -64,6 +83,4 @@ void PhysicsComponent::setTransformation(const btTransform& worldTrans){
 	quat glm_rot = quat(rot.w(), rot.x(), rot.y(), rot.z());
 
 	model = translate(pos.x(), pos.y(), pos.z()) * toMat4(glm_rot);
-
-    //std::cout << pos.x() << std::endl << pos.y() << std::endl << pos.z() << std::endl << std::endl;
 }

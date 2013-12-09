@@ -1,16 +1,14 @@
 #ifndef MESH_HH
 #define MESH_HH
 
-
 #include <GL/GLEW.h>
 #include <glm/glm.hpp>
 #include <mutex>
 
-
 class Material;
 
 
-class Mesh {
+class Mesh{
 public:
     Mesh(Material* pMaterial_);
     Mesh(const Mesh&) = delete;

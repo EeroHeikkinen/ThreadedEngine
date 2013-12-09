@@ -4,7 +4,7 @@
 #include "component.hh"
 
 #include <thread>
-#include <tbb/tbb.h>
+#include <unordered_set>
 class Device;
 
 
@@ -21,8 +21,9 @@ public:
     void loop(void);
 
     // Adds a new LogicComponent pointer to vpLogicComponents vector.
-    void addLogicComponent(LogicComponent* pComponent);
-    void addLogicComponents(tbb::concurrent_vector<LogicComponent*>& vpComponents);
+    void addComponent(LogicComponent* pComponent);
+    void removeComponent(LogicComponent* pComponent);
+    /*void addComponents(tbb::concurrent_vector<LogicComponent*>& vpComponents);*/
     //void deleteLogicComponent(LogicComponent*);
 
     LogicThread(const LogicThread&) = delete;
@@ -32,7 +33,8 @@ private:
     bool running;
     unsigned int initOrderNumber;
 
-    tbb::concurrent_vector<LogicComponent*> vpLogicComponents;
+    std::unordered_set<LogicComponent*> spLogicComponents;
+    LogicComponent *pCurrentComponent, *pToBeErased;
 };
 
 

@@ -1,7 +1,6 @@
 #ifndef MATERIAL_HH
 #define MATERIAL_HH
 
-
 #include <GL/GLEW.h>
 #include <mutex>
 #include <map>

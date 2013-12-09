@@ -84,8 +84,11 @@ void RenderThread::loop(void){
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     // render
-    for(auto pRenderer : vpRenderers)
-        pRenderer->render();
+    {
+        std::lock_guard<std::mutex> lock(rendererMapMutex);
+        for(auto& pRendererPair : mpRenderers)
+            pRendererPair.first->render();
+    }
 
     // show the rendered stuff
     pWindow->display();
@@ -133,11 +136,7 @@ void RenderThread::attachContext(void){
     glContextMutex.unlock();
 }
 
-void RenderThread::addRenderer(Renderer* pRenderer){
-    vpRenderers.push_back(pRenderer);
-}
-
-void RenderThread::addRenderers(tbb::concurrent_vector<Renderer*>& vpRenderers_){
+/*void RenderThread::addRenderers(tbb::concurrent_vector<Renderer*>& vpRenderers_){
     for(auto pRenderer : vpRenderers_)
         vpRenderers.push_back(pRenderer);
-}
+}*/

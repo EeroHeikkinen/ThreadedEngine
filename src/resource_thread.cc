@@ -42,7 +42,6 @@ void ResourceThread::init(void){
 
     testEntLoader = new Test::TestEntityLoader();
     testEntLoader->loadEntities();
-    testEntLoader->pushEntities();
 
     DEVICE.getRenderThread().attachContext();
 

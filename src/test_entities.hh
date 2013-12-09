@@ -16,7 +16,7 @@ class Mesh;
 namespace Test{
     class Camera : public Entity{
     public:
-        Camera(Test::StupidRenderer*);
+        Camera(StupidRenderer*);
 
         void logic(void);
     protected:
@@ -27,7 +27,9 @@ namespace Test{
 
     class SingleMeshEntity : public Entity{
     public:
-        SingleMeshEntity(Mesh* pMesh, glm::mat4 model);
+        SingleMeshEntity(StupidRenderer* pStupidRenderer,
+                         Mesh* pMesh,
+                         glm::mat4 model);
 
         void render(const glm::mat4&, const glm::mat4&);
     private:
@@ -37,7 +39,8 @@ namespace Test{
 
     class Sphere : public Entity{ //render, physics
     public:
-        Sphere(std::unique_ptr<btCollisionShape> pCollisionMesh,
+        Sphere(StupidRenderer* pStupidRenderer,
+               std::unique_ptr<btCollisionShape> pCollisionMesh,
                PhysicsNode* pParent,
                glm::vec3 initialPos,
                glm::vec3 initialVel,
@@ -58,7 +61,8 @@ namespace Test{
 
     class Box : public Entity{ //render, physics
     public:
-        Box(float xHalfSize, float yHalfSize, float zHalfSize,
+        Box(StupidRenderer* pStupidRenderer,
+            float xHalfSize, float yHalfSize, float zHalfSize,
             std::unique_ptr<btCollisionShape> pCollisionMesh,
             PhysicsNode* pParent,
             glm::vec3 initialPos,

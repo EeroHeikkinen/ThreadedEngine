@@ -2,8 +2,10 @@
 #define TEST_RENDERERS_HH
 
 #include "renderer.hh"
-#include "threading_utils.hh"
+#include "component.hh"
+
 #include <tbb/concurrent_unordered_set.h>
+#include <mutex>
 
 
 namespace Test
@@ -13,27 +15,25 @@ namespace Test
     class StupidRenderer : public Renderer{
     public:
         StupidRenderer(void);
-        ~StupidRenderer(void);
+        ~StupidRenderer(void){}
 
-        //Traversal...
         void render(void);
-        //and growing are thread-safe, but...
-        void addRenderComponent(RenderComponent* renderComponent){
-            spRenderComponents.insert(renderComponent);
-        }
-        //removal isn't. Thus we need a more complicated approach.
-        void removeRenderComponent(RenderComponent* renderComponent){
-        }
 
+        void addComponent(StupidRenderComponent*);
+        void removeComponent(StupidRenderComponent*);
 
-
+        void addComponent(StupidCameraComponent*);
+        void removeComponent(StupidCameraComponent*);
     private:
-        QueuedInterruptMutex erasureMutex;
-        tbb::concurrent_unordered_set<RenderComponent*> spRenderComponents;
-        Test::Camera* pCamera;
-        std::unique_ptr<> defaultCamera;
+        std::mutex mutex; //slow, but then again, this is StupidRenderer
+        tbb::concurrent_unordered_set<StupidRenderComponent*> spStupidRenderComponents;
+
+        glm::mat4 defaultView, defaultProj;
+        StupidCameraComponent defaultCamera;
+
+        StupidCameraComponent* pCurrentCamera;
     };
-}
+} //namespace Test
 
 
 #endif // TEST_RENDERERS_HH

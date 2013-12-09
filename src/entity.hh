@@ -1,3 +1,6 @@
+#ifndef ENTITY_HH
+#define ENTITY_HH
+
 #include "component.hh"
 
 #include <memory>
@@ -39,3 +42,6 @@ DerivedEntity* Entity::addChild(std::unique_ptr<DerivedEntity> pChild){
     mpChildren.emplace(pAdded, std::move(pChild));
     return pAdded;
 }
+
+
+#endif //ENTITY_HH

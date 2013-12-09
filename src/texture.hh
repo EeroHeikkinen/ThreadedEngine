@@ -1,10 +1,8 @@
 #ifndef TEXTURE_HH
 #define TEXTURE_HH
 
-
 #include <string>
 #include <GL/GLEW.h>
-
 
 #define FOURCC_DXT1 0x31545844 // "DXT1" in ASCII
 #define FOURCC_DXT3 0x33545844 // "DXT3" in ASCII

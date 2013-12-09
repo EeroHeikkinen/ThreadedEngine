@@ -1,13 +1,12 @@
 #ifndef DEVICE_HH
 #define DEVICE_HH
 
-
 #include "render_thread.hh"
 #include "logic_thread.hh"
 #include "physics_thread.hh"
 #include "resource_thread.hh"
-#include "scene_graph.hh"
 #include "threading_utils.hh"
+#include "entity.hh"
 
 #define DEVICE Device::getDevice()
 

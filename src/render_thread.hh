@@ -6,8 +6,9 @@
 
 #include <thread>
 #include <mutex>
-#include <tbb/tbb.h>
+#include <unordered_map>
 #include <SFML/Window.hpp>
+
 class Device;
 
 
@@ -33,9 +34,13 @@ public:
     void detachContext(void);
     void attachContext(void);
 
-    // Adds a new Renderer pointer to vpRenderers vector.
-    void addRenderer(Renderer*);
+    // Gains ownership of and adds a renderer pointer to vpRenderers vector.
+    template<typename DerivedRenderer>
+    DerivedRenderer* addRenderer(std::unique_ptr<DerivedRenderer>);
+
     void addRenderers(tbb::concurrent_vector<Renderer*>&);
+
+    //deletion has to be implemented carefully, as it's not a thread-safe operation
     //void deleteRenderer(Renderer*);
 
     RenderThread(const RenderThread&) = delete;
@@ -51,12 +56,22 @@ private:
     sf::Window* pWindow;
     bool windowInitialized;
     QueuedInterruptMutex glContextMutex;
-    //std::mutex glContextMutex;
-    //bool deactivatingContext;
 
     // Renderer container vector
-    tbb::concurrent_vector<Renderer*> vpRenderers;
+    std::mutex rendererMapMutex;
+    std::unordered_map<Renderer*, std::unique_ptr<Renderer>> mpRenderers;
 };
+
+template<typename DerivedRenderer>
+DerivedRenderer* RenderThread::addRenderer(std::unique_ptr<DerivedRenderer> pRenderer){
+    std::lock_guard<std::mutex> lock(rendererMapMutex);
+    DerivedRenderer* pAdded = pRenderer.get();
+    if(pAdded == nullptr)
+        return nullptr;
+
+    mpRenderers.emplace(pAdded, std::move(pRenderer));
+    return pAdded;
+}
 
 
 #endif // RENDER_THREAD_HH

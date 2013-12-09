@@ -25,6 +25,10 @@ protected:
     unsigned int currentNumber;
 };
 
+/* TODO: MAKE SURE THIS IS BASIC LOCKABLE *
+ * if this is the case, this one can and  *
+ * should be used with lock wrappers such *
+ * as std::lock_guard or std::unique_lock */
 class QueuedInterruptMutex{
 public:
     QueuedInterruptMutex(void);

@@ -23,8 +23,8 @@ public:
 //StupidRenderComponent
 class StupidRenderComponent : public Component{
 public:
-    StupidRenderComponent(Test::StupidRenderer* pStupidRenderer) :
-        pStupidRenderer(pStupidRenderer)
+    StupidRenderComponent(Test::StupidRenderer* pTargetStructure) :
+        pTargetStructure(pTargetStructure)
         {}
     virtual ~StupidRenderComponent(void){}
 
@@ -33,7 +33,7 @@ public:
     StupidRenderComponent(const StupidRenderComponent&) = delete;
     StupidRenderComponent& operator=(const StupidRenderComponent&) = delete;
 protected:
-    Test::StupidRenderer* pStupidRenderer;
+    Test::StupidRenderer* pTargetStructure;
     /* For successful threading, these two      *
      * functions shall be called in the most    *
      * derived class constructor and destructor *
@@ -44,9 +44,9 @@ protected:
 template<typename RenderFunc>
 class _StupidRenderComponent : public StupidRenderComponent{
 public:
-    _StupidRenderComponent(Test::StupidRenderer* pStupidRenderer,
+    _StupidRenderComponent(Test::StupidRenderer* pTargetStructure,
                            RenderFunc rfunc) :
-        StupidRenderComponent(pStupidRenderer),
+        StupidRenderComponent(pTargetStructure),
         rfunc(rfunc)
         {
             addToStructure();
@@ -63,18 +63,18 @@ private:
 };
 template<typename RenderFunc>
 std::unique_ptr<_StupidRenderComponent<RenderFunc>>
-makeStupidRenderComponent(Test::StupidRenderer* pStupidRenderer,
+makeStupidRenderComponent(Test::StupidRenderer* pTargetStructure,
                           RenderFunc rfunc){
-    return make_unique<_StupidRenderComponent<RenderFunc>>(pStupidRenderer, rfunc);
+    return make_unique<_StupidRenderComponent<RenderFunc>>(pTargetStructure, rfunc);
 }
 
 //StupidCameraComponent
 class StupidCameraComponent : public Component{
 public:
-    StupidCameraComponent(Test::StupidRenderer* pStupidRenderer,
+    StupidCameraComponent(Test::StupidRenderer* pTargetStructure,
                           glm::mat4& view,
                           glm::mat4& proj) :
-        pStupidRenderer(pStupidRenderer),
+        pTargetStructure(pTargetStructure),
         view(view),
         proj(proj)
         {}
@@ -87,7 +87,7 @@ public:
         return proj;
     }
 protected:
-    Test::StupidRenderer* pStupidRenderer;
+    Test::StupidRenderer* pTargetStructure;
     glm::mat4& view;
     glm::mat4& proj;
     /* For successful threading, these two      *

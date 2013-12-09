@@ -1,43 +1,34 @@
 #include "test_entity_loaders.hh"
+#include "test_renderers.hh"
+#include "test_entities.hh"
 #include "texture.hh"
 #include "shader.hh"
 #include "material.hh"
 #include "mesh.hh"
 #include "test_models.hh"
+#include "device.hh"
 
 #include <stdlib.h>
 #include <time.h>
 
 
-Test::TestEntityLoader::TestEntityLoader(void) {}
-
-Test::TestEntityLoader::~TestEntityLoader(void) {
-    delete pCamera;
-    delete pTestRenderer;
-    //delete pBox;
-
+Test::TestEntityLoader::~TestEntityLoader(void){
     delete pTexture;
     delete pShader;
     delete pMaterial;
     delete pMesh;
-
-    for (auto it = vpSingleMeshEntities.begin(); it != vpSingleMeshEntities.end(); it++) {
-        delete *it;
-    }
 }
 
-void Test::TestEntityLoader::loadEntities(void) {
+void Test::TestEntityLoader::loadEntities(void){
     srand(time(NULL));
 
-    pCamera = new Test::Camera();
-    pTestRenderer = new Test::TestRenderer(pCamera);
-    //pBox = new Test::Box(2.0f, 0.1f, 2.0f, glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, -1.1f, 0.0f)));
+    Test::StupidRenderer* pRenderer =
+        DEVICE.getRenderThread().addRenderer(
+            make_unique<Test::StupidRenderer>());
+    DEVICE.getUniverse().addChild(
+        make_unique<Test::Camera>(pRenderer));
 
-    addRenderer(pTestRenderer);
-    //addEntity(pBox);
-    addEntity(pCamera);
-
-    // resources
+    // resources (non-RAII)
     pTexture = new Texture(GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR, GL_WRAP_BORDER, GL_WRAP_BORDER, 4);
     pTexture->loadFromFile("res/textures/edwerd.png");
 
@@ -50,20 +41,15 @@ void Test::TestEntityLoader::loadEntities(void) {
 
     pMesh = new Mesh(pMaterial);
     makeUVSphere(pMesh->getVBO(), pMesh->getIBO(), pMesh->getVAO(), pMesh->getNIndices(), 32, 16);
-    /*
-    TODO
-    fix this interface
-    */
 
-
-    for (int i = 0; i < 100; i++) {
-        Test::SingleMeshEntity* pSingleMeshEntity =
-            new Test::SingleMeshEntity(pMesh,
+    for(int i = 0; i < 100; i++){
+        DEVICE.getUniverse().addChild(
+            make_unique<Test::SingleMeshEntity>(
+                pRenderer,
+                pMesh,
                 glm::translate(glm::mat4(1.0f),
-                    glm::vec3(50.0f-(rand()%10000)/100.0f,
-                              50.0f-(rand()%10000)/100.0f,
-                              50.0f-(rand()%10000)/100.0f)));
-        addEntity(pSingleMeshEntity);
-        vpSingleMeshEntities.push_back(pSingleMeshEntity);
+                               glm::vec3(50.0f-(rand()%10000)/100.0f,
+                                         50.0f-(rand()%10000)/100.0f,
+                                         50.0f-(rand()%10000)/100.0f))));
     }
 }
