@@ -9,85 +9,56 @@
 
 
 // Camera
-
-Test::Camera::Camera(void) :
+Test::Camera::Camera(Test::StupidRenderer* pStupidRenderer) :
     angle(0.0f),
     pos(25.0f*sin(angle), 0.0f, 20.0f*cos(angle)),
-
     view(glm::lookAt(pos,                           // camera position
                      glm::vec3(0.0f, 0.0f, 0.0f),   // spot to look at
                      glm::vec3(0.0f, 1.0f, 0.0f))), // up vector
-    projection(glm::perspective(60.0f,              // FOV
+    proj(glm::perspective(60.0f,              // FOV
                                 4.0f / 3.0f,        // aspect ratio
                                 0.1f,               // near clipping plane
                                 100.0f))            // far clipping plane
-    {}
+    {
+        addComponent(makeLogicComponent([this](){this->logic();}));
+        addComponent(makeStupidCameraComponent(pStupidRenderer,
+                                               view,
+                                               proj);
+    }
 
 void Test::Camera::logic(void){
     angle += 0.0035;
     if (angle > 2*PI) angle -= 2*PI;
     pos = glm::vec3(25.0f*sin(angle), 0.0f, 20.0f*cos(angle));
     view = glm::lookAt(pos, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-    projection = glm::perspective(60.0f, 4.0f / 3.0f, 0.1f, 100.0f);
+    proj = glm::perspective(60.0f, 4.0f / 3.0f, 0.1f, 100.0f);
 
-}
-
-const glm::mat4& Test::Camera::getViewMatrix(void) const{
-    return view;
-}
-
-const glm::mat4& Test::Camera::getProjectionMatrix(void) const{
-    return projection;
 }
 
 // SingleMeshEntity
+Test::SingleMeshEntity::SingleMeshEntity(Mesh* pMesh, glm::mat4 _model) :
+    pMesh(pMesh),
+    model(_model)
+    {
+        auto rfunc = [this](const glm::mat4& view, const glm::mat4& proj){
+            this->render(view, proj);
+        }
+        addComponent(makeStupidRenderComponent(rfunc));
+    }
 
-Test::SingleMeshEntity::SingleMeshEntity(Mesh* pMesh_, glm::mat4 model_) :
-    pMesh(pMesh_),
-    model(model_)
-    {}
-
-void Test::SingleMeshEntity::render(const glm::mat4& view, const glm::mat4& projection) {
+void Test::SingleMeshEntity::render(const glm::mat4& view, const glm::mat4& projection){
     pMesh->render(view, projection, model);
 }
 
-Test::WatcherCamera::WatcherCamera(Test::Sphere* pSphere) :
-    pSphere(pSphere),
-    pBox(nullptr)
-    {std::cout << "Sphere" << pBox << std::endl;}
-
-Test::WatcherCamera::WatcherCamera(Test::Box* pBox) :
-    pSphere(nullptr),
-    pBox(pBox)
-    {std::cout << "Box" << pSphere << std::endl;}
-
-void Test::WatcherCamera::logic(void){
-    glm::vec3 target;
-    if(pSphere)
-        target = pSphere->getPosition();
-    else if(pBox)
-        target = pBox->getPosition();
-    else
-        target = glm::vec3(0.0f);
-    //angle += 0.01;
-    if (angle > 2*PI) angle -= 2*PI;
-    pos = glm::vec3(5.0f*sin(angle), 2.0f, 5.0f*cos(angle));
-    view = glm::lookAt(pos, target, glm::vec3(0.0f, 1.0f, 0.0f));
-    projection = glm::perspective(60.0f, 4.0f / 3.0f, 0.1f, 100.0f);
-}
-
 // Sphere
-
-Test::Sphere::Sphere(btCollisionShape* collisionMesh_,
-                     PhysicsNode* parent_,
-                     glm::vec3 initialPos_,
-                     glm::vec3 initialVel_,
-                     float mass_,
-                     float restitution_) :
-    PhysicsComponent(collisionMesh_, parent_, initialPos_, initialVel_, model, mass_, restitution_),
-    model(glm::translate(glm::mat4(1.0f), initialPos_))
+Test::Sphere::Sphere(std::unique_ptr<btCollisionShape> pCollisionMesh,
+                     PhysicsNode* pParent,
+                     glm::vec3 initialPos,
+                     glm::vec3 initialVel,
+                     float mass,
+                     float restitution) :
+    model(glm::translate(glm::mat4(1.0f), initialPos))
     {
-        std::cout << "TrueSphereInit" << std::endl;
         // Model
         Test::makeUVSphere(VBO, IBO, VAO, numIndices, 32, 16);
 
@@ -95,6 +66,17 @@ Test::Sphere::Sphere(btCollisionShape* collisionMesh_,
         shader.addShaderObject(GL_VERTEX_SHADER, "shaders/VS_texture_normal.glsl");
         shader.addShaderObject(GL_FRAGMENT_SHADER, "shaders/FS_texture_normal.glsl");
         shader.link();
+
+        addComponent(makePhysicsComponent(std::move(pCollisionMesh),
+                                          pParent,
+                                          std::move(initialPos),
+                                          std::move(initialVel),
+                                          mass,
+                                          restitution));
+        auto rfunc = [this](const glm::mat4& view, const glm::mat4& proj){
+            this->render(view, proj);
+        }
+        addComponent(makeStupidRenderComponent(rfunc));
     }
 
 Test::Sphere::~Sphere(void){
@@ -122,25 +104,34 @@ glm::vec3 Test::Sphere::getPosition(void){
 }
 
 //Box
-
-Test::Box::Box(float xSize_, float ySize_, float zSize_,
-               btCollisionShape* collisionMesh_,
-               PhysicsNode* parent_,
-               glm::vec3 initialPos_,
-               glm::vec3 initialVel_,
-               float mass_,
-               float restitution_) :
-    PhysicsComponent(collisionMesh_, parent_, initialPos_, initialVel_, model, mass_, restitution_),
+Test::Box::Box(float xHalfSize, float yHalfSize, float zHalfSize,
+               std::unique_ptr<btCollisionShape>pCollisionMesh,
+               PhysicsNode* pParent,
+               glm::vec3 initialPos,
+               glm::vec3 initialVel,
+               float mass,
+               float restitution) :
     numIndices(36),
-    model(glm::translate(glm::mat4(1.0f), initialPos_))
+    model(glm::translate(glm::mat4(1.0f), initialPos))
     {
         // Model
-        Test::makeBox(VBO, IBO, VAO, xSize_, ySize_, zSize_);
+        Test::makeBox(VBO, IBO, VAO, xSize, ySize, zSize);
 
         // Shader
         shader.addShaderObject(GL_VERTEX_SHADER, "shaders/VS_color.glsl");
         shader.addShaderObject(GL_FRAGMENT_SHADER, "shaders/FS_color.glsl");
         shader.link();
+
+        addComponent(makePhysicsComponent(std::move(pCollisionMesh),
+                                          pParent,
+                                          std::move(initialPos),
+                                          std::move(initialVel),
+                                          mass,
+                                          restitution));
+        auto rfunc = [this](const glm::mat4& view, const glm::mat4& proj){
+            this->render(view, proj);
+        }
+        addComponent(makeStupidRenderComponent(rfunc));
     }
 
 Test::Box::~Box(void){

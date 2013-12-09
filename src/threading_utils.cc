@@ -20,12 +20,8 @@ void QueuedInterruptMutex::dispatchInterrupts(void){ //dispatch waiting interrup
     std::cout << "Dispatching" << std::endl;
     if(cvQueue.empty())
         return;
-
-    if(!cvQueue.try_pop(pCurrentCv)){ //if not empty, pop the CV to be notified
-            /*TODO
-            throw an exception */
-            return;
-    }
+    if(!cvQueue.try_pop(pCurrentCv)) //if not empty, pop the CV to be notified
+        return;
     pCurrentCv->notify_all(); //notify it
     while(pCurrentCv != &ownerCv) //stop execution until the queue is empty
         ownerCv.wait(ownerLock);

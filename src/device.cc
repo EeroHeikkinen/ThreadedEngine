@@ -36,8 +36,8 @@ PhysicsThread& Device::getPhysicsThread(void){
     return physicsThread;
 }
 
-SceneGraph& Device::getSceneGraph(void){
-    return sceneGraph;
+Entity& Device::getUniverse(void){
+    return universe;
 }
 
 Device::Device(void) :

@@ -8,6 +8,10 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 class PhysicsNode;
+namespace Test
+{
+    class StupidRenderer;
+}
 
 
 class Component{
@@ -19,14 +23,17 @@ public:
 //StupidRenderComponent
 class StupidRenderComponent : public Component{
 public:
-    StupidRenderComponent(void){}
+    StupidRenderComponent(Test::StupidRenderer* pStupidRenderer) :
+        pStupidRenderer(pStupidRenderer)
+        {}
     virtual ~StupidRenderComponent(void){}
 
     virtual void render(const glm::mat4&, const glm::mat4&) = 0;
 
-    RenderComponent(const RenderComponent&) = delete;
-    RenderComponent& operator=(const RenderComponent&) = delete;
+    StupidRenderComponent(const StupidRenderComponent&) = delete;
+    StupidRenderComponent& operator=(const StupidRenderComponent&) = delete;
 protected:
+    Test::StupidRenderer* pStupidRenderer;
     /* For successful threading, these two      *
      * functions shall be called in the most    *
      * derived class constructor and destructor *
@@ -37,7 +44,9 @@ protected:
 template<typename RenderFunc>
 class _StupidRenderComponent : public StupidRenderComponent{
 public:
-    _StupidRenderComponent(RenderFunc rfunc) :
+    _StupidRenderComponent(Test::StupidRenderer* pStupidRenderer,
+                           RenderFunc rfunc) :
+        StupidRenderComponent(pStupidRenderer),
         rfunc(rfunc)
         {
             addToStructure();
@@ -54,15 +63,63 @@ private:
 };
 template<typename RenderFunc>
 std::unique_ptr<_StupidRenderComponent<RenderFunc>>
-makeStupidRenderComponent(RenderFunc rfunc){
-    return make_unique<_StupidRenderComponent<RenderFunc>>(rfunc);
+makeStupidRenderComponent(Test::StupidRenderer* pStupidRenderer,
+                          RenderFunc rfunc){
+    return make_unique<_StupidRenderComponent<RenderFunc>>(pStupidRenderer, rfunc);
+}
+
+//StupidCameraComponent
+class StupidCameraComponent : public Component{
+public:
+    StupidCameraComponent(Test::StupidRenderer* pStupidRenderer,
+                          glm::mat4& view,
+                          glm::mat4& proj) :
+        pStupidRenderer(pStupidRenderer),
+        view(view),
+        proj(proj)
+        {}
+    virtual ~StupidCameraComponent(void){}
+
+    const glm::mat4& getViewMatrix(void){
+        return view;
+    }
+    const glm::mat4& getProjMatrix(void){
+        return proj;
+    }
+protected:
+    Test::StupidRenderer* pStupidRenderer;
+    glm::mat4& view;
+    glm::mat4& proj;
+    /* For successful threading, these two      *
+     * functions shall be called in the most    *
+     * derived class constructor and destructor *
+     * and NEVER OVERRIDDEN!                    */
+    void addToStructure(void);
+    void removeFromStructure(void);
+};
+template<typename... Args>
+class _StupidCameraComponent : public StupidCameraComponent{
+public:
+    _StupidCameraComponent(Args&&... args) :
+        StupidCameraComponent(std::forward<Args>(args)...)
+        {
+            addToStructure();
+        }
+    ~_StupidCameraComponent(void){
+        removeFromStructure();
+    }
+};
+template<typename... Args>
+std::unique_ptr<_StupidCameraComponent<Args...>>
+makeStupidCameraComponent(Args&&... args){
+    return make_unique<_StupidCameraComponent<Args...>>(std::forward<Args>(args)...);
 }
 
 //LogicComponent
 class LogicComponent : public Component{
 public:
-    LogicComponent(void);
-    virtual ~LogicComponent(void);
+    LogicComponent(void){}
+    virtual ~LogicComponent(void){}
 
     virtual void logic(void) = 0;
 
@@ -118,11 +175,14 @@ public:
     PhysicsComponent& operator=(const PhysicsComponent&) = delete;
 protected:
     std::unique_ptr<btCollisionShape> pCollisionMesh;
+    PhysicsNode* pParent;
     std::unique_ptr<PhysicsMotionState> pMotionState;
-    PhysicsNode* node;
+    std::unique_ptr<PhysicsNode> pPhysicsNode;
     glm::vec3 initialPos;
+    glm::vec3 initialVel;
     glm::mat4& model;
     float mass;
+    float restitution;
     std::unique_ptr<btRigidBody> pPhysicsBody;
 
     /* For successful threading, these two      *
@@ -132,6 +192,22 @@ protected:
     void addToStructure(void);
     void removeFromStructure(void);
 };
-
+template<typename... Args>
+class _PhysicsComponent : public PhysicsComponent{
+public:
+    _PhysicsComponent(Args&&... args) :
+        PhysicsComponent(std::forward<Args>(args)...)
+        {
+            addToStructure();
+        }
+    ~_PhysicsComponent(void){
+        removeFromStructure();
+    }
+};
+template<typename... Args>
+std::unique_ptr<_PhysicsComponent<Args...>>
+makePhysicsComponent(Args&&... args){
+    return make_unique<_PhysicsComponent<Args...>>(std::forward<Args>(args)...);
+}
 
 #endif // COMPONENT_HH

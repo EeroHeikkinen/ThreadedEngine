@@ -1,10 +1,13 @@
+#include "component.hh"
+
 #include <memory>
 #include <list>
 #include <unordered_map>
 
+
 class Entity{
 public:
-    Entity(void){}
+    Entity(void) : pParent(nullptr) {}
     virtual ~Entity(){}
     Entity(const Entity&) = delete; //add these later
     Entity& operator=(const Entity&) = delete;
@@ -12,7 +15,6 @@ public:
     template<typename DerivedEntity>
     DerivedEntity* addChild(std::unique_ptr<DerivedEntity>);
 
-    void eraseChild(Entity*);
     void eraseThisSubtree(void);
     void eraseThisAlone(void);
 
@@ -23,6 +25,8 @@ protected:
     Entity* pParent;
     std::list<std::unique_ptr<Component>> lpComponents;
     std::unordered_map<Entity*, std::unique_ptr<Entity>> mpChildren;
+
+    void eraseChild(Entity*);
 };
 
 template<typename DerivedEntity>
@@ -31,7 +35,7 @@ DerivedEntity* Entity::addChild(std::unique_ptr<DerivedEntity> pChild){
     if(pAdded == nullptr)
         return nullptr; //this means the user is somewhat stupid
 
-    pChild->parent = this;
+    pChild->pParent = this;
     mpChildren.emplace(pAdded, std::move(pChild));
     return pAdded;
 }

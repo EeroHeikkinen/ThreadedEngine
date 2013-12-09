@@ -4,7 +4,7 @@
 
 void EntityLoader::pushEntities(void) {
     DEVICE.getRenderThread().addRenderers(vpRenderers);
-    DEVICE.getSceneGraph().addRenderComponents(vpRenderComponents);
+    DEVICE.getRenderThreadSceneGraph().addRenderComponents(vpRenderComponents);
     /*
     TODO
     phusics too

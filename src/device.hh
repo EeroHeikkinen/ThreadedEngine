@@ -14,6 +14,8 @@
 class Device{
 public:
     static Device& getDevice(void);
+    Device(const Device&) = delete;
+    Device& operator=(const Device&) = delete;
 
     void eventLoop(void);
     void stop(void);
@@ -23,15 +25,12 @@ public:
     LogicThread& getLogicThread(void);
     PhysicsThread& getPhysicsThread(void);
 
-    SceneGraph& getSceneGraph(void);
+    Entity& getUniverse(void);
 
     friend void RenderThread::launch(void);
     friend void PhysicsThread::launch(void);
     friend void ResourceThread::launch(void);
     friend void LogicThread::launch(void);
-
-    Device(const Device&) = delete;
-    Device& operator=(const Device&) = delete;
 
 private:
     Device(void); // private constructor
@@ -49,7 +48,7 @@ private:
     LogicThread logicThread;
 
     // entity graph
-    EntityGraph entityGraph;
+    Entity universe;
 };
 
 

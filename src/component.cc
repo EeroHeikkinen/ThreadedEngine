@@ -10,20 +10,26 @@
 using namespace glm;
 
 
+void StupidRenderComponent::addToStructure(void){}
+
+
+
 //PhysicsComponent
 PhysicsComponent::PhysicsComponent(std::unique_ptr<btCollisionShape> _pCollisionMesh,
                                    PhysicsNode* pParent,
-								   vec3 initialPos,
-								   vec3 initialVel,
+								   vec3 _initialPos,
+								   vec3 _initialVel,
 								   mat4& model,
 								   float mass,
 								   float restitution) :
     pCollisionMesh(std::move(_pCollisionMesh)),
-    initialPos(initialPos),
+    pParent(pParent),
+    initialPos(std::move(_initialPos)),
+    initialVel(std::move(_initialVel)),
     model(model),
-    mass(mass)
+    mass(mass),
+    restitution(restitution)
     {
-        node = DEVICE.getPhysicsThread().getPhysicsTree().addNode(pParent, this);
         btTransform btInitialPos(btQuaternion(0,0,0,1),
                                      btVector3(initialPos.x, initialPos.y, initialPos.z));
 
@@ -32,27 +38,25 @@ PhysicsComponent::PhysicsComponent(std::unique_ptr<btCollisionShape> _pCollision
         btVector3 fallInertia = btVector3(0.0f,0.0f,0.0f);
         pCollisionMesh->calculateLocalInertia(btScalar(mass), fallInertia);
         btRigidBody::btRigidBodyConstructionInfo RigidBodyCI(mass,
-                                                             pMotionState,
-                                                             pCollisionMesh,
+                                                             pMotionState.get(),
+                                                             pCollisionMesh.get(),
                                                              fallInertia);
         pPhysicsBody = make_unique<btRigidBody>(RigidBodyCI);
         pPhysicsBody->setRestitution(restitution);
-
-        //to be moved elsewhere
-        DEVICE.getPhysicsThread().getDynamicsWorld().addRigidBody(physicsBody);
     }
 
 PhysicsComponent::~PhysicsComponent(){
-	delete node;
-    DEVICE.getPhysicsThread().getDynamicsWorld().removeRigidBody(physicsBody);
-	delete collisionMesh;
-	delete physicsBody;
-	delete motionState;
+    DEVICE.getPhysicsThread().getDynamicsWorld().removeRigidBody(pPhysicsBody.get());
 }
 
 void PhysicsComponent::addToStructure(void){
-    node = DEVICE.getPhysicsThread().getPhysicsTree().addNode(pParent, this);
-    DEVICE.getPhysicsThread().getDynamicsWorld().addRigidBody(physicsBody);
+    pPhysicsNode = std::unique_ptr<PhysicsNode>(DEVICE.getPhysicsThread().getPhysicsTree().addNode(pParent, this));
+    DEVICE.getPhysicsThread().getDynamicsWorld().addRigidBody(pPhysicsBody.get());
+}
+
+void PhysicsComponent::removeFromStructure(void){
+    DEVICE.getPhysicsThread().getDynamicsWorld().removeRigidBody(pPhysicsBody.get());
+}
 
 void PhysicsComponent::setTransformation(const btTransform& worldTrans){
 	btQuaternion rot = worldTrans.getRotation();
@@ -63,9 +67,3 @@ void PhysicsComponent::setTransformation(const btTransform& worldTrans){
 
     //std::cout << pos.x() << std::endl << pos.y() << std::endl << pos.z() << std::endl << std::endl;
 }
-
-//LogicComponent
-
-LogicComponent::LogicComponent(void) {}
-
-LogicComponent::~LogicComponent(void) {}
