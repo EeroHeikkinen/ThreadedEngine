@@ -85,7 +85,6 @@ void RenderThread::loop(void){
 
     // render
     {
-        std::cout << "Rendering!" << std::endl;
         std::lock_guard<std::mutex> lock(rendererMapMutex);
         for(auto& pRendererPair : mpRenderers)
             pRendererPair.first->render();
