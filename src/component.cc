@@ -61,6 +61,7 @@ PhysicsComponent::PhysicsComponent(std::unique_ptr<btCollisionShape> _pCollision
                                                              fallInertia);
         pPhysicsBody = make_unique<btRigidBody>(RigidBodyCI);
         pPhysicsBody->setRestitution(restitution);
+        pPhysicsBody->setLinearVelocity(btVector3(initialVel.x, initialVel.y, initialVel.z));
     }
 
 PhysicsComponent::~PhysicsComponent(){

@@ -59,22 +59,33 @@ void LogicThread::init(void){
                 (pRenderer,
                  make_unique<btSphereShape>(1.0f),
                  DEVICE.getPhysicsThread().getPhysicsTree().getRoot(),
-                 glm::vec3(0.0f,3.0f,0.0f),
-                 glm::vec3(0.0f,0.0f,0.0f),
+                 glm::vec3(10.0f,3.0f,0.0f),
+                 glm::vec3(-100.0f,0.0f,0.0f),
                  1.0f,
                  0.5f));
 
         DEVICE.getUniverse().addChild(
             make_unique<Test::Box>
                 (pRenderer,
-                 1.0f,1.0f,1.0f,
-                 make_unique<btBoxShape>(btVector3(1.0f,1.0f,1.0f)),
+                 10.0f,1.0f,10.0f,
+                 make_unique<btBoxShape>(btVector3(10.0f,1.0f,10.0f)),
                  DEVICE.getPhysicsThread().getPhysicsTree().getRoot(),
-                 glm::vec3(-1.0f,0.0f,1.0f),
+                 glm::vec3(-1.0f,-2.0f,1.0f),
                  glm::vec3(0.0f,0.0f,0.0f),
                  0.0f,
                  0.5f));
-
+        for (float i = 0.0f; i < 10.0f; i=i+2.0) {
+            DEVICE.getUniverse().addChild(
+                make_unique<Test::Box>
+                    (pRenderer,
+                     1.0f,1.0f,1.0f,
+                     make_unique<btBoxShape>(btVector3(1.0f,1.0f,1.0f)),
+                     DEVICE.getPhysicsThread().getPhysicsTree().getRoot(),
+                     glm::vec3(0.0f,i,0.0f),
+                     glm::vec3(0.0f,0.0f,0.0f),
+                     1.0f,
+                     0.5f));
+        }
     DEVICE.getRenderThread().attachContext();
 
     std::cout << "LogicInitEnd" << std::endl;
