@@ -17,6 +17,7 @@ bool QueuedInterruptMutex::checkInterrupts(void){ //check if there are any inter
 }
 
 void QueuedInterruptMutex::dispatchInterrupts(void){ //dispatch waiting interrupts
+    std::cout << "Dispatching!" << std::endl;
     if(cvQueue.empty())
         return;
     if(!cvQueue.try_pop(pCurrentCv)) //if not empty, pop the CV to be notified
@@ -27,6 +28,7 @@ void QueuedInterruptMutex::dispatchInterrupts(void){ //dispatch waiting interrup
 }
 
 void QueuedInterruptMutex::lock(void){
+    std::cout << "Locking!" << std::endl;
     std::condition_variable* pQueuedCv = new std::condition_variable;
     cvQueue.push(pQueuedCv);
 
@@ -37,6 +39,7 @@ void QueuedInterruptMutex::lock(void){
 }
 
 void QueuedInterruptMutex::unlock(void){
+    std::cout << "Unlocking!" << std::endl;
     delete pCurrentCv; //this destructs the queued condition variable
     if(!cvQueue.try_pop(pCurrentCv)) //check if queue is empty
         pCurrentCv = &ownerCv;

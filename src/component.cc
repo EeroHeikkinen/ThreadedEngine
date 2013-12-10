@@ -2,7 +2,6 @@
 #include "device.hh"
 #include "test_renderers.hh"
 
-#include <iostream>//TEMP
 #include <glm/glm.hpp>
 #include <glm/gtc/quaternion.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -50,12 +49,12 @@ PhysicsComponent::PhysicsComponent(std::unique_ptr<btCollisionShape> _pCollision
     restitution(restitution)
     {
         btTransform btInitialPos(btQuaternion(0,0,0,1),
-                                     btVector3(initialPos.x, initialPos.y, initialPos.z));
+                                 btVector3(initialPos.x, initialPos.y, initialPos.z));
 
         pMotionState = make_unique<PhysicsMotionState>(btInitialPos, this);
 
         btVector3 fallInertia = btVector3(0.0f,0.0f,0.0f);
-        pCollisionMesh->calculateLocalInertia(btScalar(mass), fallInertia);
+        pCollisionMesh->calculateLocalInertia(mass, fallInertia);
         btRigidBody::btRigidBodyConstructionInfo RigidBodyCI(mass,
                                                              pMotionState.get(),
                                                              pCollisionMesh.get(),
@@ -74,6 +73,7 @@ void PhysicsComponent::addToStructure(void){
 }
 
 void PhysicsComponent::removeFromStructure(void){
+    DEVICE.getPhysicsThread().getPhysicsTree().removeNode(pPhysicsNode.release());
     DEVICE.getPhysicsThread().getDynamicsWorld().removeRigidBody(pPhysicsBody.get());
 }
 
