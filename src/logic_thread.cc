@@ -46,9 +46,9 @@ void LogicThread::init(void){
     DEVICE.getUniverse().addChild(
         make_unique<Test::Camera>(pRenderer));
     //create a bunch of edwerdz
-    Test::EdwerdCollection* edwerdCollection =
-        DEVICE.getUniverse().addChild(make_unique<Test::EdwerdCollection>());
-    edwerdCollection->loadEdwerds(pRenderer);
+    // Test::EdwerdCollection* edwerdCollection =
+    //     DEVICE.getUniverse().addChild(make_unique<Test::EdwerdCollection>());
+    // edwerdCollection->loadEdwerds(pRenderer);
 
     DEVICE.getRenderThread().detachContext();
 
@@ -58,7 +58,7 @@ void LogicThread::init(void){
                  make_unique<btSphereShape>(1.0f),
                  DEVICE.getPhysicsThread().getPhysicsTree().getRoot(),
                  glm::vec3(10.0f,3.0f,0.0f),
-                 glm::vec3(-100.0f,0.0f,0.0f),
+                 glm::vec3(-10.0f,0.0f,0.0f),
                  1.0f,
                  0.5f));
 
@@ -72,7 +72,7 @@ void LogicThread::init(void){
                  glm::vec3(0.0f,0.0f,0.0f),
                  0.0f,
                  0.5f));
-        for (float i = 0.0f; i < 10.0f; i=i+2.0) {
+        for (float i = 0.0f; i < 1000.0f; i=i+2.0) {
             DEVICE.getUniverse().addChild(
                 make_unique<Test::Box>
                     (pRenderer,
