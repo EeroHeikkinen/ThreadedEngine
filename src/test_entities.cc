@@ -161,8 +161,9 @@ void Test::Box::render(const glm::mat4& view, const glm::mat4& projection){
     GLint MVPLoc = glGetUniformLocation(shader.getID(), "MVP");
 
     glUniformMatrix4fv(MVPLoc, 1, GL_FALSE, &MVP[0][0]);
-
+    std::cout << "BoxrenderbeforeDRAW" << std::endl;
     glDrawElements(GL_TRIANGLES, numIndices, GL_UNSIGNED_SHORT, (GLvoid*)0);
+    std::cout << "BoxrenderAFTER" << std::endl;
     glBindVertexArray(0);
 }
 glm::vec3 Test::Box::getPosition(void){
