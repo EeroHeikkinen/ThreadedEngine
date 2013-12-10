@@ -1,7 +1,6 @@
 #include "physics_tree.hh"
 
 #include <algorithm>
-#include <exception>
 
 
 PhysicsNode::PhysicsNode(PhysicsNode* pParent,
@@ -26,7 +25,7 @@ PhysicsNode::~PhysicsNode(){
 	//delete all children (which recursively deletes the whole subtree)
 
 	if (pParent != NULL)
-		for (auto pChild : vpChildren) {
+		for (auto pChild : vpChildren){
 			pParent->addChild(pChild);
 		}
 		pParent->removeChild(this);

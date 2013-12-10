@@ -10,6 +10,7 @@
 
 using namespace glm;
 
+
 //RenderComponent
 void StupidRenderComponent::addToStructure(void){
     pTargetStructure->addComponent(this);

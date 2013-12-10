@@ -1,7 +1,7 @@
 #ifndef COMPONENT_HH
 #define COMPONENT_HH
 
-#include "physics_motion_state.hh"
+#include "physics_utils.hh"
 #include "make_unique.hh"
 
 #include <glm/glm.hpp>

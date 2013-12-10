@@ -42,10 +42,10 @@ void PhysicsThread::init(void){
     pSolver = make_unique<btSequentialImpulseConstraintSolver>();
     pCollisionConfiguration = make_unique<btDefaultCollisionConfiguration>();
     pDispatcher = make_unique<btCollisionDispatcher>(pCollisionConfiguration.get());
-    pDynamicsWorld = make_unique<btDiscreteDynamicsWorld>(pDispatcher.get(),
-                                                          pBroadphase.get(),
-                                                          pSolver.get(),
-                                                          pCollisionConfiguration.get());
+    pDynamicsWorld = make_unique<DiscreteDynamicsWorld>(pDispatcher.get(),
+                                                        pBroadphase.get(),
+                                                        pSolver.get(),
+                                                        pCollisionConfiguration.get());
 
     pDynamicsWorld->setGravity(btVector3(0,-9.81,0));
 
@@ -61,7 +61,6 @@ void PhysicsThread::loop(void){
     pDynamicsWorld->stepSimulation(duration, 10);
     time_prev = time_curr;
 }
-
 
 PhysicsTree& PhysicsThread::getPhysicsTree() const{
     return *pPhysicsTree;

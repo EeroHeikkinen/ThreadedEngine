@@ -53,16 +53,6 @@ void LogicThread::init(void){
     DEVICE.getRenderThread().detachContext();
 
         DEVICE.getUniverse().addChild(
-            make_unique<Test::Sphere>
-                (pRenderer,
-                 make_unique<btSphereShape>(1.0f),
-                 DEVICE.getPhysicsThread().getPhysicsTree().getRoot(),
-                 glm::vec3(10.0f,3.0f,0.0f),
-                 glm::vec3(-100.0f,0.0f,0.0f),
-                 1.0f,
-                 0.5f));
-
-        DEVICE.getUniverse().addChild(
             make_unique<Test::Box>
                 (pRenderer,
                  10.0f,1.0f,10.0f,
@@ -84,6 +74,16 @@ void LogicThread::init(void){
                      1.0f,
                      0.5f));
         }
+        DEVICE.getUniverse().addChild(
+            make_unique<Test::Sphere>
+                (pRenderer,
+                 make_unique<btSphereShape>(1.0f),
+                 DEVICE.getPhysicsThread().getPhysicsTree().getRoot(),
+                 glm::vec3(10.0f,3.0f,0.0f),
+                 glm::vec3(-50.0f,0.0f,0.0f),
+                 1.0f,
+                 0.5f));
+
     DEVICE.getRenderThread().attachContext();
 }
 

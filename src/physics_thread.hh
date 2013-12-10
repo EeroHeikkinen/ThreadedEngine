@@ -3,11 +3,12 @@
 
 #include "physics_tree.hh"
 #include "component.hh"
-#include "physics_motion_state.hh"
+#include "physics_utils.hh"
 
 #include <thread>
 #include <btBulletDynamicsCommon.h>
 #include <chrono>
+
 class Device;
 
 
@@ -40,7 +41,7 @@ private:
     std::unique_ptr<btSequentialImpulseConstraintSolver> pSolver;
     std::unique_ptr<btDefaultCollisionConfiguration> pCollisionConfiguration;
     std::unique_ptr<btCollisionDispatcher> pDispatcher;
-    std::unique_ptr<btDiscreteDynamicsWorld> pDynamicsWorld;
+    std::unique_ptr<DiscreteDynamicsWorld> pDynamicsWorld;
 
     typedef std::chrono::high_resolution_clock clock;
     std::chrono::time_point<clock> time_prev, time_curr;

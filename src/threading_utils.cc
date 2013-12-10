@@ -1,5 +1,4 @@
 #include "threading_utils.hh"
-#include <iostream>
 
 
 //QueuedInterruptMutex

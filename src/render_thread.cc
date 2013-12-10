@@ -3,7 +3,7 @@
 
 #include <GL/GLEW.h>
 #include <SFML/OpenGL.hpp>
-#include <iostream> //TEMP
+#include <iostream>
 
 
 RenderThread::RenderThread(Device* pDevice, unsigned int initOrderNumber) :
@@ -95,17 +95,17 @@ void RenderThread::loop(void){
 
     // check if other threads want to borrow the GL context
     if(glContextMutex.checkInterrupts()){
-        while(!pWindow->setActive(false)) //get ridda dis spinlock!
+        while(!pWindow->setActive(false))
             sf::sleep(sf::milliseconds(5));
         //wait for other threads to do their work
         glContextMutex.dispatchInterrupts();
 
-        while(!pWindow->setActive(true)) //und dis too!
+        while(!pWindow->setActive(true))
             sf::sleep(sf::milliseconds(5));
     }
 
     // delay
-    sf::sleep(sf::milliseconds(10));
+    sf::sleep(sf::milliseconds(5));
     /*
     TODO
     Improve the delay
