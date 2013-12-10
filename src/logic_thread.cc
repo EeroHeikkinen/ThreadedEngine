@@ -4,7 +4,6 @@
 #include "device.hh"
 
 #include <SFML/Window.hpp>
-#include <iostream>
 
 namespace Test{class Camera;}
 
@@ -39,7 +38,6 @@ void LogicThread::join(void){
 }
 
 void LogicThread::init(void){
-    std::cout << "LogicInitBegin" << std::endl;
     //create a StupidRenderer
     Test::StupidRenderer* pRenderer =
         DEVICE.getRenderThread().addRenderer(
@@ -47,10 +45,10 @@ void LogicThread::init(void){
     //create a camera for the StupidRenderer
     DEVICE.getUniverse().addChild(
         make_unique<Test::Camera>(pRenderer));
-/*    //create a bunch of edwerdz
+    //create a bunch of edwerdz
     Test::EdwerdCollection* edwerdCollection =
         DEVICE.getUniverse().addChild(make_unique<Test::EdwerdCollection>());
-    edwerdCollection->loadEdwerds(pRenderer);*/
+    edwerdCollection->loadEdwerds(pRenderer);
 
     DEVICE.getRenderThread().detachContext();
 
@@ -87,8 +85,6 @@ void LogicThread::init(void){
                      0.5f));
         }
     DEVICE.getRenderThread().attachContext();
-
-    std::cout << "LogicInitEnd" << std::endl;
 }
 
 void LogicThread::loop(void){

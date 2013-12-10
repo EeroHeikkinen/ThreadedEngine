@@ -9,7 +9,6 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <stdlib.h>
 #include <time.h>
-#include <iostream>
 
 #define PI 3.14159265359
 
@@ -53,7 +52,6 @@ Test::SingleMeshEntity::SingleMeshEntity(Test::StupidRenderer* pStupidRenderer,
         addComponent(makeStupidRenderComponent(pStupidRenderer, rfunc));
     }
 void Test::SingleMeshEntity::render(const glm::mat4& view, const glm::mat4& projection){
-    std::cout << "SingleMeshRender!" << std::endl;
     pMesh->render(view, projection, model);
 }
 
@@ -93,21 +91,16 @@ Test::Sphere::~Sphere(void){
     glDeleteVertexArrays(1, &VAO);
 }
 void Test::Sphere::render(const glm::mat4& view, const glm::mat4& projection){
-    std::cout << "Spherender!" << std::endl;
     glm::mat4 MVP = projection * view * model;
 
     glBindVertexArray(VAO);
-    shader.use();
-    std::cout << "1" << std::endl;
-    GLint MVPLoc = glGetUniformLocation(shader.getID(), "MVP");
-    std::cout << "2" << std::endl;
 
-    glUniformMatrix4fv(MVPLoc, 1, GL_FALSE, &MVP[0][0]);
-    std::cout << "3" << std::endl;
-    std::cout << "NumIndices " << numIndices << std::endl;
+        shader.use();
+        GLint MVPLoc = glGetUniformLocation(shader.getID(), "MVP");
+        glUniformMatrix4fv(MVPLoc, 1, GL_FALSE, &MVP[0][0]);
 
-    glDrawElements(GL_TRIANGLES, numIndices, GL_UNSIGNED_SHORT, (GLvoid*)0);
-    std::cout << "4" << std::endl;
+        glDrawElements(GL_TRIANGLES, numIndices, GL_UNSIGNED_SHORT, (GLvoid*)0);
+
     glBindVertexArray(0);
 }
 glm::vec3 Test::Sphere::getPosition(void){
@@ -152,18 +145,16 @@ Test::Box::~Box(void){
     glDeleteVertexArrays(1, &VAO);
 }
 void Test::Box::render(const glm::mat4& view, const glm::mat4& projection){
-    std::cout << "Boxrender!" << std::endl;
     glm::mat4 MVP = projection * view * model;
 
     glBindVertexArray(VAO);
-    shader.use();
 
-    GLint MVPLoc = glGetUniformLocation(shader.getID(), "MVP");
+        shader.use();
+        GLint MVPLoc = glGetUniformLocation(shader.getID(), "MVP");
+        glUniformMatrix4fv(MVPLoc, 1, GL_FALSE, &MVP[0][0]);
 
-    glUniformMatrix4fv(MVPLoc, 1, GL_FALSE, &MVP[0][0]);
-    std::cout << "BoxrenderbeforeDRAW" << std::endl;
-    glDrawElements(GL_TRIANGLES, numIndices, GL_UNSIGNED_SHORT, (GLvoid*)0);
-    std::cout << "BoxrenderAFTER" << std::endl;
+        glDrawElements(GL_TRIANGLES, numIndices, GL_UNSIGNED_SHORT, (GLvoid*)0);
+
     glBindVertexArray(0);
 }
 glm::vec3 Test::Box::getPosition(void){
