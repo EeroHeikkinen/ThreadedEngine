@@ -28,11 +28,10 @@ public:
     void setParent(PhysicsNode*);
     bool removeChild(PhysicsNode*);
 private:
-    PhysicsNode* parent;
-    PhysicsComponent* component;
-    ChildVec children;
+    PhysicsNode* pParent;
+    PhysicsComponent* pComponent;
+    ChildVec vpChildren;
 };
-
 
 class PhysicsTree {
 public:

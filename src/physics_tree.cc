@@ -4,65 +4,65 @@
 #include <exception>
 
 
-PhysicsNode::PhysicsNode(PhysicsNode* parent_,
-                         PhysicsComponent* component_,
-                         PhysicsNode::ChildVec children_) :
-    parent(parent_),
-    component(component_),
-    children(children_)
+PhysicsNode::PhysicsNode(PhysicsNode* pParent,
+                         PhysicsComponent* pComponent,
+                         PhysicsNode::ChildVec _vpChildren) :
+    pParent(pParent),
+    pComponent(pComponent),
+    vpChildren(std::move(_vpChildren))
     {}
 
-PhysicsNode::PhysicsNode(PhysicsNode* parent_,
-                         PhysicsComponent* component_,
-                         PhysicsNode* child_) :
-    parent(parent_),
-    component(component_)
+PhysicsNode::PhysicsNode(PhysicsNode* pParent,
+                         PhysicsComponent* pComponent,
+                         PhysicsNode* pChild) :
+    pParent(pParent),
+    pComponent(pComponent)
     {
-        if(child_ != nullptr)
-            children.push_back(child_);
+        if(pChild != nullptr)
+            vpChildren.push_back(pChild);
     }
 
 PhysicsNode::~PhysicsNode(){
 	//delete all children (which recursively deletes the whole subtree)
 
-	if (parent != NULL)
-		for (auto i : children) {
-			parent->addChild(i);
+	if (pParent != NULL)
+		for (auto pChild : vpChildren) {
+			pParent->addChild(pChild);
 		}
-		parent->removeChild(this);
+		pParent->removeChild(this);
 }
 
 PhysicsNode::ChildVec PhysicsNode::getChildren() const{
-	return children;
+	return vpChildren;
 }
 
 PhysicsNode* PhysicsNode::getParent() const{
-	return parent;
+	return pParent;
 }
 
 PhysicsComponent* PhysicsNode::getComponent() const{
-	return component;
+	return pComponent;
 }
 
 void PhysicsNode::setChildren(ChildVec newchildren){
-	for (auto i : children)
-		delete i;
+	for (auto pChild : vpChildren)
+		delete pChild;
 
-	children = newchildren;
+	vpChildren = std::move(newchildren);
 }
 
 void PhysicsNode::addChild(PhysicsNode* newchild){
-	children.push_back(newchild);
+	vpChildren.push_back(newchild);
 }
 
 void PhysicsNode::setParent(PhysicsNode* newparent){
-	parent = newparent;
+	pParent = newparent;
 }
 
 bool PhysicsNode::removeChild(PhysicsNode* removed) {
-	std::vector<PhysicsNode*>::iterator found = std::find(children.begin(), children.end(), removed);
-	if (found != children.end()){
-		children.erase(found);
+	std::vector<PhysicsNode*>::iterator found = std::find(vpChildren.begin(), vpChildren.end(), removed);
+	if (found != vpChildren.end()){
+		vpChildren.erase(found);
 		return true;
 	}
 	return false;
@@ -74,8 +74,6 @@ PhysicsTree::PhysicsTree(){
 
 PhysicsTree::~PhysicsTree(){
 }
-
-
 
 // Adds node to the tree.
 // Child argument should be existing node in the tree.

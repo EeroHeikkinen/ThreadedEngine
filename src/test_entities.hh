@@ -11,6 +11,8 @@
 #include <mutex>
 
 class Mesh;
+class Material;
+namespace Test{class StupidRenderer;}
 
 
 namespace Test{
@@ -58,7 +60,6 @@ namespace Test{
         glm::mat4 model;
     };
 
-
     class Box : public Entity{ //render, physics
     public:
         Box(StupidRenderer* pStupidRenderer,
@@ -81,6 +82,18 @@ namespace Test{
         glm::mat4 model;
     };
 
+    class EdwerdCollection : public Entity{
+    public:
+        EdwerdCollection(void){}
+        ~EdwerdCollection(void);
+
+        void loadEdwerds(StupidRenderer*);
+    private:
+        Texture* pTexture;
+        Shader* pShader;
+        Material* pMaterial;
+        Mesh* pMesh;
+    };
 } // namespace Test
 
 

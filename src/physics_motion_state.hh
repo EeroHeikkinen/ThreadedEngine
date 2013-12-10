@@ -4,22 +4,21 @@
 #include <LinearMath/btMotionState.h>
 #include <btBulletDynamicsCommon.h>
 
-class PhysicsNode;
 class PhysicsComponent;
 
 
 class PhysicsMotionState : public btMotionState{
 public:
-	PhysicsMotionState(const btTransform& initialPos_,  PhysicsComponent* component_);
+	PhysicsMotionState(const btTransform& initialPos,  PhysicsComponent* pComponent);
 	virtual ~PhysicsMotionState() {}
 
-	void setComponent(PhysicsComponent* component_);
+	void setComponent(PhysicsComponent* pComponent);
 
 	virtual void getWorldTransform(btTransform& worldTrans) const;
 	virtual void setWorldTransform(const btTransform& worldTrans);
 private:
 	btTransform initialPos;
-	PhysicsComponent* component;
+	PhysicsComponent* pComponent;
 };
 
 

@@ -1,17 +1,13 @@
 #include "physics_motion_state.hh"
 #include "physics_tree.hh"
-#include <iostream> //temp
-
-//TEMP
-#include <iostream>
 
 
-PhysicsMotionState::PhysicsMotionState(const btTransform& initialPos_, PhysicsComponent* component_) :
-									  initialPos(initialPos_), component(component_)
-									  {std::cout << "MotStatArgh: " << component << std::endl;}
+PhysicsMotionState::PhysicsMotionState(const btTransform& initialPos, PhysicsComponent* pComponent) :
+									  initialPos(initialPos), pComponent(pComponent)
+									  {}
 
-void PhysicsMotionState::setComponent(PhysicsComponent* component_) {
-	component = component_;
+void PhysicsMotionState::setComponent(PhysicsComponent* _pComponent) {
+	pComponent = _pComponent;
 }
 
 void PhysicsMotionState::getWorldTransform(btTransform& worldTrans) const{
@@ -19,5 +15,5 @@ void PhysicsMotionState::getWorldTransform(btTransform& worldTrans) const{
 }
 
 void PhysicsMotionState::setWorldTransform(const btTransform& worldTrans){
-	component->setTransformation(worldTrans);
+	pComponent->setTransformation(worldTrans);
 }

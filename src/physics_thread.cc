@@ -3,7 +3,6 @@
 #include "device.hh"
 
 #include <SFML/Window.hpp>
-#include <iostream> //temp
 
 
 PhysicsThread::PhysicsThread(Device* pDevice, unsigned int initOrderNumber) :
@@ -18,13 +17,6 @@ PhysicsThread::~PhysicsThread(void){
         running = false;
         thread.join();
     }
-
-    delete physicsTree;
-    delete dynamicsWorld;
-    delete solver;
-    delete collisionConfiguration;
-    delete dispatcher;
-    delete broadphase;
 }
 
 void PhysicsThread::launch(void){
@@ -43,42 +35,38 @@ void PhysicsThread::join(void){
 }
 
 void PhysicsThread::init(void){
-    physicsTree = new PhysicsTree;
+    pPhysicsTree = make_unique<PhysicsTree>();
 
     // very basic bullet configuration, change if needed!
-    broadphase = new btDbvtBroadphase();
-    collisionConfiguration = new btDefaultCollisionConfiguration();
-    dispatcher = new btCollisionDispatcher(collisionConfiguration);
-    solver = new btSequentialImpulseConstraintSolver();
-    dynamicsWorld = new btDiscreteDynamicsWorld(dispatcher, broadphase, solver, collisionConfiguration);
+    pBroadphase = make_unique<btDbvtBroadphase>();
+    pSolver = make_unique<btSequentialImpulseConstraintSolver>();
+    pCollisionConfiguration = make_unique<btDefaultCollisionConfiguration>();
+    pDispatcher = make_unique<btCollisionDispatcher>(pCollisionConfiguration.get());
+    pDynamicsWorld = make_unique<btDiscreteDynamicsWorld>(pDispatcher.get(),
+                                                          pBroadphase.get(),
+                                                          pSolver.get(),
+                                                          pCollisionConfiguration.get());
 
-    dynamicsWorld->setGravity(btVector3(0,-9.81,0));
+    pDynamicsWorld->setGravity(btVector3(0,-9.81,0));
 
-    time_physics_prev = clock::now();
-    time_physics_curr = clock::now();
-    // TEMP: creating arbitrary tree consisting of one physics component for testing purposes
-    /*PhysicsComponent* component = new PhysicsComponent;
-    for (unsigned i = 0; i < 5; i++) {
-        auto parent = physicsTree->getRoot();
-        for (unsigned j = 0; j < 6; j++) {
-            parent = physicsTree->addNode(parent, component);
-        }
-    }*/
-    // end of TEMP
+    time_prev = clock::now();
+    time_curr = clock::now();
 }
 
 void PhysicsThread::loop(void){
-    time_physics_curr = clock::now();
-    dynamicsWorld->stepSimulation((float)(std::chrono::duration_cast<std::chrono::milliseconds>(
-                                        time_physics_curr - time_physics_prev).count()) / 1000.0, 10);
-    time_physics_prev = time_physics_curr;
+    time_curr = clock::now();
+    float duration =
+        std::chrono::duration_cast<std::chrono::milliseconds>
+            (time_curr - time_prev).count() / 1000.0;
+    pDynamicsWorld->stepSimulation(duration, 10);
+    time_prev = time_curr;
 }
 
 
 PhysicsTree& PhysicsThread::getPhysicsTree() const{
-    return *physicsTree;
+    return *pPhysicsTree;
 }
 
 btDiscreteDynamicsWorld& PhysicsThread::getDynamicsWorld() const{
-    return *dynamicsWorld;
+    return *pDynamicsWorld;
 }

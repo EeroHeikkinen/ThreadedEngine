@@ -1,8 +1,11 @@
 #include "logic_thread.hh"
+#include "test_entities.hh"
+#include "test_renderers.hh"
 #include "device.hh"
-#include <iostream> //temp
 
 #include <SFML/Window.hpp>
+
+namespace Test{class Camera;}
 
 
 LogicThread::LogicThread(Device* pDevice, unsigned int initOrderNumber) :
@@ -35,10 +38,17 @@ void LogicThread::join(void){
 }
 
 void LogicThread::init(void){
-    Test::TestEntityLoader* entLoader =
-        DEVICE.getUniverse().addChild(make_unique<Test::TestEntityLoader>());
-
-    entLoader->loadEntities();
+    //create a StupidRenderer
+    Test::StupidRenderer* pRenderer =
+        DEVICE.getRenderThread().addRenderer(
+            make_unique<Test::StupidRenderer>());
+    //create a camera for the StupidRenderer
+    DEVICE.getUniverse().addChild(
+        make_unique<Test::Camera>(pRenderer));
+    //create a bunch of edwerdz
+    Test::EdwerdCollection* edwerdCollection =
+        DEVICE.getUniverse().addChild(make_unique<Test::EdwerdCollection>());
+    edwerdCollection->loadEdwerds(pRenderer);
 }
 
 void LogicThread::loop(void){

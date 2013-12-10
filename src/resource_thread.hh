@@ -1,8 +1,6 @@
 #ifndef RESOURCE_THREAD_HH
 #define RESOURCE_THREAD_HH
 
-#include "test_entity_loaders.hh"//TEMP
-
 #include <thread>
 
 class Device;

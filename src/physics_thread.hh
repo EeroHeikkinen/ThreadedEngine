@@ -32,17 +32,18 @@ private:
     std::thread thread;
     bool running;
     unsigned int initOrderNumber;
-    PhysicsTree* physicsTree;
+
+    std::unique_ptr<PhysicsTree> pPhysicsTree;
 
     //Bullet stuff
-    btBroadphaseInterface* broadphase;
-    btDefaultCollisionConfiguration* collisionConfiguration;
-    btCollisionDispatcher* dispatcher;
-    btSequentialImpulseConstraintSolver* solver;
-    btDiscreteDynamicsWorld* dynamicsWorld;
+    std::unique_ptr<btBroadphaseInterface> pBroadphase;
+    std::unique_ptr<btSequentialImpulseConstraintSolver> pSolver;
+    std::unique_ptr<btDefaultCollisionConfiguration> pCollisionConfiguration;
+    std::unique_ptr<btCollisionDispatcher> pDispatcher;
+    std::unique_ptr<btDiscreteDynamicsWorld> pDynamicsWorld;
 
     typedef std::chrono::high_resolution_clock clock;
-    std::chrono::time_point<clock> time_physics_prev, time_physics_curr;
+    std::chrono::time_point<clock> time_prev, time_curr;
 };
 
 

@@ -6,7 +6,6 @@
 #include <map>
 #include <string>
 
-
 class Texture;
 class Shader;
 

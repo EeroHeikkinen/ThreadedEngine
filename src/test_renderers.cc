@@ -18,22 +18,24 @@ void Test::StupidRenderer::render(void){
     std::lock_guard<std::mutex> lock(mutex);
     for(auto pStupidRenderComponent : spStupidRenderComponents)
         pStupidRenderComponent->render(pCurrentCamera->getViewMatrix(),
-                                 pCurrentCamera->getProjMatrix());
+                                       pCurrentCamera->getProjMatrix());
 }
 
-void Test::StupidRenderer::addComponent(StupidRenderComponent* stupidRenderComponent){
-    spStupidRenderComponents.insert(stupidRenderComponent);
+void Test::StupidRenderer::addComponent(StupidRenderComponent* pStupidRenderComponent){
+    spStupidRenderComponents.insert(pStupidRenderComponent);
 }
-void Test::StupidRenderer::removeComponent(StupidRenderComponent* stupidRenderComponent){
+void Test::StupidRenderer::removeComponent(StupidRenderComponent* pStupidRenderComponent){
     std::lock_guard<std::mutex> lock(mutex);
-    spStupidRenderComponents.unsafe_erase(stupidRenderComponent);
+    spStupidRenderComponents.unsafe_erase(pStupidRenderComponent);
 }
 
-void Test::StupidRenderer::addComponent(StupidCameraComponent* stupidCameraComponent){
+void Test::StupidRenderer::addComponent(StupidCameraComponent* pStupidCameraComponent){
     std::lock_guard<std::mutex> lock(mutex);
-    pCurrentCamera = stupidCameraComponent;
+    pCurrentCamera = pStupidCameraComponent;
 }
-void Test::StupidRenderer::removeComponent(StupidCameraComponent* stupidCameraComponent){
-    std::lock_guard<std::mutex> lock(mutex);
-    pCurrentCamera = &defaultCamera;
+void Test::StupidRenderer::removeComponent(StupidCameraComponent* pStupidCameraComponent){
+    if(pStupidCameraComponent == pCurrentCamera){
+        std::lock_guard<std::mutex> lock(mutex);
+        pCurrentCamera = &defaultCamera;
+    }
 }
