@@ -25,7 +25,7 @@ public:
     void loop(void);
 
     PhysicsTree& getPhysicsTree() const;
-    btDiscreteDynamicsWorld& getDynamicsWorld() const;
+    DiscreteDynamicsWorld& getDynamicsWorld() const;
 
     PhysicsThread(const PhysicsThread&) = delete;
     PhysicsThread& operator=(const PhysicsThread&) = delete;

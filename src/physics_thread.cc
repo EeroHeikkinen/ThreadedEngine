@@ -66,6 +66,6 @@ PhysicsTree& PhysicsThread::getPhysicsTree() const{
     return *pPhysicsTree;
 }
 
-btDiscreteDynamicsWorld& PhysicsThread::getDynamicsWorld() const{
+DiscreteDynamicsWorld& PhysicsThread::getDynamicsWorld() const{
     return *pDynamicsWorld;
 }
