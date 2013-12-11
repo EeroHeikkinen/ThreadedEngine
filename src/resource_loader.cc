@@ -1,6 +1,7 @@
 #include "resource_loader.hh"
 #include "device.hh"
 #include "make_unique.hh"
+#include "test_models.hh" // TEMP
 
 
 void ResourceLoader::loadResource(ResourceType resType, const std::string& id) {
@@ -107,6 +108,16 @@ bool StandardResourceLoader::setMaterialInfo(const std::string& id,
         return false;
 
     materialInfos[id] = std::make_pair(textureIds, shaderId);
+    return true;
+}
+
+bool StandardResourceLoader::setMeshInfo(const std::string& id,
+                                         const std::string& materialId) {
+    std::lock_guard<std::recursive_mutex> lock(mutex);
+    if (id == "" || materialId == "")
+        return false;
+
+    meshInfos[id] = materialId;
     return true;
 }
 
@@ -222,6 +233,30 @@ void StandardResourceLoader::load(ResourceType resType, std::string id) {
             std::unique_ptr<Material> pMaterial = make_unique<Material>(materialTextures, pShader);
 
             materials[id] = std::move(pMaterial);
+        }
+    break;
+
+    case MESH:
+        {
+            auto it = meshInfos.find(id);
+            if (it == meshInfos.end()) {
+                /*
+                TODO
+                cannot load resource; throw an exception */
+            }
+
+            Material* pMaterial = getMaterialPtr(it->second);
+            if (pMaterial == nullptr) {
+                load(MATERIAL, it->second);
+                pMaterial = getMaterialPtr(it->second);
+            }
+
+            std::unique_ptr<Mesh> pMesh = make_unique<Mesh>(pMaterial);
+
+            if (id == "sphere")
+                Test::makeUVSphere(pMesh->getVBO(), pMesh->getIBO(), pMesh->getVAO(), pMesh->getNIndices(), 32, 16);
+
+            meshes[id] = std::move(pMesh);
         }
     break;
 

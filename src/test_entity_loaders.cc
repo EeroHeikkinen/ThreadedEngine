@@ -4,6 +4,7 @@
 
 #include <stdlib.h>
 #include <time.h>
+#include <SFML/Window.hpp>
 
 
 Test::TestEntityLoader::TestEntityLoader(void) {}
@@ -54,17 +55,15 @@ void Test::TestEntityLoader::loadEntities(void) {
                                     {std::make_pair(GL_TEXTURE0, "edwerd")},
                                 "texture_normal");
 
-    pResLoader->loadResource(MATERIAL, "material_edwerd");
-    pMaterial = pResLoader->getMaterialPtr("material_edwerd");
-    if (pMaterial == nullptr)
-        std::cout << "NULLIA TULEE SAATANAVITTU!!1" << std::endl;
+    pResLoader->setMeshInfo("sphere", "material_edwerd");
 
-    pMesh = new Mesh(pMaterial);
-    makeUVSphere(pMesh->getVBO(), pMesh->getIBO(), pMesh->getVAO(), pMesh->getNIndices(), 32, 16);
-    /*
-    TODO
-    fix this interface
-    */
+    pResLoader->loadResource(MESH, "sphere");
+
+    sf::sleep(sf::milliseconds(300));
+
+    pMesh = pResLoader->getMeshPtr("sphere");
+    if (pMesh == nullptr)
+        std::cout << "NULLIA TULEE SAATANAVITTU!!1" << std::endl;
 
 
     for (int i = 0; i < 100; i++) {

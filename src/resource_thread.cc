@@ -42,6 +42,8 @@ void ResourceThread::init(void){
 
 void ResourceThread::loop(void){
     while (!qLoadCalls.empty()) {
+        std::cout << "a" << std::endl;
+
         DEVICE.getRenderThread().detachContext();
 
         ResourceLoadCall call;

@@ -53,6 +53,8 @@ public:
                          const std::unordered_map<GLenum, std::string>& textureIds = std::unordered_map<GLenum, std::string>(),
                          const std::string& shaderId = "");
 
+    bool setMeshInfo(const std::string& id = "", const std::string& materialId = "");
+
 
     StandardResourceLoader(const StandardResourceLoader&) = delete;
     StandardResourceLoader& operator=(const StandardResourceLoader&) = delete;
@@ -73,6 +75,7 @@ private:
     std::unordered_map<std::string, std::pair<std::string, GLenum>> shaderObjectInfos;
     std::unordered_map<std::string, std::vector<std::string>> shaderProgramInfos;
     std::unordered_map<std::string, std::pair<std::unordered_map<GLenum, std::string>, std::string>> materialInfos;
+    std::unordered_map<std::string, std::string> meshInfos;
 };
 
 /*

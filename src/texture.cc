@@ -50,7 +50,4 @@ void Texture::loadFromFile(const std::string& fileName) {
 
     // mipmaps
     glGenerateMipmap(GL_TEXTURE_2D);
-
-    //attach the GL context back to the render thread
-    DEVICE.getRenderThread().attachContext();
 }
