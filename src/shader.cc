@@ -98,9 +98,15 @@ void Shader::addShaderObject(GLenum type, const std::string& fileName){
 }
 
 void Shader::addShaderObjects(const std::map<GLenum, const std::string>& mObjs){
-    for (auto it=mObjs.begin(); it!=mObjs.end(); ++it) {
-        ShaderObject* pNewSO = new ShaderObject(it->first, it->second);
+    for (auto& obj : mObjs) {
+        ShaderObject* pNewSO = new ShaderObject(obj.first, obj.second);
         vpSOs.push_back(pNewSO);
+    }
+}
+
+void Shader::addShaderObjects(const std::vector<ShaderObject*>& vObjs){
+    for (auto& pShaderObject : vObjs) {
+        vpSOs.push_back(pShaderObject);
     }
 }
 

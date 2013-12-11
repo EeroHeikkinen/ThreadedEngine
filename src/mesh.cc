@@ -3,8 +3,6 @@
 
 
 Mesh::Mesh(Material* pMaterial_) {
-    std::lock_guard<std::mutex> lock(mutex);
-
     pMaterial = pMaterial_;
 
     glGenBuffers(1, &VBO);

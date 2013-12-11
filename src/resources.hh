@@ -12,8 +12,10 @@ enum ResourceType {
     INVALID_TYPE,
 
     TEXTURE_IMG,
-    SHADER_VS,
-    SHADER_FS
+    SHADER_OBJECT,
+    SHADER,
+    MATERIAL,
+    MESH
 };
 
 

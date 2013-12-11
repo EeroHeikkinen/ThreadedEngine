@@ -4,7 +4,7 @@
 
 #include <GL/GLEW.h>
 #include <mutex>
-#include <map>
+#include <unordered_map>
 #include <string>
 
 
@@ -15,17 +15,16 @@ class Shader;
 class Material {
 public:
     Material(void) {}
-    Material(GLenum texid, Texture* pTexture_, Shader* pShader_, const std::string& MVPstr);
-    Material(std::map<GLenum, Texture*>& pTextures_, Shader* pShader_, const std::string& MVPstr);
+    Material(GLenum texid, Texture* pTexture_, Shader* pShader_);
+    Material(std::unordered_map<GLenum, Texture*>& pTextures_, Shader* pShader_);
 
     void use(void) const;
 
-    GLint getMVPLocation(void) const;
+    Shader* getShaderPtr(void) const;
 
 private:
-    std::map<GLenum, Texture*> pTextures;
+    std::unordered_map<GLenum, Texture*> pTextures;
     Shader* pShader;
-    GLint MVPLoc;
 
     std::mutex mutex;
 };

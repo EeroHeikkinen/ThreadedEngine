@@ -1,5 +1,5 @@
 #ifndef TEST_ENTITY_LOADERS_HH
-#define TEST_ENTITY_LODAERS_HH
+#define TEST_ENTITY_LOADERS_HH
 
 
 #include "entity_loader.hh"
