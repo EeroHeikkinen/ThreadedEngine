@@ -4,13 +4,9 @@
 #include "test_models.hh" // TEMP
 
 
-void ResourceLoader::loadResource(ResourceType resType, const std::string& id) {
-    DEVICE.getResourceThread().pushResourceLoadCall(
-        std::make_pair(
-            std::make_pair(this, &ResourceLoader::load),
-            std::make_pair(resType, id)
-        )
-    );
+void ResourceLoader::loadResource(ResourceType resType, const std::string& resId){
+    ResourceThread::ResourceLoadCall call = {this, &ResourceLoader::load, resType, resId};
+    DEVICE.getResourceThread().pushResourceLoadCall(call);
 }
 
 Texture* StandardResourceLoader::getTexturePtr(const std::string& id) const {
@@ -33,7 +29,7 @@ ShaderObject* StandardResourceLoader::getShaderObjectPtr(const std::string& id) 
 
 
 Shader* StandardResourceLoader::getShaderPtr(const std::string& id) const {
-    if (id != "") {
+    if (id != ""){
         auto it = shaders.find(id);
         if (it != shaders.end())
             return it->second.get();
@@ -51,7 +47,7 @@ Material* StandardResourceLoader::getMaterialPtr(const std::string& id) const {
 }
 
 Mesh* StandardResourceLoader::getMeshPtr(const std::string& id) const {
-    if (id != "") {
+    if (id != ""){
         auto it = meshes.find(id);
         if (it != meshes.end())
             return it->second.get();

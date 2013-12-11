@@ -10,16 +10,17 @@
 #include <string>
 #include <tbb/tbb.h>
 
-
 class Device;
 
 
 class ResourceThread{
 public:
-    typedef std::pair<
-                std::pair<ResourceLoader*, void (ResourceLoader::*)(ResourceType, std::string)>,
-                std::pair<ResourceType, std::string> >
-        ResourceLoadCall;
+    struct ResourceLoadCall{
+        ResourceLoader* pResLoader;
+        void (ResourceLoader::*pLoadFunc)(ResourceType, std::string);
+        ResourceType resType;
+        std::string resID;
+    };
 
     ResourceThread(Device&);
     ~ResourceThread(void);

@@ -1,7 +1,6 @@
 #ifndef RESOURCES_HH
 #define RESOURCES_HH
 
-
 #include "texture.hh"
 #include "shader.hh"
 #include "material.hh"

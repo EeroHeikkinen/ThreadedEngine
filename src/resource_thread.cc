@@ -17,7 +17,7 @@ ResourceThread::~ResourceThread(void){
         thread.join();
     }
 
-    for (auto loader : vpResourceLoaders) {
+    for (auto loader : vpResourceLoaders){
         delete loader;
     }
 }
@@ -41,15 +41,14 @@ void ResourceThread::init(void){
 }
 
 void ResourceThread::loop(void){
-    while (!qLoadCalls.empty()) {
+    while(!qLoadCalls.empty()){
         std::cout << "a" << std::endl;
 
         DEVICE.getRenderThread().detachContext();
 
-        ResourceLoadCall call;
-        if (qLoadCalls.try_pop(call)) {
-            (call.first.first->*call.first.second)(call.second.first, call.second.second);
-        }
+            ResourceLoadCall call;
+            if (qLoadCalls.try_pop(call))
+                (call.pResLoader->*call.pLoadFunc)(call.resType, call.resID);
 
         DEVICE.getRenderThread().attachContext();
     }
@@ -62,7 +61,7 @@ void ResourceThread::loop(void){
     */
 }
 
-void ResourceThread::addResourceLoader(ResourceLoader* pResLoader) {
+void ResourceThread::addResourceLoader(ResourceLoader* pResLoader){
     vpResourceLoaders.push_back(pResLoader);
 }
 
