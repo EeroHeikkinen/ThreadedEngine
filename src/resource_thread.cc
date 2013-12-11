@@ -20,8 +20,6 @@ ResourceThread::~ResourceThread(void){
     for (auto loader : vpResourceLoaders) {
         delete loader;
     }
-
-    delete testEntLoader;//temp
 }
 
 void ResourceThread::launch(void){
@@ -40,18 +38,6 @@ void ResourceThread::join(void){
 }
 
 void ResourceThread::init(void){
-    //Begin of TEMP
-    DEVICE.getRenderThread().detachContext();
-
-    testResLoader->loadFromTXT("res/test_res_list.txt");
-
-    testEntLoader = new Test::TestEntityLoader();
-    testEntLoader->loadEntities();
-    testEntLoader->pushEntities();
-
-    DEVICE.getRenderThread().attachContext();
-
-    //End of TEMP
 }
 
 void ResourceThread::loop(void){

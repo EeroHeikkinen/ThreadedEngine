@@ -3,8 +3,6 @@
 
 #include "resources.hh"
 #include "resource_loader.hh"
-#include "test_entity_loaders.hh"//TEMP
-#include "test_resource_loaders.hh"//TEMP
 
 #include <thread>
 #include <mutex>
@@ -48,9 +46,6 @@ private:
 
     //resource loader callback queue
     tbb::concurrent_queue<ResourceLoadCall> qLoadCalls;
-
-    Test::TestEntityLoader* testEntLoader;//temp
-    Test::TestResourceLoader* testResLoader;//temp
 };
 
 

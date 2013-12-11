@@ -16,6 +16,8 @@ LogicThread::~LogicThread(void){
         running = false;
         thread.join();
     }
+
+    delete testEntLoader;//temp
 }
 
 void LogicThread::launch(void){
@@ -34,6 +36,9 @@ void LogicThread::join(void){
 }
 
 void LogicThread::init(void){
+    testEntLoader = new Test::TestEntityLoader();
+    testEntLoader->loadEntities();
+    testEntLoader->pushEntities();
 }
 
 void LogicThread::loop(void){

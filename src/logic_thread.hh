@@ -2,6 +2,8 @@
 #define LOGIC_THREAD_HH
 
 #include "component.hh"
+#include "test_entity_loaders.hh"//TEMP
+#include "test_resource_loaders.hh"//TEMP
 
 #include <thread>
 #include <tbb/tbb.h>
@@ -32,6 +34,8 @@ private:
     bool running;
 
     tbb::concurrent_vector<LogicComponent*> vpLogicComponents;
+
+    Test::TestEntityLoader* testEntLoader;//temp
 };
 
 

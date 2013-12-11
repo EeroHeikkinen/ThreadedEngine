@@ -59,13 +59,15 @@ Mesh* StandardResourceLoader::getMeshPtr(const std::string& id) const {
 }
 
 bool StandardResourceLoader::setTextureInfo(const std::string& id, const std::string& fileName,
+                                            Texture::Type type_,
                                             GLenum minFilter_, GLenum magFilter_,
                                             GLenum sWrap_, GLenum tWrap_, GLuint AFLevel_) {
-    std::lock_guard<std::mutex> lock(mutex);
+    std::lock_guard<std::recursive_mutex> lock(mutex);
     if (id == "" || fileName == "")
         return false;
 
     Texture::Info info;
+    info.type = type_;
     info.minFilter = minFilter_;
     info.magFilter = magFilter_;
     info.sWrap = sWrap_;
@@ -79,7 +81,7 @@ bool StandardResourceLoader::setTextureInfo(const std::string& id, const std::st
 bool StandardResourceLoader::setShaderObjectInfo(const std::string& id,
                                                  const std::string& fileName,
                                                  GLenum type) {
-    std::lock_guard<std::mutex> lock(mutex);
+    std::lock_guard<std::recursive_mutex> lock(mutex);
     if (id == "" || fileName == "")
         return false;
 
@@ -89,26 +91,56 @@ bool StandardResourceLoader::setShaderObjectInfo(const std::string& id,
 
 bool StandardResourceLoader::setShaderProgramInfo(const std::string& id,
                                                   const std::vector<std::string>& vShaderObjectIds) {
-    std::lock_guard<std::mutex> lock(mutex);
-    if (id == "")
+    std::lock_guard<std::recursive_mutex> lock(mutex);
+    if (id == "" || vShaderObjectIds.size() == 0)
         return false;
 
     shaderProgramInfos[id] = vShaderObjectIds;
     return true;
 }
 
+bool StandardResourceLoader::setMaterialInfo(const std::string& id,
+                                             const std::unordered_map<GLenum, std::string>& textureIds,
+                                             const std::string& shaderId) {
+    std::lock_guard<std::recursive_mutex> lock(mutex);
+    if (id == "" || textureIds.size() == 0 || shaderId == "")
+        return false;
+
+    materialInfos[id] = std::make_pair(textureIds, shaderId);
+    return true;
+}
+
 void StandardResourceLoader::load(ResourceType resType, std::string id) {
-    std::lock_guard<std::mutex> lock(mutex);
+    std::lock_guard<std::recursive_mutex> lock(mutex);
 
     switch (resType) {
-    case TEXTURE_IMG:
+    case TEXTURE:
         {
-            std::pair<std::string, Texture::Info> info = textureInfos.find(id)->second;
+            auto it = textureInfos.find(id);
+            if (it == textureInfos.end()) {
+                /*
+                TODO
+                cannot load resource; throw an exception */
+            }
+
+            std::pair<std::string, Texture::Info> info = it->second;
             std::unique_ptr<Texture> pTexture
-                = make_unique<Texture>(info.second.minFilter, info.second.magFilter,
+                = make_unique<Texture>(info.second.type, info.second.minFilter, info.second.magFilter,
                                        info.second.sWrap, info.second.tWrap, info.second.AFLevel);
 
-            pTexture->loadFromFile(info.first);
+            switch (info.second.type) {
+                case Texture::Type::IMG:
+                    pTexture->loadFromFile(info.first);
+                break;
+
+                case Texture::Type::INVALID:
+                    //TODO exception?
+                break;
+
+                default:
+                    //TODO exception?
+                break;
+            }
 
             textures[id] = std::move(pTexture);
         }
@@ -116,7 +148,14 @@ void StandardResourceLoader::load(ResourceType resType, std::string id) {
 
     case SHADER_OBJECT:
         {
-            std::pair<std::string, GLenum> info = shaderObjectInfos.find(id)->second;
+            auto it = shaderObjectInfos.find(id);
+            if (it == shaderObjectInfos.end()) {
+                /*
+                TODO
+                cannot load resource; throw an exception */
+            }
+
+            std::pair<std::string, GLenum> info = it->second;
             std::unique_ptr<ShaderObject> pShaderObject
                 = make_unique<ShaderObject>(info.second, info.first);
 
@@ -126,13 +165,24 @@ void StandardResourceLoader::load(ResourceType resType, std::string id) {
 
     case SHADER:
         {
-            std::vector<std::string> vObjIds = shaderProgramInfos.find(id)->second;
+            auto it = shaderProgramInfos.find(id);
+            if (it == shaderProgramInfos.end()) {
+                /*
+                TODO
+                cannot load resource; throw an exception */
+            }
+
+            std::vector<std::string> vObjIds = it->second;
             std::unique_ptr<Shader> pShader = make_unique<Shader>();
 
-            for (auto& id : vObjIds) {
-                ShaderObject* pShaderObject = getShaderObjectPtr(id);
-                if (pShaderObject != nullptr)
-                    pShader->addShaderObject(pShaderObject);
+            for (auto& objId : vObjIds) { // let's add shader objects
+                ShaderObject* pShaderObject = getShaderObjectPtr(objId);
+                if (pShaderObject == nullptr) { // object not loaded, load it
+                    load(SHADER_OBJECT, objId);
+                    pShaderObject = getShaderObjectPtr(objId);
+                }
+
+                pShader->addShaderObject(pShaderObject);
             }
 
             pShader->link();
@@ -143,17 +193,35 @@ void StandardResourceLoader::load(ResourceType resType, std::string id) {
 
     case MATERIAL:
         {
-            std::pair<std::unordered_map<GLenum, std::string>, std::string> info = materialInfos.find(id)->second;
-            std::unordered_map<GLenum, Texture*> pTextures;
+            auto it = materialInfos.find(id);
+            if (it == materialInfos.end()) {
+                /*
+                TODO
+                cannot load resource; throw an exception */
+            }
+
+            std::pair<std::unordered_map<GLenum, std::string>, std::string> info = it->second;
+
+            std::unordered_map<GLenum, Texture*> materialTextures; // let's find textures
             for (auto& texInfo : info.first) {
-                texInfo.first
+                Texture* pTexture = getTexturePtr(texInfo.second);
+                if (pTexture == nullptr) { // not loaded, load it
+                    load(TEXTURE, texInfo.second);
+                    pTexture = getTexturePtr(texInfo.second);
+                }
+
+                materialTextures.emplace(texInfo.first, pTexture);
             }
 
-            std::unique_ptr<Material> pMaterial = make_unique<Material>(info.first, );
-
-            for () {
-
+            Shader* pShader = getShaderPtr(info.second); // and shader too
+            if (pShader == nullptr) {
+                load(SHADER, info.second);
+                pShader = getShaderPtr(info.second);
             }
+
+            std::unique_ptr<Material> pMaterial = make_unique<Material>(materialTextures, pShader);
+
+            materials[id] = std::move(pMaterial);
         }
     break;
 

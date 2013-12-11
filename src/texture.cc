@@ -5,15 +5,18 @@
 #include <iostream> //temp
 
 
-Texture::Texture(GLenum minFilter_, GLenum magFilter_,
+Texture::Texture(Type type_,
+                 GLenum minFilter_, GLenum magFilter_,
                  GLenum sWrap_, GLenum tWrap_,
                  GLuint AFLevel_)
     {
+        info.type = type_;
         info.minFilter = minFilter_;
         info.magFilter = magFilter_;
         info.sWrap = sWrap_;
         info.tWrap = tWrap_;
         info.AFLevel = AFLevel_;
+
         glGenTextures(1, &texture);
     }
 
@@ -22,9 +25,6 @@ GLuint Texture::getTexture(void) {
 }
 
 void Texture::loadFromFile(const std::string& fileName) {
-    //activate GL context if not active
-    std::cout << "assdasd" << std::endl;
-
     sf::Image img;
     img.loadFromFile(fileName);
 

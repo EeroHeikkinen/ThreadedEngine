@@ -13,14 +13,21 @@
 
 class Texture{
 public:
+    enum Type { // tells i.a. how to load the texture
+        INVALID,
+        IMG
+    };
+
     struct Info {
+        Type type;
         GLenum
             minFilter, magFilter,   // filters for minification and magnification
             sWrap, tWrap,           // wrapping
             AFLevel;                // anisotropic filtering
     };
 
-    Texture(GLenum minFilter_, GLenum magFilter_,
+    Texture(Type type_,
+            GLenum minFilter_, GLenum magFilter_,
             GLenum sWrap_, GLenum tWrap_,
             GLuint AFLevel_);
 

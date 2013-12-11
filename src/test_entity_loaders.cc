@@ -37,19 +37,27 @@ void Test::TestEntityLoader::loadEntities(void) {
     // resources
     StandardResourceLoader* pResLoader = new StandardResourceLoader();
     pResLoader->setTextureInfo("edwerd", "res/textures/edwerd.png",
-                              GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR, GL_WRAP_BORDER, GL_WRAP_BORDER, 4);
-    pResLoader->loadResource(TEXTURE_IMG, "edwerd");
+                               Texture::Type::IMG,
+                               GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR,
+                               GL_WRAP_BORDER, GL_WRAP_BORDER, 4);
 
+    pResLoader->setShaderObjectInfo("VS_texture_normal", "res/shaders/VS_texture_normal.glsl",
+                                    GL_VERTEX_SHADER);
+    pResLoader->setShaderObjectInfo("FS_texture_normal", "res/shaders/FS_texture_normal.glsl",
+                                    GL_FRAGMENT_SHADER);
+    pResLoader->setShaderProgramInfo("texture_normal",
+                                     std::vector<std::string> {"VS_texture_normal",
+                                                               "FS_texture_normal"});
 
-    //pTexture = new Texture(GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR, GL_WRAP_BORDER, GL_WRAP_BORDER, 4);
-    //pTexture->loadFromFile("res/textures/edwerd.png");
+    pResLoader->setMaterialInfo("material_edwerd",
+                                std::unordered_map<GLenum, std::string>
+                                    {std::make_pair(GL_TEXTURE0, "edwerd")},
+                                "texture_normal");
 
-    pShader = new Shader();
-    pShader->addShaderObject(GL_VERTEX_SHADER, "shaders/VS_texture_normal.glsl");
-    pShader->addShaderObject(GL_FRAGMENT_SHADER, "shaders/FS_texture_normal.glsl");
-    pShader->link();
-
-    pMaterial = new Material(GL_TEXTURE0, pResLoader->getTexturePtr("edwerd"), pShader, "MVP");
+    pResLoader->loadResource(MATERIAL, "material_edwerd");
+    pMaterial = pResLoader->getMaterialPtr("material_edwerd");
+    if (pMaterial == nullptr)
+        std::cout << "NULLIA TULEE SAATANAVITTU!!1" << std::endl;
 
     pMesh = new Mesh(pMaterial);
     makeUVSphere(pMesh->getVBO(), pMesh->getIBO(), pMesh->getVAO(), pMesh->getNIndices(), 32, 16);

@@ -38,6 +38,7 @@ public:
     Mesh* getMeshPtr(const std::string& id = "") const;
 
     bool setTextureInfo(const std::string& id = "", const std::string& fileName = "",
+                        Texture::Type type_ = Texture::Type::INVALID,
                         GLenum minFilter_ = GL_LINEAR_MIPMAP_LINEAR, GLenum magFilter_ = GL_LINEAR,
                         GLenum sWrap_ = GL_WRAP_BORDER, GLenum tWrap_ = GL_WRAP_BORDER,
                         GLuint AFLevel_ = 0);
@@ -45,9 +46,13 @@ public:
     bool setShaderObjectInfo(const std::string& id = "", const std::string& fileName = "",
                              GLenum type = GL_VERTEX_SHADER);
 
-
     bool setShaderProgramInfo(const std::string& id = "",
                               const std::vector<std::string>& vShaderObjectIds = std::vector<std::string>());
+
+    bool setMaterialInfo(const std::string& id = "",
+                         const std::unordered_map<GLenum, std::string>& textureIds = std::unordered_map<GLenum, std::string>(),
+                         const std::string& shaderId = "");
+
 
     StandardResourceLoader(const StandardResourceLoader&) = delete;
     StandardResourceLoader& operator=(const StandardResourceLoader&) = delete;
@@ -55,14 +60,8 @@ public:
 protected:
     virtual void load(ResourceType resType, std::string id = "");
 
-    /* probably useless
-    void addTexture(const std::string& id, Texture* texture);
-    void addShader(const std::string& id, Shader* shader);
-    void addMaterial(const std::string& id, Material* material);
-    void addMesh(const std::string& id, Mesh* mesh);*/
-
 private:
-    std::mutex mutex;
+    std::recursive_mutex mutex;
 
     std::unordered_map<std::string, std::unique_ptr<Texture>> textures;
     std::unordered_map<std::string, std::unique_ptr<ShaderObject>> shaderObjects;

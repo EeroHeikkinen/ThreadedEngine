@@ -1,5 +1,6 @@
 #include "mesh.hh"
 #include "material.hh"
+#include "shader.hh"
 
 
 Mesh::Mesh(Material* pMaterial_) {
@@ -25,8 +26,9 @@ void Mesh::render(const glm::mat4& view, const glm::mat4& projection, const glm:
     // use material
     pMaterial->use();
 
+    GLint MVPLoc = glGetUniformLocation(pMaterial->getShaderPtr()->getID(), "MVP");
     // upload MVP matrix
-    glUniformMatrix4fv(pMaterial->getMVPLocation(), 1, GL_FALSE, &MVP[0][0]);
+    glUniformMatrix4fv(MVPLoc, 1, GL_FALSE, &MVP[0][0]);
 
     // draw
     glDrawElements(GL_TRIANGLES, nIndices, GL_UNSIGNED_SHORT, (GLvoid*)0);
