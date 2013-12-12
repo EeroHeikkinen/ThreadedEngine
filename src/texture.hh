@@ -14,8 +14,8 @@
 class Texture{
 public:
     enum Type { // tells i.a. how to load the texture
-        INVALID,
-        IMG
+        TYPE_INVALID,
+        TYPE_IMG
     };
 
     struct Info {

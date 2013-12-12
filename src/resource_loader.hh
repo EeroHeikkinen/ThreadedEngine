@@ -38,7 +38,7 @@ public:
     Mesh* getMeshPtr(const std::string& id = "") const;
 
     bool setTextureInfo(const std::string& id = "", const std::string& fileName = "",
-                        Texture::Type type_ = Texture::Type::INVALID,
+                        Texture::Type type_ = Texture::TYPE_INVALID,
                         GLenum minFilter_ = GL_LINEAR_MIPMAP_LINEAR, GLenum magFilter_ = GL_LINEAR,
                         GLenum sWrap_ = GL_WRAP_BORDER, GLenum tWrap_ = GL_WRAP_BORDER,
                         GLuint AFLevel_ = 0);
@@ -53,7 +53,7 @@ public:
                          const std::unordered_map<GLenum, std::string>& textureIds = std::unordered_map<GLenum, std::string>(),
                          const std::string& shaderId = "");
 
-    bool setMeshInfo(const std::string& id = "", const std::string& materialId = "");
+    //bool setMeshInfo(const std::string& id = "", const std::string& materialId = "");
 
 
     StandardResourceLoader(const StandardResourceLoader&) = delete;
@@ -75,7 +75,7 @@ private:
     std::unordered_map<std::string, std::pair<std::string, GLenum>> shaderObjectInfos;
     std::unordered_map<std::string, std::vector<std::string>> shaderProgramInfos;
     std::unordered_map<std::string, std::pair<std::unordered_map<GLenum, std::string>, std::string>> materialInfos;
-    std::unordered_map<std::string, std::string> meshInfos;
+    //std::unordered_map<std::string, std::string> meshInfos;
 };
 
 /*

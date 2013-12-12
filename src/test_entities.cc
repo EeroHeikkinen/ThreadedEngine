@@ -40,15 +40,32 @@ const glm::mat4& Test::Camera::getProjectionMatrix(void) const{
     return projection;
 }
 
-// SingleMeshEntity
+// Edwerd
 
-Test::SingleMeshEntity::SingleMeshEntity(Mesh* pMesh_, glm::mat4 model_) :
+Test::Edwerd::Edwerd(Mesh* pMesh_, Material* pMaterial_, glm::mat4 model_) :
     pMesh(pMesh_),
+    pMaterial(pMaterial_),
     model(model_)
     {}
 
-void Test::SingleMeshEntity::render(const glm::mat4& view, const glm::mat4& projection) {
-    pMesh->render(view, projection, model);
+void Test::Edwerd::render(const glm::mat4& view, const glm::mat4& projection) {
+    glm::mat4 MVP = projection * view * model;
+
+    // bind VAO
+    glBindVertexArray(pMesh->getVAO());
+
+    // use material
+    pMaterial->use();
+
+    GLint MVPLoc = glGetUniformLocation(pMaterial->getShaderPtr()->getID(), "MVP");
+    // upload MVP matrix
+    glUniformMatrix4fv(MVPLoc, 1, GL_FALSE, &MVP[0][0]);
+
+    // draw
+    glDrawElements(GL_TRIANGLES, pMesh->getNIndices(), GL_UNSIGNED_SHORT, (GLvoid*)0);
+
+    // unbind VAO
+    glBindVertexArray(0);
 }
 
 Test::WatcherCamera::WatcherCamera(Test::Sphere* pSphere) :
@@ -135,7 +152,7 @@ Test::Box::Box(float xSize_, float ySize_, float zSize_,
     model(glm::translate(glm::mat4(1.0f), initialPos_))
     {
         // Model
-        Test::makeBox(VBO, IBO, VAO, xSize_, ySize_, zSize_);
+        Test::makeBox(VBO, IBO, VAO, numIndices, xSize_, ySize_, zSize_);
 
         // Shader
         shader.addShaderObject(GL_VERTEX_SHADER, "shaders/VS_color.glsl");

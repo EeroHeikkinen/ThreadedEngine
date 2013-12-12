@@ -107,7 +107,7 @@ bool StandardResourceLoader::setMaterialInfo(const std::string& id,
     return true;
 }
 
-bool StandardResourceLoader::setMeshInfo(const std::string& id,
+/*bool StandardResourceLoader::setMeshInfo(const std::string& id,
                                          const std::string& materialId) {
     std::lock_guard<std::recursive_mutex> lock(mutex);
     if (id == "" || materialId == "")
@@ -115,7 +115,7 @@ bool StandardResourceLoader::setMeshInfo(const std::string& id,
 
     meshInfos[id] = materialId;
     return true;
-}
+}*/
 
 void StandardResourceLoader::load(ResourceType resType, std::string id) {
     std::lock_guard<std::recursive_mutex> lock(mutex);
@@ -136,11 +136,11 @@ void StandardResourceLoader::load(ResourceType resType, std::string id) {
                                        info.second.sWrap, info.second.tWrap, info.second.AFLevel);
 
             switch (info.second.type) {
-                case Texture::Type::IMG:
+                case Texture::TYPE_IMG:
                     pTexture->loadFromFile(info.first);
                 break;
 
-                case Texture::Type::INVALID:
+                case Texture::TYPE_INVALID:
                     //TODO exception?
                 break;
 
@@ -234,23 +234,17 @@ void StandardResourceLoader::load(ResourceType resType, std::string id) {
 
     case MESH:
         {
-            auto it = meshInfos.find(id);
+            /*auto it = meshInfos.find(id);
             if (it == meshInfos.end()) {
-                /*
-                TODO
-                cannot load resource; throw an exception */
-            }
+            }*/
 
-            Material* pMaterial = getMaterialPtr(it->second);
-            if (pMaterial == nullptr) {
-                load(MATERIAL, it->second);
-                pMaterial = getMaterialPtr(it->second);
-            }
+            std::unique_ptr<Mesh> pMesh = make_unique<Mesh>();
 
-            std::unique_ptr<Mesh> pMesh = make_unique<Mesh>(pMaterial);
-
-            if (id == "sphere")
+            if (id == "sphere") //TEMP
                 Test::makeUVSphere(pMesh->getVBO(), pMesh->getIBO(), pMesh->getVAO(), pMesh->getNIndices(), 32, 16);
+
+            if (id == "box") // TEMP
+                Test::makeBox(pMesh->getVBO(), pMesh->getIBO(), pMesh->getVAO(), pMesh->getNIndices(), 1.0f, 1.0f, 1.0f);
 
             meshes[id] = std::move(pMesh);
         }

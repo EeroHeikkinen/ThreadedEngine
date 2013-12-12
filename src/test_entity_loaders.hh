@@ -34,7 +34,7 @@ namespace Test {
         Material* pMaterial;
         Mesh* pMesh;
 
-        std::vector<Test::SingleMeshEntity*> vpSingleMeshEntities;
+        std::vector<Test::Edwerd*> vpEdwerdz;
     };
 
 }

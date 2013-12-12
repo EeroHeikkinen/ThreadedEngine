@@ -8,6 +8,7 @@ namespace Test{
     void makeBox(GLuint& VBO_,
                  GLuint& IBO_,
                  GLuint& VAO_,
+                 size_t& numIndices_,
                  float xSize,
                  float ySize,
                  float zSize);

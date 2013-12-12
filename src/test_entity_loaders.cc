@@ -19,8 +19,8 @@ Test::TestEntityLoader::~TestEntityLoader(void) {
     delete pMaterial;
     delete pMesh;
 
-    for (auto it = vpSingleMeshEntities.begin(); it != vpSingleMeshEntities.end(); it++) {
-        delete *it;
+    for (auto pEdwerd : vpEdwerdz) {
+        delete pEdwerd;
     }
 }
 
@@ -38,7 +38,7 @@ void Test::TestEntityLoader::loadEntities(void) {
     // resources
     StandardResourceLoader* pResLoader = new StandardResourceLoader();
     pResLoader->setTextureInfo("edwerd", "res/textures/edwerd.png",
-                               Texture::Type::IMG,
+                               Texture::TYPE_IMG,
                                GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR,
                                GL_WRAP_BORDER, GL_WRAP_BORDER, 4);
 
@@ -55,25 +55,27 @@ void Test::TestEntityLoader::loadEntities(void) {
                                     {std::make_pair(GL_TEXTURE0, "edwerd")},
                                 "texture_normal");
 
-    pResLoader->setMeshInfo("sphere", "material_edwerd");
+    //pResLoader->setMeshInfo("sphere", "material_edwerd");
 
     pResLoader->loadResource(MESH, "sphere");
+    pResLoader->loadResource(MATERIAL, "material_edwerd");
 
     sf::sleep(sf::milliseconds(300));
 
     pMesh = pResLoader->getMeshPtr("sphere");
-    if (pMesh == nullptr)
+    pMaterial = pResLoader->getMaterialPtr("material_edwerd");
+    if (pMesh == nullptr || pMaterial == nullptr)
         std::cout << "NULLIA TULEE SAATANAVITTU!!1" << std::endl;
 
 
     for (int i = 0; i < 100; i++) {
-        Test::SingleMeshEntity* pSingleMeshEntity =
-            new Test::SingleMeshEntity(pMesh,
+        Test::Edwerd* pEdwerd =
+            new Test::Edwerd(pMesh, pMaterial,
                 glm::translate(glm::mat4(1.0f),
                     glm::vec3(50.0f-(rand()%10000)/100.0f,
                               50.0f-(rand()%10000)/100.0f,
                               50.0f-(rand()%10000)/100.0f)));
-        addEntity(pSingleMeshEntity);
-        vpSingleMeshEntities.push_back(pSingleMeshEntity);
+        addEntity(pEdwerd);
+        vpEdwerdz.push_back(pEdwerd);
     }
 }

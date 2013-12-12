@@ -7,7 +7,7 @@
 #define PI 3.14159265358979323846
 
 
-void Test::makeBox(GLuint& VBO_, GLuint& IBO_, GLuint& VAO_,
+void Test::makeBox(GLuint& VBO_, GLuint& IBO_, GLuint& VAO_, size_t& numIndices_,
                    float xSize, float ySize, float zSize){
     const GLfloat vertices[24] = {
         -xSize,  -ySize,  -zSize,
@@ -39,6 +39,8 @@ void Test::makeBox(GLuint& VBO_, GLuint& IBO_, GLuint& VAO_,
         1,  3,  5,  3,  5,  7,
         4,  5,  6,  5,  6,  7
     };
+
+    numIndices_ = 36;
 
     //vector for attribute data, interleaving
     std::vector<GLfloat> vertexBufferData;
@@ -78,8 +80,7 @@ void Test::makeBox(GLuint& VBO_, GLuint& IBO_, GLuint& VAO_,
     glBindVertexArray(0);
 }
 
-void Test::makeUVSphere(GLuint& VBO_, GLuint& IBO_, GLuint& VAO_,
-                        size_t& numIndices_,
+void Test::makeUVSphere(GLuint& VBO_, GLuint& IBO_, GLuint& VAO_, size_t& numIndices_,
                         const unsigned int numSegments,
                         const unsigned int numRings){
     if (numSegments < 3){

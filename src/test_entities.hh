@@ -3,8 +3,7 @@
 
 
 #include "component.hh"
-#include "shader.hh"
-#include "texture.hh"
+#include "resources.hh"
 
 #include <GL/GLEW.h>
 #include <glm/glm.hpp>
@@ -32,12 +31,13 @@ namespace Test{
     };
 
 
-    class SingleMeshEntity : public RenderComponent {
+    class Edwerd : public RenderComponent {
     public:
-        SingleMeshEntity(Mesh* pMesh_, glm::mat4 model_);
+        Edwerd(Mesh* pMesh_, Material* pMaterial_, glm::mat4 model_);
         void render(const glm::mat4&, const glm::mat4&);
     private:
         Mesh* pMesh;
+        Material* pMaterial;
         glm::mat4 model;
     };
 

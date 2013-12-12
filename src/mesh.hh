@@ -12,17 +12,15 @@ class Material;
 
 class Mesh {
 public:
-    Mesh(Material* pMaterial_);
-    Mesh(const Mesh&) = delete;
+    Mesh(void);
     ~Mesh(void);
-
-    void render(const glm::mat4& view, const glm::mat4& projection, const glm::mat4& model) const;
 
     GLuint& getVBO(void);               //TEMP?
     GLuint& getIBO(void);               //TEMP?
     GLuint& getVAO(void);               //TEMP?
     unsigned int& getNIndices(void);    //TEMP?
 
+    Mesh(const Mesh&) = delete;
     Mesh& operator=(const Mesh&) = delete;
 
 private:
