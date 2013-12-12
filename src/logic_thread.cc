@@ -9,10 +9,9 @@ namespace Test{class Camera;}
 
 
 LogicThread::LogicThread(Device* pDevice, unsigned int initOrderNumber) :
-    running(true),
-    initOrderNumber(initOrderNumber)
+    running(true)
     {
-        thread = std::thread(&LogicThread::launch, this);
+        thread = std::thread(&LogicThread::launch, this, initOrderNumber);
     }
 
 LogicThread::~LogicThread(void){
@@ -22,7 +21,7 @@ LogicThread::~LogicThread(void){
     }
 }
 
-void LogicThread::launch(void){
+void LogicThread::launch(unsigned int initOrderNumber){
     //New thread begins here
     DEVICE.initSequencer.initialize(this, initOrderNumber);
     while (running)

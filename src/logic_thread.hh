@@ -13,7 +13,7 @@ public:
     LogicThread(Device*, unsigned int);
     ~LogicThread(void);
 
-    void launch(void);
+    void launch(unsigned int);
     void stop(void);
     void join(void);
 
@@ -29,7 +29,6 @@ public:
 private:
     std::thread thread;
     bool running;
-    unsigned int initOrderNumber;
 
     std::unordered_set<LogicComponent*> spLogicComponents;
     LogicComponent *pCurrentComponent, *pToBeErased;

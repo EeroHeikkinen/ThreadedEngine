@@ -33,7 +33,7 @@ public:
     template<typename... Args>
     int stepSimulation(Args&&... args){
         std::lock_guard<std::mutex> lock(mutex);
-        btDiscreteDynamicsWorld::stepSimulation(std::forward<Args>(args)...);
+        return btDiscreteDynamicsWorld::stepSimulation(std::forward<Args>(args)...);
     }
 
     virtual void removeRigidBody(btRigidBody* pRigidBody){

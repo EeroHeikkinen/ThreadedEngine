@@ -26,10 +26,10 @@ public:
 
     Entity& getUniverse(void);
 
-    friend void RenderThread::launch(void);
-    friend void PhysicsThread::launch(void);
-    friend void ResourceThread::launch(void);
-    friend void LogicThread::launch(void);
+    friend void RenderThread::launch(unsigned int);
+    friend void PhysicsThread::launch(unsigned int);
+    friend void ResourceThread::launch(unsigned int);
+    friend void LogicThread::launch(unsigned int);
 
 private:
     Device(void); // private constructor

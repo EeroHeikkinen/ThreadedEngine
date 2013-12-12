@@ -7,9 +7,7 @@
 
 
 RenderThread::RenderThread(Device* pDevice, unsigned int initOrderNumber) :
-    running(true),
-    initOrderNumber(initOrderNumber),
-    windowInitialized(false)
+    running(true)
     {
         // window settings
         sf::ContextSettings settings;
@@ -22,7 +20,6 @@ RenderThread::RenderThread(Device* pDevice, unsigned int initOrderNumber) :
         // create the window
         pWindow = new sf::Window(sf::VideoMode(1280, 960), "OpenGL", sf::Style::Default, settings);
         pWindow->setVerticalSyncEnabled(true);
-        windowInitialized = true;
 
         // initialize GLEW
         glewExperimental = GL_TRUE;
@@ -40,7 +37,7 @@ RenderThread::RenderThread(Device* pDevice, unsigned int initOrderNumber) :
             sf::sleep(sf::milliseconds(5));
 
         // launch render thread
-        thread = std::thread(&RenderThread::launch, this);
+        thread = std::thread(&RenderThread::launch, this, initOrderNumber);
     }
 
 RenderThread::~RenderThread(void){
@@ -51,7 +48,7 @@ RenderThread::~RenderThread(void){
     delete pWindow;
 }
 
-void RenderThread::launch(void){
+void RenderThread::launch(unsigned int initOrderNumber){
     // render thread begins here
     DEVICE.initSequencer.initialize(this, initOrderNumber);
     while (running)
@@ -114,10 +111,6 @@ void RenderThread::loop(void){
 
 sf::Window* RenderThread::getWindowPtr(void){
     return pWindow;
-}
-
-bool RenderThread::isWindowInitialized(void){
-    return windowInitialized;
 }
 
 //a thread can call this to borrow the glContext

@@ -5,10 +5,9 @@
 
 
 ResourceThread::ResourceThread(Device* pDevice, unsigned int initOrderNumber) :
-    running(true),
-    initOrderNumber(initOrderNumber)
+    running(true)
     {
-        thread = std::thread(&ResourceThread::launch, this);
+        thread = std::thread(&ResourceThread::launch, this, initOrderNumber);
     }
 
 ResourceThread::~ResourceThread(void){
@@ -18,7 +17,7 @@ ResourceThread::~ResourceThread(void){
     }
 }
 
-void ResourceThread::launch(void){
+void ResourceThread::launch(unsigned int initOrderNumber){
     //New thread begins here
     DEVICE.initSequencer.initialize(this, initOrderNumber);
     while (running)

@@ -53,19 +53,13 @@ void Device::eventLoop(void){
         sf::Window* pWindow = renderThread.getWindowPtr();
 
         if (pWindow->isOpen()){
-            if (renderThread.isWindowInitialized()){
-                // handle events
-                sf::Event event;
-                while (pWindow->pollEvent(event)){
-                    if (event.type == sf::Event::Closed){
-                        // end the program
-                        stop();
-                    }
-                    else if (event.type == sf::Event::Resized){
-                        // adjust the viewport when the window is resized
-                        glViewport(0, 0, event.size.width, event.size.height);
-                    }
-                }
+            // handle events
+            sf::Event event;
+            while (pWindow->pollEvent(event)){
+                if(event.type == sf::Event::Closed)
+                    stop();
+                if(event.type == sf::Event::Resized)
+                    glViewport(0, 0, event.size.width, event.size.height);
             }
         }
 

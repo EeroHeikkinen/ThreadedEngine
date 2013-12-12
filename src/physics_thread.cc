@@ -6,10 +6,9 @@
 
 
 PhysicsThread::PhysicsThread(Device* pDevice, unsigned int initOrderNumber) :
-    running(true),
-    initOrderNumber(initOrderNumber)
+    running(true)
     {
-        thread = std::thread(&PhysicsThread::launch, this);
+        thread = std::thread(&PhysicsThread::launch, this, initOrderNumber);
     }
 
 PhysicsThread::~PhysicsThread(void){
@@ -19,7 +18,7 @@ PhysicsThread::~PhysicsThread(void){
     }
 }
 
-void PhysicsThread::launch(void){
+void PhysicsThread::launch(unsigned int initOrderNumber){
     //New thread begins here
     DEVICE.initSequencer.initialize(this, initOrderNumber);
     while (running)

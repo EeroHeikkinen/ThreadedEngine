@@ -17,7 +17,7 @@ public:
     RenderThread(Device*, unsigned int);
     ~RenderThread(void);
 
-    void launch(void);
+    void launch(unsigned int);
     void stop(void);
     void join(void);
 
@@ -25,7 +25,6 @@ public:
     void loop(void);
 
     sf::Window* getWindowPtr(void);
-    bool isWindowInitialized(void);
 
     // Deactivates the GL context from this thread and activates it on
     // the calling thread. This can happen only after rendering cycle.
@@ -47,12 +46,10 @@ private:
     // Thread
     std::thread thread;
     bool running;
-    unsigned int initOrderNumber;
 
     // Window & context
     sf::ContextSettings settings;
     sf::Window* pWindow;
-    bool windowInitialized;
     QueuedInterruptMutex glContextMutex;
 
     // Renderer container vector

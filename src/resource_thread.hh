@@ -11,7 +11,7 @@ public:
     ResourceThread(Device*, unsigned int);
     ~ResourceThread(void);
 
-    void launch(void);
+    void launch(unsigned int);
     void stop(void);
     void join(void);
 
@@ -24,7 +24,6 @@ public:
 private:
     std::thread thread;
     bool running;
-    unsigned int initOrderNumber;
 };
 
 
