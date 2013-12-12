@@ -20,6 +20,10 @@ Texture::Texture(Type type_,
         glGenTextures(1, &texture);
     }
 
+Texture::~Texture(void) {
+    glDeleteTextures(1, &texture);
+}
+
 GLuint Texture::getTexture(void) {
     return texture;
 }

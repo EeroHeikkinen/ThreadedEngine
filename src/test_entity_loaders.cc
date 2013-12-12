@@ -14,11 +14,6 @@ Test::TestEntityLoader::~TestEntityLoader(void) {
     delete pTestRenderer;
     //delete pBox;
 
-    delete pTexture;
-    delete pShader;
-    delete pMaterial;
-    delete pMesh;
-
     for (auto pEdwerd : vpEdwerdz) {
         delete pEdwerd;
     }
@@ -40,8 +35,8 @@ void Test::TestEntityLoader::loadEntities(void) {
     StandardResourceLoader* pResLoader =
         dynamic_cast<StandardResourceLoader*>(DEVICE.getResourceThread().getResourceLoaderPtr(MESH));
 
-    pMesh = pResLoader->getMeshPtr("sphere");
-    pMaterial = pResLoader->getMaterialPtr("material_edwerd");
+    Mesh* pMesh = pResLoader->getMeshPtr("sphere");
+    Material* pMaterial = pResLoader->getMaterialPtr("material_edwerd");
     if (pMesh == nullptr || pMaterial == nullptr)
         std::cout << "NULLIA TULEE SAATANAVITTU!!1" << std::endl;
 

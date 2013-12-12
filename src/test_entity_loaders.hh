@@ -29,11 +29,6 @@ namespace Test {
         Test::TestRenderer* pTestRenderer;
         //Test::Box* pBox;
 
-        Texture* pTexture;
-        Shader* pShader;
-        Material* pMaterial;
-        Mesh* pMesh;
-
         std::vector<Test::Edwerd*> vpEdwerdz;
     };
 

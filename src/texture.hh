@@ -30,6 +30,7 @@ public:
             GLenum minFilter_, GLenum magFilter_,
             GLenum sWrap_, GLenum tWrap_,
             GLuint AFLevel_);
+    ~Texture(void);
 
     GLuint getTexture(void);
 
