@@ -10,18 +10,20 @@ Device& Device::getDevice(void){
 }
 
 void Device::stop(void){
-    renderThread.stop();
+    resourceThread.stop();
     logicThread.stop();
     physicsThread.stop();
-    resourceThread.stop();
+
+    resourceThread.join();
+    logicThread.join();
+    physicsThread.join();
+
+    renderThread.stop();
     running = false;
 }
 
 void Device::join(void){
     renderThread.join();
-    physicsThread.join();
-    logicThread.join();
-    resourceThread.join();
 }
 
 RenderThread& Device::getRenderThread(void){
