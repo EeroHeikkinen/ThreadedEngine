@@ -109,8 +109,8 @@ Test::Sphere::Sphere(btCollisionShape* collisionMesh_,
         Test::makeUVSphere(VBO, IBO, VAO, numIndices, 32, 16);
 
         // Shader
-        shader.addShaderObject(GL_VERTEX_SHADER, "shaders/VS_texture_normal.glsl");
-        shader.addShaderObject(GL_FRAGMENT_SHADER, "shaders/FS_texture_normal.glsl");
+        //shader.addShaderObject(GL_VERTEX_SHADER, "shaders/VS_texture_normal.glsl");
+        //shader.addShaderObject(GL_FRAGMENT_SHADER, "shaders/FS_texture_normal.glsl");
         shader.link();
     }
 
@@ -155,8 +155,8 @@ Test::Box::Box(float xSize_, float ySize_, float zSize_,
         Test::makeBox(VBO, IBO, VAO, numIndices, xSize_, ySize_, zSize_);
 
         // Shader
-        shader.addShaderObject(GL_VERTEX_SHADER, "shaders/VS_color.glsl");
-        shader.addShaderObject(GL_FRAGMENT_SHADER, "shaders/FS_color.glsl");
+        //shader.addShaderObject(GL_VERTEX_SHADER, "shaders/VS_color.glsl");
+        //shader.addShaderObject(GL_FRAGMENT_SHADER, "shaders/FS_color.glsl");
         shader.link();
     }
 

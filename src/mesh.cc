@@ -11,7 +11,6 @@ Mesh::Mesh(void) {
 }
 
 Mesh::~Mesh(void) {
-    std::cout << "Mesh destructa " << this << std::endl;
     glDeleteBuffers(1, &VBO);
     glDeleteBuffers(1, &IBO);
     glDeleteVertexArrays(1, &VAO);
