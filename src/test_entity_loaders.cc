@@ -1,6 +1,6 @@
 #include "test_entity_loaders.hh"
+#include "device.hh"
 #include "resource_loader.hh"
-#include "test_models.hh"
 
 #include <stdlib.h>
 #include <time.h>
@@ -35,32 +35,10 @@ void Test::TestEntityLoader::loadEntities(void) {
     //addEntity(pBox);
     addEntity(pCamera);
 
-    // resources
-    StandardResourceLoader* pResLoader = new StandardResourceLoader();
-    pResLoader->setTextureInfo("edwerd", "res/textures/edwerd.png",
-                               Texture::TYPE_IMG,
-                               GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR,
-                               GL_WRAP_BORDER, GL_WRAP_BORDER, 4);
-
-    pResLoader->setShaderObjectInfo("VS_texture_normal", "res/shaders/VS_texture_normal.glsl",
-                                    GL_VERTEX_SHADER);
-    pResLoader->setShaderObjectInfo("FS_texture_normal", "res/shaders/FS_texture_normal.glsl",
-                                    GL_FRAGMENT_SHADER);
-    pResLoader->setShaderProgramInfo("texture_normal",
-                                     std::vector<std::string> {"VS_texture_normal",
-                                                               "FS_texture_normal"});
-
-    pResLoader->setMaterialInfo("material_edwerd",
-                                std::unordered_map<GLenum, std::string>
-                                    {std::make_pair(GL_TEXTURE0, "edwerd")},
-                                "texture_normal");
-
-    //pResLoader->setMeshInfo("sphere", "material_edwerd");
-
-    pResLoader->loadResource(MESH, "sphere");
-    pResLoader->loadResource(MATERIAL, "material_edwerd");
-
     sf::sleep(sf::milliseconds(300));
+
+    StandardResourceLoader* pResLoader =
+        dynamic_cast<StandardResourceLoader*>(DEVICE.getResourceThread().getResourceLoaderPtr(MESH));
 
     pMesh = pResLoader->getMeshPtr("sphere");
     pMaterial = pResLoader->getMaterialPtr("material_edwerd");

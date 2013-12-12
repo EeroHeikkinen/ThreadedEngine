@@ -53,12 +53,10 @@ public:
 
     //bool setMeshInfo(const std::string& id = "", const std::string& materialId = "");
 
+    virtual void load(ResourceType resType, std::string id = "");
 
     StandardResourceLoader(const StandardResourceLoader&) = delete;
     StandardResourceLoader& operator=(const StandardResourceLoader&) = delete;
-
-protected:
-    virtual void load(ResourceType resType, std::string id = "");
 
 private:
     std::recursive_mutex mutex;

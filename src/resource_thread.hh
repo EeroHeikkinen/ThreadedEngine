@@ -32,6 +32,8 @@ public:
 
     void loadResource(ResourceType resType, const std::string& id = "");
 
+    ResourceLoader* getResourceLoaderPtr(ResourceType resType);
+
     ResourceThread(const ResourceThread&) = delete;
     ResourceThread& operator=(const ResourceThread&) = delete;
 
@@ -42,7 +44,7 @@ private:
     std::forward_list<std::unique_ptr<ResourceLoader>> lpResourceLoaders;
     std::mutex resourceLoaderMutex;
 
-    //WHY THE FUCK CAN'T I USE AN ENUM INSTEAD OF UINT HERE?!
+    //WHY THE FUCK CAN'T I USE AN ENUM INSTEAD OF UINT HERE?!  cus u suk. get gud
     std::unordered_map<unsigned int, ResourceLoader*> mpResourceLoadersByType;
 
     struct ResourceLoadCall{
