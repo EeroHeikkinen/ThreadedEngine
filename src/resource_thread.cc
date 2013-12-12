@@ -16,10 +16,6 @@ ResourceThread::~ResourceThread(void){
         running = false;
         thread.join();
     }
-
-    for (auto loader : vpResourceLoaders){
-        delete loader;
-    }
 }
 
 void ResourceThread::launch(void){
@@ -48,7 +44,7 @@ void ResourceThread::loop(void){
 
             ResourceLoadCall call;
             if (qLoadCalls.try_pop(call))
-                (call.pResLoader->*call.pLoadFunc)(call.resType, call.resID);
+                call.pResLoader->load(call.resType, call.resId);
 
         DEVICE.getRenderThread().attachContext();
     }
@@ -61,10 +57,19 @@ void ResourceThread::loop(void){
     */
 }
 
-void ResourceThread::addResourceLoader(ResourceLoader* pResLoader){
-    vpResourceLoaders.push_back(pResLoader);
+void ResourceThread::addResourceLoader(std::unique_ptr<ResourceLoader> pLoader,
+                                       std::vector<ResourceType> vTypes){
+    for(ResourceType type : vTypes)
+        mpResourceLoadersByType[type] = pLoader.get();
+
+    lpResourceLoaders.emplace_front(std::move(pLoader));
 }
 
-void ResourceThread::pushResourceLoadCall(ResourceLoadCall loadCall) {
-    qLoadCalls.push(loadCall);
+void ResourceThread::loadResource(ResourceType resType, const std::string& resId){
+    auto it = mpResourceLoadersByType.find(resType);
+    if(it != mpResourceLoadersByType.end()){
+        ResourceLoadCall call = {it->second, resType, resId};
+        qLoadCalls.push(call);
+    }
+    else{/* TODO: throw an exception */}
 }

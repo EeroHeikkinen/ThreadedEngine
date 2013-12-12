@@ -9,20 +9,18 @@
 #include <memory>
 
 
-class ResourceLoader {
+class ResourceLoader{
 public:
     ResourceLoader(void) {}
     virtual ~ResourceLoader(void) {}
 
-    // called by user
-    void loadResource(ResourceType resType, const std::string& id = "");
+    virtual void load(ResourceType resType, std::string id = "") = 0;
 
     ResourceLoader(const ResourceLoader&) = delete;
     ResourceLoader& operator=(const ResourceLoader&) = delete;
 
 protected:
-    // callback function passed to ResourceThread
-    virtual void load(ResourceType resType, std::string id = "") = 0;
+    std::mutex mutex;
 };
 
 

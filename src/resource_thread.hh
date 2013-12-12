@@ -4,6 +4,8 @@
 #include "resources.hh"
 #include "resource_loader.hh"
 
+#include <forward_list>
+#include <unordered_map>
 #include <thread>
 #include <mutex>
 #include <map>
@@ -15,13 +17,6 @@ class Device;
 
 class ResourceThread{
 public:
-    struct ResourceLoadCall{
-        ResourceLoader* pResLoader;
-        void (ResourceLoader::*pLoadFunc)(ResourceType, std::string);
-        ResourceType resType;
-        std::string resID;
-    };
-
     ResourceThread(Device&);
     ~ResourceThread(void);
 
@@ -32,8 +27,10 @@ public:
     void init(void);
     void loop(void);
 
-    void addResourceLoader(ResourceLoader* pResLoader);
-    void pushResourceLoadCall(ResourceLoadCall loadCall);
+    void addResourceLoader(std::unique_ptr<ResourceLoader>,
+                           std::vector<ResourceType>);
+
+    void loadResource(ResourceType resType, const std::string& id = "");
 
     ResourceThread(const ResourceThread&) = delete;
     ResourceThread& operator=(const ResourceThread&) = delete;
@@ -42,8 +39,17 @@ private:
     std::thread thread;
     bool running;
 
+    std::forward_list<std::unique_ptr<ResourceLoader>> lpResourceLoaders;
     std::mutex resourceLoaderMutex;
-    tbb::concurrent_vector<ResourceLoader*> vpResourceLoaders;
+
+    //WHY THE FUCK CAN'T I USE AN ENUM INSTEAD OF UINT HERE?!
+    std::unordered_map<unsigned int, ResourceLoader*> mpResourceLoadersByType;
+
+    struct ResourceLoadCall{
+        ResourceLoader* pResLoader;
+        ResourceType resType;
+        std::string resId;
+    };
 
     //resource loader callback queue
     tbb::concurrent_queue<ResourceLoadCall> qLoadCalls;

@@ -65,7 +65,6 @@ void Test::TestEntityLoader::loadEntities(void) {
     if (pMesh == nullptr)
         std::cout << "NULLIA TULEE SAATANAVITTU!!1" << std::endl;
 
-
     for (int i = 0; i < 100; i++) {
         Test::SingleMeshEntity* pSingleMeshEntity =
             new Test::SingleMeshEntity(pMesh,
