@@ -4,11 +4,6 @@
 #include "test_models.hh" // TEMP
 
 
-void ResourceLoader::loadResource(ResourceType resType, const std::string& resId){
-    ResourceThread::ResourceLoadCall call = {this, &ResourceLoader::load, resType, resId};
-    DEVICE.getResourceThread().pushResourceLoadCall(call);
-}
-
 Texture* StandardResourceLoader::getTexturePtr(const std::string& id) const {
     if (id != "") {
         auto it = textures.find(id);
@@ -26,7 +21,6 @@ ShaderObject* StandardResourceLoader::getShaderObjectPtr(const std::string& id) 
     }
     return nullptr;
 }
-
 
 Shader* StandardResourceLoader::getShaderPtr(const std::string& id) const {
     if (id != ""){

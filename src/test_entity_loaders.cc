@@ -67,7 +67,6 @@ void Test::TestEntityLoader::loadEntities(void) {
     if (pMesh == nullptr || pMaterial == nullptr)
         std::cout << "NULLIA TULEE SAATANAVITTU!!1" << std::endl;
 
-
     for (int i = 0; i < 100; i++) {
         Test::Edwerd* pEdwerd =
             new Test::Edwerd(pMesh, pMaterial,
