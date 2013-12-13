@@ -58,7 +58,7 @@ private:
 
 
 template<typename DerivedLoader>
-DerivedLoader* ResourceThread::addResourceLoader(std::unique_ptr<DerivedLoader> pLoader,
+DerivedLoader* ResourceThread::addResourceLoader(std::unique_ptr<ResourceLoader> pLoader,
                                                  std::vector<ResourceType> vTypes){
     DerivedLoader* pAdded = pLoader.get();
 

@@ -33,6 +33,8 @@ void ResourceThread::join(void){
 }
 
 void ResourceThread::init(void){
+    DEVICE.getRenderThread().detachContext();
+
     // ptr
     std::unique_ptr<StandardResourceLoader> pResLoader = make_unique<StandardResourceLoader>();
 
@@ -47,9 +49,9 @@ void ResourceThread::init(void){
                                GL_NEAREST, GL_NEAREST,
                                GL_WRAP_BORDER, GL_WRAP_BORDER, 2);
 
-    pResLoader->setShaderObjectInfo("VS_texture_normal", "res/shaders/VS_LSD.glsl",
+    pResLoader->setShaderObjectInfo("VS_texture_normal", "res/shaders/VS_texture_normal.glsl",
                                     GL_VERTEX_SHADER);
-    pResLoader->setShaderObjectInfo("FS_texture_normal", "res/shaders/FS_LSD.glsl",
+    pResLoader->setShaderObjectInfo("FS_texture_normal", "res/shaders/FS_texture_normal.glsl",
                                     GL_FRAGMENT_SHADER);
     pResLoader->setShaderProgramInfo("texture_normal",
                                      std::vector<std::string> {"VS_texture_normal",
@@ -66,18 +68,20 @@ void ResourceThread::init(void){
                                 "texture_normal");
 
     //add it
-    addResourceLoader(std::move(pResLoader),
-                      std::vector<ResourceType>{TEXTURE, // resource types to associate it with
-                                                SHADER_OBJECT,
-                                                SHADER,
-                                                MATERIAL,
-                                                MESH});
-
+    StandardResourceLoader* pResLoader2 =
+        addResourceLoader(std::move(pResLoader),
+                          std::vector<ResourceType>{TEXTURE, // resource types to associate it with
+                                                    SHADER_OBJECT,
+                                                    SHADER,
+                                                    MATERIAL,
+                                                    MESH});
     // load 'em
-    loadResource(MESH, "sphere");
-    loadResource(MESH, "box");
-    loadResource(MATERIAL, "material_edwerd");
-    loadResource(MATERIAL, "material_grassblock");
+    pResLoader2->load(MESH, "sphere");
+    pResLoader2->load(MESH, "box");
+    pResLoader2->load(MATERIAL, "material_edwerd");
+    pResLoader2->load(MATERIAL, "material_grassblock");
+
+    DEVICE.getRenderThread().attachContext();
 }
 
 void ResourceThread::loop(void){
@@ -97,14 +101,6 @@ void ResourceThread::loop(void){
     TODO:
     Improve the delay
     */
-}
-
-void ResourceThread::addResourceLoader(std::unique_ptr<ResourceLoader> pLoader,
-                                       std::vector<ResourceType> vTypes){
-    for(ResourceType type : vTypes)
-        mpResourceLoadersByType[type] = pLoader.get();
-
-    lpResourceLoaders.emplace_front(std::move(pLoader));
 }
 
 void ResourceThread::loadResource(ResourceType resType, const std::string& resId){

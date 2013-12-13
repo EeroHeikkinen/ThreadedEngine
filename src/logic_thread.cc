@@ -38,7 +38,7 @@ void LogicThread::join(void){
 }
 
 void LogicThread::init(void){
-    sf::sleep(sf::milliseconds(200));
+    sf::sleep(sf::milliseconds(1000));
 
     //create a StupidRenderer
     Test::StupidRenderer* pRenderer =
@@ -66,7 +66,7 @@ void LogicThread::init(void){
                  0.0f,
                  0.5f));
 
-        for(float i = -4.0f; i < 1000.0f; i=i+2.0){
+        for(float i = -4.0f; i < 400.0f; i=i+2.0){
             DEVICE.getUniverse().addChild(
                 make_unique<Test::Box>
                     (pRenderer,
