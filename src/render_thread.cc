@@ -75,12 +75,19 @@ void RenderThread::init(void){
     glEnable(GL_DEPTH_TEST);
     // accept fragment if it closer to the camera than the former one
     glDepthFunc(GL_LESS);
+    glClearColor(1.0f, 0.055f, 0.48f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
 void RenderThread::loop(void){
     // clear the buffers
-    glClearColor(1.0f, 0.055f, 0.48f, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    //glClearColor(1.0f, 0.055f, 0.48f, 1.0f);
+    static int asd = 0;
+    ++asd;
+    if (asd > 30) {
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        asd = 0;
+    }
 
     // render
     {

@@ -47,9 +47,9 @@ void ResourceThread::init(void){
                                GL_NEAREST, GL_NEAREST,
                                GL_WRAP_BORDER, GL_WRAP_BORDER, 2);
 
-    pResLoader->setShaderObjectInfo("VS_texture_normal", "res/shaders/VS_texture_normal.glsl",
+    pResLoader->setShaderObjectInfo("VS_texture_normal", "res/shaders/VS_LSD.glsl",
                                     GL_VERTEX_SHADER);
-    pResLoader->setShaderObjectInfo("FS_texture_normal", "res/shaders/FS_texture_normal.glsl",
+    pResLoader->setShaderObjectInfo("FS_texture_normal", "res/shaders/FS_LSD.glsl",
                                     GL_FRAGMENT_SHADER);
     pResLoader->setShaderProgramInfo("texture_normal",
                                      std::vector<std::string> {"VS_texture_normal",

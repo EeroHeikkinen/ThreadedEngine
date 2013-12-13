@@ -18,14 +18,14 @@ class StandardResourceLoader;
 // Camera
 Test::Camera::Camera(Test::StupidRenderer* pStupidRenderer) :
     angle(0.0f),
-    pos(25.0f*sin(angle), 0.0f, 20.0f*cos(angle)),
+    pos(25.0f*sin(angle), 20.0f, 20.0f*cos(angle)),
     view(glm::lookAt(pos,                           // camera position
                      glm::vec3(0.0f, 0.0f, 0.0f),   // spot to look at
                      glm::vec3(0.0f, 1.0f, 0.0f))), // up vector
     proj(glm::perspective(60.0f,              // FOV
                                 4.0f / 3.0f,        // aspect ratio
                                 0.1f,               // near clipping plane
-                                100.0f))            // far clipping plane
+                                200.0f))            // far clipping plane
     {
         addComponent(makeLogicComponent([this](){this->logic();}));
         addComponent(make_unique<StupidCameraComponent>(pStupidRenderer,
@@ -40,7 +40,7 @@ Test::Camera::~Camera(void){
 void Test::Camera::logic(void){
     angle += 0.0035;
     if (angle > 2*PI) angle -= 2*PI;
-    pos = glm::vec3(25.0f*sin(angle), 0.0f, 20.0f*cos(angle));
+    pos = glm::vec3(25.0f*sin(angle), 20.0f, 20.0f*cos(angle));
     view = glm::lookAt(pos, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
     proj = glm::perspective(60.0f, 4.0f / 3.0f, 0.1f, 100.0f);
 

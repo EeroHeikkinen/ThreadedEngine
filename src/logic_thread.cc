@@ -57,16 +57,16 @@ void LogicThread::init(void){
         DEVICE.getUniverse().addChild(
             make_unique<Test::Box>
                 (pRenderer,
-                 10.0f,1.0f,10.0f,
+                 100.0f,1.0f,100.0f,
                 dynamic_cast<StandardResourceLoader*>
                     (DEVICE.getResourceThread().getResourceLoaderPtr(MATERIAL))
                         ->getMaterialPtr("material_grassblock"),
-                 glm::vec3(-1.0f,-2.0f,1.0f),
+                 glm::vec3(-1.0f,-5.0f,1.0f),
                  glm::vec3(0.0f,0.0f,0.0f),
                  0.0f,
                  0.5f));
 
-        for(float i = 0.0f; i < 1000.0f; i=i+2.0){
+        for(float i = -4.0f; i < 1000.0f; i=i+2.0){
             DEVICE.getUniverse().addChild(
                 make_unique<Test::Box>
                     (pRenderer,
@@ -80,7 +80,7 @@ void LogicThread::init(void){
                      0.5f));
         }
 
-        DEVICE.getUniverse().addChild(
+        /*DEVICE.getUniverse().addChild(
             make_unique<Test::Sphere>
                 (pRenderer,
                  1.0f,
@@ -90,7 +90,7 @@ void LogicThread::init(void){
                  glm::vec3(10.0f,3.0f,0.0f),
                  glm::vec3(-50.0f,0.0f,0.0f),
                  1.0f,
-                 0.5f));
+                 0.5f));*/
 
     DEVICE.getRenderThread().attachContext();
 }
