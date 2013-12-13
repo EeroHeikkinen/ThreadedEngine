@@ -3,7 +3,6 @@
 #include "device.hh"
 
 #include <SFML/Window.hpp>
-#include <iostream>
 
 
 PhysicsThread::PhysicsThread(Device* pDevice, unsigned int initOrderNumber) :
@@ -35,7 +34,6 @@ void PhysicsThread::join(void){
 }
 
 void PhysicsThread::init(void){
-    std::cout << "physicsinitBegin" << std::endl;
     pPhysicsTree = make_unique<PhysicsTree>();
 
     // very basic bullet configuration, change if needed!
@@ -52,7 +50,6 @@ void PhysicsThread::init(void){
 
     time_prev = clock::now();
     time_curr = clock::now();
-    std::cout << "physicsinitEnd" << std::endl;
 }
 
 void PhysicsThread::loop(void){

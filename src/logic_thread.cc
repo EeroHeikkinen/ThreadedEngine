@@ -4,7 +4,6 @@
 #include "device.hh"
 
 #include <SFML/Window.hpp>
-#include <iostream>
 
 namespace Test{class Camera;}
 class StandardResourceLoader;
@@ -39,8 +38,7 @@ void LogicThread::join(void){
 }
 
 void LogicThread::init(void){
-    std::cout << "logicthreadinitBegin" << std::endl;
-    sf::sleep(sf::milliseconds(2000));
+    sf::sleep(sf::milliseconds(200));
 
     //create a StupidRenderer
     Test::StupidRenderer* pRenderer =
@@ -53,14 +51,6 @@ void LogicThread::init(void){
     Test::EdwerdCollection* edwerdCollection =
         DEVICE.getUniverse().addChild(make_unique<Test::EdwerdCollection>());
         edwerdCollection->loadEdwerds(pRenderer);*/
-    std::cout << "blaargh" << std::endl;
-    auto ferrari =                 dynamic_cast<StandardResourceLoader*>
-                    (DEVICE.getResourceThread().getResourceLoaderPtr(MESH))
-                        ->getMeshPtr("sphere");
-    if(ferrari == nullptr)
-        std::cout << "NULLIA PERKELE" << std::endl;
-    else
-        std::cout << "EINULLIAMITVIT?!?!?!!?" << std::endl;
 
     DEVICE.getRenderThread().detachContext();
 
@@ -98,7 +88,7 @@ void LogicThread::init(void){
                     (DEVICE.getResourceThread().getResourceLoaderPtr(MATERIAL))
                         ->getMaterialPtr("material_edwerd"),
                  glm::vec3(10.0f,3.0f,0.0f),
-                 glm::vec3(-10.0f,0.0f,0.0f),
+                 glm::vec3(-50.0f,0.0f,0.0f),
                  1.0f,
                  0.5f));
 

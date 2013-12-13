@@ -2,7 +2,6 @@
 #include "device.hh"
 
 #include <SFML/Graphics.hpp>
-#include <iostream> //temp
 
 
 Texture::Texture(Type type_,

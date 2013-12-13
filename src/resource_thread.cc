@@ -2,7 +2,6 @@
 #include "device.hh"
 
 #include <SFML/Window.hpp>
-#include <iostream>
 
 
 ResourceThread::ResourceThread(Device* pDevice, unsigned int initOrderNumber) :
@@ -34,7 +33,6 @@ void ResourceThread::join(void){
 }
 
 void ResourceThread::init(void){
-    std::cout << "resourcethreadinitBegin" << std::endl;
     // ptr
     std::unique_ptr<StandardResourceLoader> pResLoader = make_unique<StandardResourceLoader>();
 
@@ -69,7 +67,6 @@ void ResourceThread::init(void){
     loadResource(MESH, "sphere");
     loadResource(MESH, "box");
     loadResource(MATERIAL, "material_edwerd");
-    std::cout << "resourcethreadinitEnd" << std::endl;
 }
 
 void ResourceThread::loop(void){

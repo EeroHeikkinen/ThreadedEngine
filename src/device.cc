@@ -1,7 +1,6 @@
 #include "device.hh"
 
 #include <SFML/OpenGL.hpp>
-#include <iostream>//TEMP
 
 
 Device& Device::getDevice(void){

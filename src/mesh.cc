@@ -1,18 +1,15 @@
 #include "mesh.hh"
 #include "material.hh"
 #include "shader.hh"
-#include <iostream>
 
 
-Mesh::Mesh(void) {
-    std::cout << "Making mesh!" << std::endl;
+Mesh::Mesh(void){
     glGenBuffers(1, &VBO);
     glGenBuffers(1, &IBO);
     glGenVertexArrays(1, &VAO);
 }
 
-Mesh::~Mesh(void) {
-    std::cout << "Deleting mesh" << std::endl;
+Mesh::~Mesh(void){
     glDeleteBuffers(1, &VBO);
     glDeleteBuffers(1, &IBO);
     glDeleteVertexArrays(1, &VAO);

@@ -71,17 +71,15 @@ void RenderThread::join(void){
 }
 
 void RenderThread::init(void){
-    std::cout << "renderinitBegin" << std::endl;
     // enable depth test
     glEnable(GL_DEPTH_TEST);
     // accept fragment if it closer to the camera than the former one
     glDepthFunc(GL_LESS);
-    std::cout << "renderinitEnd" << std::endl;
 }
 
 void RenderThread::loop(void){
     // clear the buffers
-    glClearColor(1.0f, 0.35f, 0.65f, 1.0f);
+    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     // render

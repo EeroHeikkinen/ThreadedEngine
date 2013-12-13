@@ -8,7 +8,7 @@ namespace Test{
     void makeBox(GLuint& VBO_,
                  GLuint& IBO_,
                  GLuint& VAO_,
-                 size_t& numIndices_,
+                 unsigned int& numIndices_,
                  float xSize,
                  float ySize,
                  float zSize);
@@ -16,7 +16,7 @@ namespace Test{
     void makeUVSphere(GLuint& VBO_,
                      GLuint& IBO_,
                      GLuint& VAO_,
-                     size_t& numIndices_,
+                     unsigned int& numIndices_,
                      const unsigned int numSegments,
                      const unsigned int numRings);
 
