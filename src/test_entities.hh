@@ -59,6 +59,8 @@ namespace Test{
                float mass,
                float restitution);
         ~Sphere(void);
+    private:
+        glm::mat4 scale;
     };
 
 
@@ -72,21 +74,14 @@ namespace Test{
             float mass,
             float restitution);
         ~Box(void);
+    private:
+        glm::mat4 scale;
     };
-/*
+
     class EdwerdCollection : public Entity{
     public:
-        EdwerdCollection(void){}
-        ~EdwerdCollection(void);
-
-        void loadEdwerds(StupidRenderer*);
-    private:
-        Texture* pTexture;
-        Shader* pShader;
-        Material* pMaterial;
-        Mesh* pMesh;
+        EdwerdCollection(StupidRenderer*);
     };
-    */
 } // namespace Test
 
 

@@ -39,6 +39,7 @@ PhysicsComponent::PhysicsComponent(std::unique_ptr<btCollisionShape> _pCollision
 								   vec3 _initialPos,
 								   vec3 _initialVel,
 								   mat4& model,
+								   mat4& scale,
 								   float mass,
 								   float restitution) :
     pCollisionMesh(std::move(_pCollisionMesh)),
@@ -46,6 +47,7 @@ PhysicsComponent::PhysicsComponent(std::unique_ptr<btCollisionShape> _pCollision
     initialPos(std::move(_initialPos)),
     initialVel(std::move(_initialVel)),
     model(model),
+    scale(scale),
     mass(mass),
     restitution(restitution)
     {
@@ -84,5 +86,5 @@ void PhysicsComponent::setTransformation(const btTransform& worldTrans){
 	btVector3 pos = worldTrans.getOrigin();
 	quat glm_rot = quat(rot.w(), rot.x(), rot.y(), rot.z());
 
-	model = translate(pos.x(), pos.y(), pos.z()) * toMat4(glm_rot);
+	model = translate(pos.x(), pos.y(), pos.z()) * toMat4(glm_rot) * scale;
 }

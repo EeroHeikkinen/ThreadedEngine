@@ -38,8 +38,6 @@ void LogicThread::join(void){
 }
 
 void LogicThread::init(void){
-    sf::sleep(sf::milliseconds(1000));
-
     //create a StupidRenderer
     Test::StupidRenderer* pRenderer =
         DEVICE.getRenderThread().addRenderer(
@@ -47,10 +45,9 @@ void LogicThread::init(void){
     //create a camera for the StupidRenderer
     DEVICE.getUniverse().addChild(
         make_unique<Test::Camera>(pRenderer));
-    /*//create a bunch of edwerdz
+    //create a bunch of edwerdz
     Test::EdwerdCollection* edwerdCollection =
-        DEVICE.getUniverse().addChild(make_unique<Test::EdwerdCollection>());
-        edwerdCollection->loadEdwerds(pRenderer);*/
+        DEVICE.getUniverse().addChild(make_unique<Test::EdwerdCollection>(pRenderer));
 
     DEVICE.getRenderThread().detachContext();
 
@@ -66,31 +63,33 @@ void LogicThread::init(void){
                  0.0f,
                  0.5f));
 
-        for(float i = -4.0f; i < 400.0f; i=i+2.0){
-            DEVICE.getUniverse().addChild(
-                make_unique<Test::Box>
-                    (pRenderer,
-                     1.0f,1.0f,1.0f,
-                    dynamic_cast<StandardResourceLoader*>
-                        (DEVICE.getResourceThread().getResourceLoaderPtr(MATERIAL))
-                            ->getMaterialPtr("material_grassblock"),
-                     glm::vec3(0.0f,i,0.0f),
-                     glm::vec3(0.0f,0.0f,0.0f),
-                     1.0f,
-                     0.5f));
+        for(int j = -40; j <= 40; j=j+4){
+            for(float i = -4.0f; i < 50.0f; i=i+2.05){
+                DEVICE.getUniverse().addChild(
+                    make_unique<Test::Box>
+                        (pRenderer,
+                         1.0f,1.0f,1.0f,
+                        dynamic_cast<StandardResourceLoader*>
+                            (DEVICE.getResourceThread().getResourceLoaderPtr(MATERIAL))
+                                ->getMaterialPtr("material_grassblock"),
+                         glm::vec3(j,i,0.0f),
+                         glm::vec3(0.0f,0.0f,0.0f),
+                         1.0f,
+                         0.5f));
+            }
         }
 
-        /*DEVICE.getUniverse().addChild(
+        DEVICE.getUniverse().addChild(
             make_unique<Test::Sphere>
                 (pRenderer,
-                 1.0f,
-                dynamic_cast<StandardResourceLoader*>
+                 5.0f,
+                 dynamic_cast<StandardResourceLoader*>
                     (DEVICE.getResourceThread().getResourceLoaderPtr(MATERIAL))
                         ->getMaterialPtr("material_edwerd"),
-                 glm::vec3(10.0f,3.0f,0.0f),
-                 glm::vec3(-50.0f,0.0f,0.0f),
-                 1.0f,
-                 0.5f));*/
+                 glm::vec3(-120.0f,3.0f,-30.0f),
+                 glm::vec3(75.0f,20.0f,20.0f),
+                 80.0f,
+                 0.5f));
 
     DEVICE.getRenderThread().attachContext();
 }

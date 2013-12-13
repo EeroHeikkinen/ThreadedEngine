@@ -134,6 +134,7 @@ public:
                      glm::vec3 initialPos,
                      glm::vec3 initialVel,
                      glm::mat4& model,
+                     glm::mat4& scale,
                      float mass,
                      float restitution);
     virtual ~PhysicsComponent(void);
@@ -150,6 +151,7 @@ protected:
     glm::vec3 initialPos;
     glm::vec3 initialVel;
     glm::mat4& model;
+    glm::mat4& scale;
     float mass;
     float restitution;
     std::unique_ptr<btRigidBody> pPhysicsBody;

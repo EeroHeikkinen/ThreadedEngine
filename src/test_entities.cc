@@ -18,14 +18,14 @@ class StandardResourceLoader;
 // Camera
 Test::Camera::Camera(Test::StupidRenderer* pStupidRenderer) :
     angle(0.0f),
-    pos(25.0f*sin(angle), 20.0f, 20.0f*cos(angle)),
+    pos(75.0f*sin(angle), 20.0f, 75.0f*cos(angle)),
     view(glm::lookAt(pos,                           // camera position
                      glm::vec3(0.0f, 0.0f, 0.0f),   // spot to look at
                      glm::vec3(0.0f, 1.0f, 0.0f))), // up vector
     proj(glm::perspective(60.0f,              // FOV
-                                4.0f / 3.0f,        // aspect ratio
-                                0.1f,               // near clipping plane
-                                200.0f))            // far clipping plane
+                          4.0f / 3.0f,        // aspect ratio
+                          0.1f,               // near clipping plane
+                          300.0f))            // far clipping plane
     {
         addComponent(makeLogicComponent([this](){this->logic();}));
         addComponent(make_unique<StupidCameraComponent>(pStupidRenderer,
@@ -40,9 +40,9 @@ Test::Camera::~Camera(void){
 void Test::Camera::logic(void){
     angle += 0.0035;
     if (angle > 2*PI) angle -= 2*PI;
-    pos = glm::vec3(25.0f*sin(angle), 20.0f, 20.0f*cos(angle));
+    pos = glm::vec3(75.0f*sin(angle), 20.0f, 75.0f*cos(angle));
     view = glm::lookAt(pos, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-    proj = glm::perspective(60.0f, 4.0f / 3.0f, 0.1f, 100.0f);
+    proj = glm::perspective(60.0f, 4.0f / 3.0f, 0.1f, 300.0f);
 
 }
 
@@ -107,7 +107,8 @@ Test::Sphere::Sphere(Test::StupidRenderer* pStupidRenderer,
                 ->getMeshPtr("sphere"),
         pMaterial,
         glm::translate(glm::mat4(1.0f), initialPos) *
-            glm::scale(glm::mat4(1.0f), glm::vec3(radius,radius,radius)))
+            glm::scale(glm::mat4(1.0f), glm::vec3(radius))),
+    scale(glm::scale(glm::mat4(1.0f), glm::vec3(radius)))
     {
         addComponent(make_unique<PhysicsComponent>(
                         make_unique<btSphereShape>(radius),
@@ -115,6 +116,7 @@ Test::Sphere::Sphere(Test::StupidRenderer* pStupidRenderer,
                         std::move(initialPos),
                         std::move(initialVel),
                         model,
+                        scale,
                         mass,
                         restitution));
 
@@ -139,7 +141,8 @@ Test::Box::Box(Test::StupidRenderer* pStupidRenderer,
                 ->getMeshPtr("box"),
         pMaterial,
         glm::translate(glm::mat4(1.0f), initialPos) *
-            glm::scale(glm::mat4(1.0f), glm::vec3(xHalfSize,yHalfSize,zHalfSize)))
+            glm::scale(glm::mat4(1.0f), glm::vec3(xHalfSize,yHalfSize,zHalfSize))),
+    scale(glm::scale(glm::mat4(1.0f), glm::vec3(xHalfSize,yHalfSize,zHalfSize)))
     {
         addComponent(make_unique<PhysicsComponent>(
                         make_unique<btBoxShape>(btVector3(xHalfSize,yHalfSize,zHalfSize)),
@@ -147,6 +150,7 @@ Test::Box::Box(Test::StupidRenderer* pStupidRenderer,
                         std::move(initialPos),
                         std::move(initialVel),
                         model,
+                        scale,
                         mass,
                         restitution));
 
@@ -156,45 +160,18 @@ Test::Box::~Box(void){
     unregisterComponents();
 }
 
-/*
+
 //EdwerdCollection
-Test::EdwerdCollection::~EdwerdCollection(void){
-    delete pTexture;
-    delete pShader;
-    delete pMaterial;
-    delete pMesh;
-}
-
-void Test::EdwerdCollection::loadEdwerds(Test::StupidRenderer* pRenderer){
+Test::EdwerdCollection::EdwerdCollection(Test::StupidRenderer* pRenderer){
     srand(time(NULL));
-
-    // TODO: RAII-ify this!
-    DEVICE.getRenderThread().detachContext();
-
-        pTexture = new Texture(GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR, GL_WRAP_BORDER, GL_WRAP_BORDER, 4);
-        pTexture->loadFromFile("res/textures/edwerd.png");
-
-        pShader = new Shader();
-        pShader->addShaderObject(GL_VERTEX_SHADER, "shaders/VS_texture_normal.glsl");
-        pShader->addShaderObject(GL_FRAGMENT_SHADER, "shaders/FS_texture_normal.glsl");
-        pShader->link();
-
-        pMaterial = new Material(GL_TEXTURE0, pTexture, pShader, "MVP");
-
-        pMesh = new Mesh(pMaterial);
-        makeUVSphere(pMesh->getVBO(), pMesh->getIBO(), pMesh->getVAO(), pMesh->getNIndices(), 32, 16);
-
-    DEVICE.getRenderThread().attachContext();
 
     for(int i = 0; i < 100; ++i){
         this->addChild(
-            make_unique<Test::SingleMeshEntity>(
+            make_unique<Test::Edwerd>(
                 pRenderer,
-                pMesh,
                 glm::translate(glm::mat4(1.0f),
                                glm::vec3(50.0f-(rand()%10000)/100.0f,
                                          50.0f-(rand()%10000)/100.0f,
                                          50.0f-(rand()%10000)/100.0f))));
     }
 }
-*/
