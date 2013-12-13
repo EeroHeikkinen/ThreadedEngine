@@ -16,7 +16,7 @@ namespace {
     };
 }
 
-void Test::makeBox(GLuint& VBO_, GLuint& IBO_, GLuint& VAO_, unsigned int& numIndices_,
+void Test::makeBox(GLuint& VBO_, GLuint& IBO_, GLuint& VAO_, size_t& numIndices_,
                    float xSize, float ySize, float zSize){
 
     PackedVertex_PUN vertices[24];
@@ -79,10 +79,10 @@ void Test::makeBox(GLuint& VBO_, GLuint& IBO_, GLuint& VAO_, unsigned int& numIn
         vertices[i].normal = glm::vec3(0.0f, 0.0f, -1.0f);
 
     //bottom
-    vertices[20].position = glm::vec3(-xSize, ySize, -zSize);
-    vertices[21].position = glm::vec3(xSize, ySize, -zSize);
-    vertices[22].position = glm::vec3(-xSize, ySize, zSize);
-    vertices[23].position = glm::vec3(xSize, ySize, zSize);
+    vertices[20].position = glm::vec3(-xSize, -ySize, -zSize);
+    vertices[21].position = glm::vec3(xSize, -ySize, -zSize);
+    vertices[22].position = glm::vec3(-xSize, -ySize, zSize);
+    vertices[23].position = glm::vec3(xSize, -ySize, zSize);
     vertices[20].uv = glm::vec2(0.25f, 0.0f);
     vertices[21].uv = glm::vec2(0.50f, 0.0f);
     vertices[22].uv = glm::vec2(0.25f, 0.25f);
@@ -131,9 +131,9 @@ void Test::makeBox(GLuint& VBO_, GLuint& IBO_, GLuint& VAO_, unsigned int& numIn
 }
 
 void Test::makeUVSphere(GLuint& VBO_, GLuint& IBO_, GLuint& VAO_,
-                        unsigned int& numIndices_,
-                        const unsigned int numSegments,
-                        const unsigned int numRings){
+                        size_t& numIndices_,
+                        const size_t numSegments,
+                        const size_t numRings){
     if (numSegments < 3){
         /*
         TODO
@@ -151,7 +151,7 @@ void Test::makeUVSphere(GLuint& VBO_, GLuint& IBO_, GLuint& VAO_,
     }
 
     // some temp values
-    const unsigned int numVertices( numSegments * (numRings+2) );
+    const size_t numVertices( numSegments * (numRings+2) );
     numIndices_ = 6 * numSegments * (numRings-1);
 
     float
@@ -161,8 +161,8 @@ void Test::makeUVSphere(GLuint& VBO_, GLuint& IBO_, GLuint& VAO_,
     // vertices
     PackedVertex_PUN* vertices = new PackedVertex_PUN[numVertices];
 
-    for (unsigned int s=0; s<numSegments; ++s) {
-        for (unsigned int r=0; r<numRings+1; ++r) {
+    for (size_t s=0; s<numSegments; ++s) {
+        for (size_t r=0; r<numRings+1; ++r) {
             if (r <= numRings/2) {
                 vertices[s*(numRings+2) + r].position = glm::vec3(s*sAngle, r*rAngle - PI/2, 0.0f);
                 float t = (float)r/(numRings/2);
@@ -177,7 +177,7 @@ void Test::makeUVSphere(GLuint& VBO_, GLuint& IBO_, GLuint& VAO_,
     }
 
     // reconfiguring
-    for (unsigned int i=0; i<numVertices; ++i) {
+    for (size_t i=0; i<numVertices; ++i) {
         vertices[i].position.z = -sinf(vertices[i].position.x) * cosf(vertices[i].position.y);
         vertices[i].position.x = cosf(vertices[i].position.x) * cosf(vertices[i].position.y);
         vertices[i].position.y = sinf(vertices[i].position.y);
@@ -187,9 +187,9 @@ void Test::makeUVSphere(GLuint& VBO_, GLuint& IBO_, GLuint& VAO_,
     // indices
     GLshort* indices = new GLshort[numIndices_];
 
-    for (unsigned int s=0; s<numSegments; ++s) {
-        for (unsigned int r=0; r<numRings-1; ++r) {
-            unsigned int p(6 * (s*(numRings-1) + r));//first index of the partition
+    for (size_t s=0; s<numSegments; ++s) {
+        for (size_t r=0; r<numRings-1; ++r) {
+            size_t p(6 * (s*(numRings-1) + r));//first index of the partition
             short add[6];//index add in the middle(equator[whatever you wanna call it])
             if (r < numRings/2-1)
                 { add[0]=0; add[1]=0; add[2]=0; add[3]=0; add[4]=0; add[5]=0; }

@@ -9,8 +9,5 @@ uniform sampler2D texture_;
 out vec3 color;
 
 void main(void) {
-	vec3 a = (texture(texture_, uv_).rgb + position_.xyz)/2;
-	color = a;
-	a = floor(a*1)/1;
-	color = abs(color-a-0.5)*2;
+	color = texture(texture_, uv_).rgb;
 }

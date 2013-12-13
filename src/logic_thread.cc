@@ -60,7 +60,7 @@ void LogicThread::init(void){
                  10.0f,1.0f,10.0f,
                 dynamic_cast<StandardResourceLoader*>
                     (DEVICE.getResourceThread().getResourceLoaderPtr(MATERIAL))
-                        ->getMaterialPtr("material_edwerd"),
+                        ->getMaterialPtr("material_grassblock"),
                  glm::vec3(-1.0f,-2.0f,1.0f),
                  glm::vec3(0.0f,0.0f,0.0f),
                  0.0f,
@@ -73,7 +73,7 @@ void LogicThread::init(void){
                      1.0f,1.0f,1.0f,
                     dynamic_cast<StandardResourceLoader*>
                         (DEVICE.getResourceThread().getResourceLoaderPtr(MATERIAL))
-                            ->getMaterialPtr("material_edwerd"),
+                            ->getMaterialPtr("material_grassblock"),
                      glm::vec3(0.0f,i,0.0f),
                      glm::vec3(0.0f,0.0f,0.0f),
                      1.0f,

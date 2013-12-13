@@ -42,6 +42,11 @@ void ResourceThread::init(void){
                                GL_LINEAR_MIPMAP_LINEAR, GL_LINEAR,
                                GL_WRAP_BORDER, GL_WRAP_BORDER, 4);
 
+    pResLoader->setTextureInfo("grassblock", "res/textures/grassblock.png",
+                               Texture::TYPE_IMG,
+                               GL_NEAREST, GL_NEAREST,
+                               GL_WRAP_BORDER, GL_WRAP_BORDER, 2);
+
     pResLoader->setShaderObjectInfo("VS_texture_normal", "res/shaders/VS_texture_normal.glsl",
                                     GL_VERTEX_SHADER);
     pResLoader->setShaderObjectInfo("FS_texture_normal", "res/shaders/FS_texture_normal.glsl",
@@ -53,6 +58,11 @@ void ResourceThread::init(void){
     pResLoader->setMaterialInfo("material_edwerd",
                                 std::unordered_map<GLenum, std::string>
                                     {std::make_pair(GL_TEXTURE0, "edwerd")},
+                                "texture_normal");
+
+    pResLoader->setMaterialInfo("material_grassblock",
+                                std::unordered_map<GLenum, std::string>
+                                    {std::make_pair(GL_TEXTURE0, "grassblock")},
                                 "texture_normal");
 
     //add it
@@ -67,6 +77,7 @@ void ResourceThread::init(void){
     loadResource(MESH, "sphere");
     loadResource(MESH, "box");
     loadResource(MATERIAL, "material_edwerd");
+    loadResource(MATERIAL, "material_grassblock");
 }
 
 void ResourceThread::loop(void){
