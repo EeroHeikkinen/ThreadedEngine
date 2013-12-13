@@ -44,6 +44,7 @@ public:
     void addShaderObject(ShaderObject*);
     void addShaderObject(GLenum, const std::string&);
     void addShaderObjects(const std::map<GLenum, const std::string>&);
+    void addShaderObjects(const std::vector<ShaderObject*>&);
 
     void link(void) const;
     void use(void) const;
@@ -58,4 +59,4 @@ private:
 };
 
 
-#endif //HANDLER_HH
+#endif // SHADER_HH

@@ -24,6 +24,8 @@ public:
     void addComponent(std::unique_ptr<Component>);
     //if you think that you need to delete a component, go kill yourself
 
+    void registerComponents(void);
+    void unregisterComponents(void);
 protected:
     Entity* pParent;
     std::list<std::unique_ptr<Component>> lpComponents;

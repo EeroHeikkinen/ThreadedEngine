@@ -49,10 +49,17 @@ RenderThread::~RenderThread(void){
 }
 
 void RenderThread::launch(unsigned int initOrderNumber){
-    // render thread begins here
+    glContextMutex.gainOwnership();
+
+    while (!pWindow->setActive(true))
+        sf::sleep(sf::milliseconds(5));
+
     DEVICE.initSequencer.initialize(this, initOrderNumber);
     while (running)
         loop();
+
+    while (!pWindow->setActive(false))
+        sf::sleep(sf::milliseconds(5));
 }
 
 void RenderThread::stop(void){
@@ -64,15 +71,12 @@ void RenderThread::join(void){
 }
 
 void RenderThread::init(void){
-    // set GL context active for render thread
-    glContextMutex.gainOwnership();
-    while (!pWindow->setActive(true))
-        sf::sleep(sf::milliseconds(5));
-
+    std::cout << "renderinitBegin" << std::endl;
     // enable depth test
     glEnable(GL_DEPTH_TEST);
     // accept fragment if it closer to the camera than the former one
     glDepthFunc(GL_LESS);
+    std::cout << "renderinitEnd" << std::endl;
 }
 
 void RenderThread::loop(void){

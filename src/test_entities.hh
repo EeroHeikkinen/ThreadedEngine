@@ -19,6 +19,7 @@ namespace Test{
     class Camera : public Entity{
     public:
         Camera(StupidRenderer*);
+        ~Camera(void);
 
         void logic(void);
     protected:
@@ -30,58 +31,49 @@ namespace Test{
     class SingleMeshEntity : public Entity{
     public:
         SingleMeshEntity(StupidRenderer* pStupidRenderer,
-                         Mesh* pMesh,
-                         glm::mat4 model);
+               Mesh* pMesh,
+               Material* pMaterial,
+               glm::mat4 model);
+        virtual ~SingleMeshEntity(void);
 
         void render(const glm::mat4&, const glm::mat4&);
-    private:
+    protected:
         Mesh* pMesh;
+        Material* pMaterial;
         glm::mat4 model;
     };
 
-    class Sphere : public Entity{ //render, physics
+    class Edwerd : public SingleMeshEntity{
+    public:
+        Edwerd(StupidRenderer* pStupidRenderer,
+               glm::mat4 model);
+    };
+
+    class Sphere : public SingleMeshEntity{
     public:
         Sphere(StupidRenderer* pStupidRenderer,
-               std::unique_ptr<btCollisionShape> pCollisionMesh,
-               PhysicsNode* pParent,
+               float radius,
+               Material* pMaterial,
                glm::vec3 initialPos,
                glm::vec3 initialVel,
                float mass,
                float restitution);
         ~Sphere(void);
-
-        void render(const glm::mat4&, const glm::mat4&);
-
-        glm::vec3 getPosition(void);
-    private:
-        GLuint VBO, IBO, VAO;
-        Shader shader;
-        unsigned int numIndices;
-        glm::mat4 model;
     };
 
-    class Box : public Entity{ //render, physics
+
+    class Box : public SingleMeshEntity{
     public:
         Box(StupidRenderer* pStupidRenderer,
             float xHalfSize, float yHalfSize, float zHalfSize,
-            std::unique_ptr<btCollisionShape> pCollisionMesh,
-            PhysicsNode* pParent,
+            Material* pMaterial,
             glm::vec3 initialPos,
             glm::vec3 initialVel,
             float mass,
             float restitution);
         ~Box(void);
-
-        void render(const glm::mat4&, const glm::mat4&);
-
-        glm::vec3 getPosition(void);
-    private:
-        GLuint VBO, IBO, VAO;
-        Shader shader;
-        unsigned int numIndices;
-        glm::mat4 model;
     };
-
+/*
     class EdwerdCollection : public Entity{
     public:
         EdwerdCollection(void){}
@@ -94,6 +86,7 @@ namespace Test{
         Material* pMaterial;
         Mesh* pMesh;
     };
+    */
 } // namespace Test
 
 

@@ -21,8 +21,9 @@ public:
     void join(void);
 
     RenderThread& getRenderThread(void);
-    LogicThread& getLogicThread(void);
     PhysicsThread& getPhysicsThread(void);
+    ResourceThread& getResourceThread(void);
+    LogicThread& getLogicThread(void);
 
     Entity& getUniverse(void);
 

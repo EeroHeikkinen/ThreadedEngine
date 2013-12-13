@@ -24,18 +24,25 @@ void Device::stop(void){
 
 void Device::join(void){
     renderThread.join();
+    sf::Window* pWindow = renderThread.getWindowPtr();
+    while (!pWindow->setActive(true))
+        sf::sleep(sf::milliseconds(5));
 }
 
 RenderThread& Device::getRenderThread(void){
     return renderThread;
 }
 
-LogicThread& Device::getLogicThread(void){
-    return logicThread;
-}
-
 PhysicsThread& Device::getPhysicsThread(void){
     return physicsThread;
+}
+
+ResourceThread& Device::getResourceThread(void){
+    return resourceThread;
+}
+
+LogicThread& Device::getLogicThread(void){
+    return logicThread;
 }
 
 Entity& Device::getUniverse(void){

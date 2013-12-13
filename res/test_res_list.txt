@@ -1,0 +1,8 @@
+* Resource list for TestResourceLoader
+* the syntax is as follows: resource type|resource identifier string|file name
+*
+* Resource types:
+* 0: INVALID_TYPE
+* 1: TEXTURE_IMG
+1|edwerd|res/edwerd.png      
+1|world|res/world.png       *commentz can be herr too

@@ -3,28 +3,18 @@
 #include "shader.hh"
 
 
-Material::Material(GLenum texid, Texture* pTexture_, Shader* pShader_, const std::string& MVPstr) {
+Material::Material(GLenum texid, Texture* pTexture_, Shader* pShader_) {
     std::lock_guard<std::mutex> lock(mutex);
 
     pTextures.emplace(texid, pTexture_);
     pShader = pShader_;
-    MVPLoc = glGetUniformLocation(pShader->getID(), MVPstr.c_str());
-    /*
-    TODO
-    if MVPloc < 0 an exception should be thrown.
-    */
 }
 
-Material::Material(std::map<GLenum, Texture*>& pTextures_, Shader* pShader_, const std::string& MVPstr) {
+Material::Material(std::unordered_map<GLenum, Texture*>& pTextures_, Shader* pShader_) {
     std::lock_guard<std::mutex> lock(mutex);
 
     pTextures.insert(pTextures_.begin(), pTextures.end());
     pShader = pShader_;
-    MVPLoc = glGetUniformLocation(pShader->getID(), MVPstr.c_str());
-    /*
-    TODO
-    same as above
-    */
 }
 
 void Material::use(void) const {
@@ -38,6 +28,6 @@ void Material::use(void) const {
     }
 }
 
-GLint Material::getMVPLocation(void) const {
-    return MVPLoc;
+Shader* Material::getShaderPtr(void) const {
+    return pShader;
 }

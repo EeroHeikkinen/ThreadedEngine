@@ -1,8 +1,10 @@
 #ifndef TEXTURE_HH
 #define TEXTURE_HH
 
+
 #include <string>
 #include <GL/GLEW.h>
+
 
 #define FOURCC_DXT1 0x31545844 // "DXT1" in ASCII
 #define FOURCC_DXT3 0x33545844 // "DXT3" in ASCII
@@ -11,9 +13,24 @@
 
 class Texture{
 public:
-    Texture(GLenum minFilter_, GLenum magFilter_,
+    enum Type { // tells i.a. how to load the texture
+        TYPE_INVALID,
+        TYPE_IMG
+    };
+
+    struct Info {
+        Type type;
+        GLenum
+            minFilter, magFilter,   // filters for minification and magnification
+            sWrap, tWrap,           // wrapping
+            AFLevel;                // anisotropic filtering
+    };
+
+    Texture(Type type_,
+            GLenum minFilter_, GLenum magFilter_,
             GLenum sWrap_, GLenum tWrap_,
             GLuint AFLevel_);
+    ~Texture(void);
 
     GLuint getTexture(void);
 
@@ -21,11 +38,7 @@ public:
 
 private:
     GLuint texture;
-
-    GLenum
-        minFilter, magFilter,   // filters for minification and magnification
-        sWrap, tWrap,           // wrapping
-        AFLevel;                // anisotropic filtering
+    Info info;
 };
 
 

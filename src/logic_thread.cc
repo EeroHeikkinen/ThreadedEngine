@@ -4,8 +4,10 @@
 #include "device.hh"
 
 #include <SFML/Window.hpp>
+#include <iostream>
 
 namespace Test{class Camera;}
+class StandardResourceLoader;
 
 
 LogicThread::LogicThread(Device* pDevice, unsigned int initOrderNumber) :
@@ -37,6 +39,9 @@ void LogicThread::join(void){
 }
 
 void LogicThread::init(void){
+    std::cout << "logicthreadinitBegin" << std::endl;
+    sf::sleep(sf::milliseconds(2000));
+
     //create a StupidRenderer
     Test::StupidRenderer* pRenderer =
         DEVICE.getRenderThread().addRenderer(
@@ -44,10 +49,18 @@ void LogicThread::init(void){
     //create a camera for the StupidRenderer
     DEVICE.getUniverse().addChild(
         make_unique<Test::Camera>(pRenderer));
-    //create a bunch of edwerdz
+    /*//create a bunch of edwerdz
     Test::EdwerdCollection* edwerdCollection =
         DEVICE.getUniverse().addChild(make_unique<Test::EdwerdCollection>());
-        edwerdCollection->loadEdwerds(pRenderer);
+        edwerdCollection->loadEdwerds(pRenderer);*/
+    std::cout << "blaargh" << std::endl;
+    auto ferrari =                 dynamic_cast<StandardResourceLoader*>
+                    (DEVICE.getResourceThread().getResourceLoaderPtr(MESH))
+                        ->getMeshPtr("sphere");
+    if(ferrari == nullptr)
+        std::cout << "NULLIA PERKELE" << std::endl;
+    else
+        std::cout << "EINULLIAMITVIT?!?!?!!?" << std::endl;
 
     DEVICE.getRenderThread().detachContext();
 
@@ -55,8 +68,9 @@ void LogicThread::init(void){
             make_unique<Test::Box>
                 (pRenderer,
                  10.0f,1.0f,10.0f,
-                 make_unique<btBoxShape>(btVector3(10.0f,1.0f,10.0f)),
-                 DEVICE.getPhysicsThread().getPhysicsTree().getRoot(),
+                dynamic_cast<StandardResourceLoader*>
+                    (DEVICE.getResourceThread().getResourceLoaderPtr(MATERIAL))
+                        ->getMaterialPtr("material_edwerd"),
                  glm::vec3(-1.0f,-2.0f,1.0f),
                  glm::vec3(0.0f,0.0f,0.0f),
                  0.0f,
@@ -67,8 +81,9 @@ void LogicThread::init(void){
                 make_unique<Test::Box>
                     (pRenderer,
                      1.0f,1.0f,1.0f,
-                     make_unique<btBoxShape>(btVector3(1.0f,1.0f,1.0f)),
-                     DEVICE.getPhysicsThread().getPhysicsTree().getRoot(),
+                    dynamic_cast<StandardResourceLoader*>
+                        (DEVICE.getResourceThread().getResourceLoaderPtr(MATERIAL))
+                            ->getMaterialPtr("material_edwerd"),
                      glm::vec3(0.0f,i,0.0f),
                      glm::vec3(0.0f,0.0f,0.0f),
                      1.0f,
@@ -78,8 +93,10 @@ void LogicThread::init(void){
         DEVICE.getUniverse().addChild(
             make_unique<Test::Sphere>
                 (pRenderer,
-                 make_unique<btSphereShape>(1.0f),
-                 DEVICE.getPhysicsThread().getPhysicsTree().getRoot(),
+                 1.0f,
+                dynamic_cast<StandardResourceLoader*>
+                    (DEVICE.getResourceThread().getResourceLoaderPtr(MATERIAL))
+                        ->getMaterialPtr("material_edwerd"),
                  glm::vec3(10.0f,3.0f,0.0f),
                  glm::vec3(-10.0f,0.0f,0.0f),
                  1.0f,

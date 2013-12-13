@@ -13,8 +13,14 @@ namespace Test{class StupidRenderer;}
 
 class Component{
 public:
-    Component(){}
-    virtual ~Component(){}
+    Component(void) : isInStructure(false) {}
+    virtual ~Component(void){}
+
+    virtual void addToStructure(void) = 0;
+    virtual void removeFromStructure(void) = 0;
+
+    /* Modify this and I'll strangle you */
+    bool isInStructure;
 };
 
 //StupidRenderComponent
@@ -31,10 +37,8 @@ public:
     StupidRenderComponent& operator=(const StupidRenderComponent&) = delete;
 protected:
     Test::StupidRenderer* pTargetStructure;
-    /* For successful threading, these two      *
-     * functions shall be called in the most    *
-     * derived class constructor and destructor *
-     * and NEVER OVERRIDDEN!                    */
+
+    /* NEVER OVERRIDE! */
     void addToStructure(void);
     void removeFromStructure(void);
 };
@@ -45,12 +49,7 @@ public:
                            RenderFunc rfunc) :
         StupidRenderComponent(pTargetStructure),
         rfunc(rfunc)
-        {
-            addToStructure();
-        }
-    ~_StupidRenderComponent(void){ //FINAL
-        removeFromStructure();
-    }
+        {}
 
     void render(const glm::mat4& view, const glm::mat4& proj){
         rfunc(view, proj);
@@ -87,30 +86,11 @@ protected:
     Test::StupidRenderer* pTargetStructure;
     glm::mat4& view;
     glm::mat4& proj;
-    /* For successful threading, these two      *
-     * functions shall be called in the most    *
-     * derived class constructor and destructor *
-     * and NEVER OVERRIDDEN!                    */
+
+    /* NEVER OVERRIDE! */
     void addToStructure(void);
     void removeFromStructure(void);
 };
-template<typename... Args>
-class _StupidCameraComponent : public StupidCameraComponent{
-public:
-    _StupidCameraComponent(Args&&... args) :
-        StupidCameraComponent(std::forward<Args>(args)...)
-        {
-            addToStructure();
-        }
-    ~_StupidCameraComponent(void){
-        removeFromStructure();
-    }
-};
-template<typename... Args>
-std::unique_ptr<_StupidCameraComponent<Args...>>
-makeStupidCameraComponent(Args&&... args){
-    return make_unique<_StupidCameraComponent<Args...>>(std::forward<Args>(args)...);
-}
 
 //LogicComponent
 class LogicComponent : public Component{
@@ -123,10 +103,7 @@ public:
     LogicComponent(const LogicComponent&) = delete;
     LogicComponent& operator=(const LogicComponent&) = delete;
 protected:
-    /* For successful threading, these two      *
-     * functions shall be called in the most    *
-     * derived class constructor and destructor *
-     * and NEVER OVERRIDDEN!                    */
+    /* NEVER OVERRIDE! */
     void addToStructure(void);
     void removeFromStructure(void);
 };
@@ -135,12 +112,7 @@ class _LogicComponent : public LogicComponent{
 public:
     _LogicComponent(LogicFunc lfunc) :
         lfunc(lfunc)
-        {
-            addToStructure();
-        }
-    ~_LogicComponent(void){ //FINAL
-        removeFromStructure();
-    }
+        {}
 
     void logic(void){
         lfunc();
@@ -182,29 +154,10 @@ protected:
     float restitution;
     std::unique_ptr<btRigidBody> pPhysicsBody;
 
-    /* For successful threading, these two      *
-     * functions shall be called in the most    *
-     * derived class constructor and destructor *
-     * and NEVER OVERRIDDEN!                    */
+    /* NEVER OVERRIDE! */
     void addToStructure(void);
     void removeFromStructure(void);
 };
-template<typename... Args>
-class _PhysicsComponent : public PhysicsComponent{
-public:
-    _PhysicsComponent(Args&&... args) :
-        PhysicsComponent(std::forward<Args>(args)...)
-        {
-            addToStructure();
-        }
-    ~_PhysicsComponent(void){
-        removeFromStructure();
-    }
-};
-template<typename... Args>
-std::unique_ptr<_PhysicsComponent<Args...>>
-makePhysicsComponent(Args&&... args){
-    return make_unique<_PhysicsComponent<Args...>>(std::forward<Args>(args)...);
-}
+
 
 #endif // COMPONENT_HH
