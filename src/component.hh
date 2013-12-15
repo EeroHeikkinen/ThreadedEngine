@@ -131,7 +131,6 @@ class PhysicsComponent : public Component{
 public:
     PhysicsComponent(std::unique_ptr<btCollisionShape> pCollisionMesh,
                      PhysicsNode* pParent,
-                     glm::vec3 initialPos,
                      glm::vec3 initialVel,
                      glm::mat4& model,
                      glm::mat4& scale,

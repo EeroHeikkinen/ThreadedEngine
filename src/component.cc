@@ -24,18 +24,15 @@ void StupidCameraComponent::removeFromStructure(void){
 
 //LogicComponent
 void LogicComponent::addToStructure(void){
-    std::cout << "Adding logic!" << std::endl;
     DEVICE.getLogicThread().addComponent(this);
 }
 void LogicComponent::removeFromStructure(void){
-    std::cout << "Removing logic!" << std::endl;
     DEVICE.getLogicThread().removeComponent(this);
 }
 
 //PhysicsComponent
 PhysicsComponent::PhysicsComponent(std::unique_ptr<btCollisionShape> _pCollisionMesh,
                                    PhysicsNode* pParent,
-								   glm::vec3 initialPos,
 								   glm::vec3 initialVel,
 								   glm::mat4& model,
 								   glm::mat4& scale,
