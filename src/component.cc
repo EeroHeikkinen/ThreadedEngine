@@ -3,12 +3,9 @@
 #include "test_renderers.hh"
 
 #include <glm/glm.hpp>
-#include <glm/gtc/quaternion.hpp>
-#include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/quaternion.hpp>
 #include <glm/gtx/transform.hpp>
-
-using namespace glm;
+#include <iostream>
 
 
 //RenderComponent
@@ -27,48 +24,53 @@ void StupidCameraComponent::removeFromStructure(void){
 
 //LogicComponent
 void LogicComponent::addToStructure(void){
+    std::cout << "Adding logic!" << std::endl;
     DEVICE.getLogicThread().addComponent(this);
 }
 void LogicComponent::removeFromStructure(void){
+    std::cout << "Removing logic!" << std::endl;
     DEVICE.getLogicThread().removeComponent(this);
 }
 
 //PhysicsComponent
 PhysicsComponent::PhysicsComponent(std::unique_ptr<btCollisionShape> _pCollisionMesh,
                                    PhysicsNode* pParent,
-								   vec3 _initialPos,
-								   vec3 _initialVel,
-								   mat4& model,
-								   mat4& scale,
-								   float mass,
-								   float restitution) :
+								   glm::vec3 initialPos,
+								   glm::vec3 initialVel,
+								   glm::mat4& model,
+								   glm::mat4& scale,
+								   float _mass,
+								   float _restitution) :
     pCollisionMesh(std::move(_pCollisionMesh)),
     pParent(pParent),
-    initialPos(std::move(_initialPos)),
-    initialVel(std::move(_initialVel)),
     model(model),
     scale(scale),
-    mass(mass),
-    restitution(restitution)
+    mass(_mass),
+    restitution(_restitution),
+    motionState(this)
     {
-        btTransform btInitialPos(btQuaternion(0,0,0,1),
-                                 btVector3(initialPos.x, initialPos.y, initialPos.z));
-
-        pMotionState = make_unique<PhysicsMotionState>(btInitialPos, this);
-
         btVector3 fallInertia = btVector3(0.0f,0.0f,0.0f);
         pCollisionMesh->calculateLocalInertia(mass, fallInertia);
-        btRigidBody::btRigidBodyConstructionInfo RigidBodyCI(mass,
-                                                             pMotionState.get(),
+        btRigidBody::btRigidBodyConstructionInfo rigidBodyCI(mass,
+                                                             &motionState,
                                                              pCollisionMesh.get(),
                                                              fallInertia);
-        pPhysicsBody = make_unique<btRigidBody>(RigidBodyCI);
-        pPhysicsBody->setRestitution(restitution);
+        rigidBodyCI.m_restitution = restitution;
+        pPhysicsBody = make_unique<btRigidBody>(rigidBodyCI);
         pPhysicsBody->setLinearVelocity(btVector3(initialVel.x, initialVel.y, initialVel.z));
     }
+PhysicsComponent::~PhysicsComponent(void){}
 
-PhysicsComponent::~PhysicsComponent(){
-    DEVICE.getPhysicsThread().getDynamicsWorld().removeRigidBody(pPhysicsBody.get());
+const glm::mat4& PhysicsComponent::getModelMatrix(void){
+    return model;
+}
+
+void PhysicsComponent::setModelMatrix(const glm::mat4& _model){
+    model = _model;
+}
+
+const glm::mat4& PhysicsComponent::getScaleMatrix(void){
+    return scale;
 }
 
 void PhysicsComponent::addToStructure(void){
@@ -79,12 +81,4 @@ void PhysicsComponent::addToStructure(void){
 void PhysicsComponent::removeFromStructure(void){
     DEVICE.getPhysicsThread().getPhysicsTree().removeNode(pPhysicsNode.release());
     DEVICE.getPhysicsThread().getDynamicsWorld().removeRigidBody(pPhysicsBody.get());
-}
-
-void PhysicsComponent::setTransformation(const btTransform& worldTrans){
-	btQuaternion rot = worldTrans.getRotation();
-	btVector3 pos = worldTrans.getOrigin();
-	quat glm_rot = quat(rot.w(), rot.x(), rot.y(), rot.z());
-
-	model = translate(pos.x(), pos.y(), pos.z()) * toMat4(glm_rot) * scale;
 }

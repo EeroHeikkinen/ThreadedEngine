@@ -2,12 +2,11 @@
 #define PHYSICS_THREAD_HH
 
 #include "physics_tree.hh"
-#include "component.hh"
 #include "physics_utils.hh"
 
 #include <thread>
-#include <btBulletDynamicsCommon.h>
 #include <chrono>
+#include <btBulletDynamicsCommon.h>
 
 class Device;
 
@@ -24,8 +23,8 @@ public:
     void init(void);
     void loop(void);
 
-    PhysicsTree& getPhysicsTree() const;
-    DiscreteDynamicsWorld& getDynamicsWorld() const;
+    PhysicsTree& getPhysicsTree();
+    DiscreteDynamicsWorld& getDynamicsWorld();
 
     PhysicsThread(const PhysicsThread&) = delete;
     PhysicsThread& operator=(const PhysicsThread&) = delete;
@@ -33,14 +32,14 @@ private:
     std::thread thread;
     bool running;
 
-    std::unique_ptr<PhysicsTree> pPhysicsTree;
+    PhysicsTree physicsTree;
 
     //Bullet stuff
-    std::unique_ptr<btBroadphaseInterface> pBroadphase;
-    std::unique_ptr<btSequentialImpulseConstraintSolver> pSolver;
-    std::unique_ptr<btDefaultCollisionConfiguration> pCollisionConfiguration;
-    std::unique_ptr<btCollisionDispatcher> pDispatcher;
-    std::unique_ptr<DiscreteDynamicsWorld> pDynamicsWorld;
+    btDbvtBroadphase broadphase;
+    btSequentialImpulseConstraintSolver solver;
+    btDefaultCollisionConfiguration collisionConfiguration;
+    btCollisionDispatcher dispatcher;
+    DiscreteDynamicsWorld dynamicsWorld;
 
     typedef std::chrono::high_resolution_clock clock;
     std::chrono::time_point<clock> time_prev, time_curr;

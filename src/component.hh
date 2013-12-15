@@ -1,11 +1,11 @@
 #ifndef COMPONENT_HH
 #define COMPONENT_HH
 
-#include "physics_utils.hh"
 #include "make_unique.hh"
+#include "physics_utils.hh"
 
 #include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
+#include <btBulletDynamicsCommon.h>
 
 class PhysicsNode;
 namespace Test{class StupidRenderer;}
@@ -46,9 +46,9 @@ template<typename RenderFunc>
 class _StupidRenderComponent : public StupidRenderComponent{
 public:
     _StupidRenderComponent(Test::StupidRenderer* pTargetStructure,
-                           RenderFunc rfunc) :
+                           RenderFunc _rfunc) :
         StupidRenderComponent(pTargetStructure),
-        rfunc(rfunc)
+        rfunc(std::move(_rfunc))
         {}
 
     void render(const glm::mat4& view, const glm::mat4& proj){
@@ -61,7 +61,7 @@ template<typename RenderFunc>
 std::unique_ptr<_StupidRenderComponent<RenderFunc>>
 makeStupidRenderComponent(Test::StupidRenderer* pTargetStructure,
                           RenderFunc rfunc){
-    return make_unique<_StupidRenderComponent<RenderFunc>>(pTargetStructure, rfunc);
+    return make_unique<_StupidRenderComponent<RenderFunc>>(pTargetStructure, std::move(rfunc));
 }
 
 //StupidCameraComponent
@@ -110,8 +110,8 @@ protected:
 template<typename LogicFunc>
 class _LogicComponent : public LogicComponent{
 public:
-    _LogicComponent(LogicFunc lfunc) :
-        lfunc(lfunc)
+    _LogicComponent(LogicFunc _lfunc) :
+        lfunc(std::move(_lfunc))
         {}
 
     void logic(void){
@@ -123,7 +123,7 @@ private:
 template<typename LogicFunc>
 std::unique_ptr<_LogicComponent<LogicFunc>>
 makeLogicComponent(LogicFunc lfunc){
-    return make_unique<_LogicComponent<LogicFunc>>(lfunc);
+    return make_unique<_LogicComponent<LogicFunc>>(std::move(lfunc));
 }
 
 //PhysicsComponent
@@ -138,22 +138,22 @@ public:
                      float mass,
                      float restitution);
     virtual ~PhysicsComponent(void);
-
-    void setTransformation(const btTransform& worldTrans);
-
     PhysicsComponent(const PhysicsComponent&) = delete;
     PhysicsComponent& operator=(const PhysicsComponent&) = delete;
+
+    const glm::mat4& getModelMatrix(void);
+    void setModelMatrix(const glm::mat4&);
+
+    const glm::mat4& getScaleMatrix(void);
 protected:
-    std::unique_ptr<btCollisionShape> pCollisionMesh;
+    std::unique_ptr<btCollisionShape> pCollisionMesh; //TODO: make this a resource
     PhysicsNode* pParent;
-    std::unique_ptr<PhysicsMotionState> pMotionState;
     std::unique_ptr<PhysicsNode> pPhysicsNode;
-    glm::vec3 initialPos;
-    glm::vec3 initialVel;
     glm::mat4& model;
     glm::mat4& scale;
     float mass;
     float restitution;
+    PhysicsMotionState motionState;
     std::unique_ptr<btRigidBody> pPhysicsBody;
 
     /* NEVER OVERRIDE! */

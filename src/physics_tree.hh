@@ -1,9 +1,9 @@
 #ifndef PHYSICS_TREE_HH
 #define PHYSICS_TREE_HH
 
-#include "component.hh"
-
 #include <vector>
+
+class PhysicsComponent;
 
 
 //treenode
@@ -52,35 +52,3 @@ private:
 
 
 #endif // PHYSICS_TREE_HH
-
-/*
-    //iterator base class from which different iterators can be derived.
-    template<bool is_const_iterator = true>
-    class PhysicsTreeIterator : public std::iterator<std::forward_iterator_tag, PhysicsComponent*> {
-
-    public:
-        //typedefs to make the iterator either const or non-const
-        virtual PhysicsTreeIterator() {}
-        typedef typename std::conditional<is_const_iterator, const Node, Node> iterator_node;
-        typedef typename std::conditional<is_const_iterator, const PhysicsComponent, PhysicsComponent> iterator_component;
-
-        virtual ~PhysicsTreeIterator() {}
-
-        iterator_component operator*() const;
-        bool operator==(const PhysicsTreeIterator) const;
-        bool operator!=(const PhysicsTreeIterator) const;
-
-
-
-    protected:
-        virtual void operator++() = 0;
-        virtual void operator++(int) = 0;
-
-        iterator_node* current;
-    };
-
-    //typedefs to define const_iterator and iterator for the tree
-    typedef PhysicsTreeIterator<true> const_iterator;
-    typedef PhysicsTreeIterator<false> iterator;
-
-*/

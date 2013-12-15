@@ -9,6 +9,7 @@
 #include <GL/GLEW.h>
 #include <glm/glm.hpp>
 #include <mutex>
+#include <chrono>
 
 class Mesh;
 class Material;
@@ -26,6 +27,9 @@ namespace Test{
         float angle;
         glm::vec3 pos;
         glm::mat4 view, proj;
+
+        typedef std::chrono::high_resolution_clock clock;
+        std::chrono::time_point<clock> time_prev, time_curr;
     };
 
     class SingleMeshEntity : public Entity{
@@ -81,6 +85,18 @@ namespace Test{
     class EdwerdCollection : public Entity{
     public:
         EdwerdCollection(StupidRenderer*);
+    };
+
+    class World : public Entity{
+    public:
+        World(StupidRenderer*);
+        virtual ~World(void);
+
+        void logic(void);
+    private:
+        StupidRenderer* pRenderer;
+        typedef std::chrono::high_resolution_clock clock;
+        std::chrono::time_point<clock> time_prev, time_curr;
     };
 } // namespace Test
 

@@ -1,16 +1,17 @@
-#ifndef PHYS_MOTION_STATE_HH
-#define PHYS_MOTION_STATE_HH
+#ifndef PHYSICS_UTILS_HH
+#define PHYSICS_UTILS_HH
 
 #include <LinearMath/btMotionState.h>
 #include <btBulletDynamicsCommon.h>
 #include <mutex>
+#include <iostream>
 
 class PhysicsComponent;
 
 
 class PhysicsMotionState : public btMotionState{
 public:
-	PhysicsMotionState(const btTransform& initialPos,  PhysicsComponent* pComponent);
+	PhysicsMotionState(PhysicsComponent* pComponent);
 	virtual ~PhysicsMotionState() {}
 
 	void setComponent(PhysicsComponent* pComponent);
@@ -18,7 +19,6 @@ public:
 	virtual void getWorldTransform(btTransform& worldTrans) const;
 	virtual void setWorldTransform(const btTransform& worldTrans);
 private:
-	btTransform initialPos;
 	PhysicsComponent* pComponent;
 };
 

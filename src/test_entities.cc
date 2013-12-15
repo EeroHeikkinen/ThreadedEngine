@@ -25,32 +25,38 @@ Test::Camera::Camera(Test::StupidRenderer* pStupidRenderer) :
     proj(glm::perspective(60.0f,              // FOV
                           4.0f / 3.0f,        // aspect ratio
                           0.1f,               // near clipping plane
-                          300.0f))            // far clipping plane
+                          300.0f)),           // far clipping plane
+    time_prev(clock::now()),
+    time_curr(clock::now())
     {
         addComponent(makeLogicComponent([this](){this->logic();}));
         addComponent(make_unique<StupidCameraComponent>(pStupidRenderer,
                                                         view,
                                                         proj));
-
         registerComponents();
     }
 Test::Camera::~Camera(void){
     unregisterComponents();
 }
 void Test::Camera::logic(void){
-    angle += 0.0035;
+    time_curr = clock::now();
+    float duration =
+        std::chrono::duration_cast<std::chrono::milliseconds>
+            (time_curr - time_prev).count() / 1000.0;
+    time_prev = time_curr;
+
+    angle += 0.5 * duration;
     if (angle > 2*PI) angle -= 2*PI;
     pos = glm::vec3(75.0f*sin(angle), 20.0f, 75.0f*cos(angle));
     view = glm::lookAt(pos, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
     proj = glm::perspective(60.0f, 4.0f / 3.0f, 0.1f, 300.0f);
-
 }
 
 //SingleMeshEntity
 Test::SingleMeshEntity::SingleMeshEntity(Test::StupidRenderer* pStupidRenderer,
-                     Mesh* pMesh,
-                     Material* pMaterial,
-                     glm::mat4 _model) :
+                                         Mesh* pMesh,
+                                         Material* pMaterial,
+                                         glm::mat4 _model) :
     pMesh(pMesh),
     pMaterial(pMaterial),
     model(std::move(_model))
@@ -175,3 +181,75 @@ Test::EdwerdCollection::EdwerdCollection(Test::StupidRenderer* pRenderer){
                                          50.0f-(rand()%10000)/100.0f))));
     }
 }
+
+//World
+Test::World::World(Test::StupidRenderer* _pRenderer) :
+    pRenderer(_pRenderer),
+    time_prev(clock::now()),
+    time_curr(clock::now())
+    {
+        //create a camera for the StupidRenderer
+        this->addChild(
+            make_unique<Test::Camera>(pRenderer));
+        //create a bunch of edwerdz
+        Test::EdwerdCollection* edwerdCollection =
+            this->addChild(make_unique<Test::EdwerdCollection>(pRenderer));
+
+        this->addChild(
+            make_unique<Test::Box>
+                (pRenderer,
+                 100.0f,1.0f,100.0f,
+                 dynamic_cast<StandardResourceLoader*>
+                     (DEVICE.getResourceThread().getResourceLoaderPtr(MATERIAL))
+                         ->getMaterialPtr("material_grassblock"),
+                 glm::vec3(-1.0f,-5.0f,1.0f),
+                 glm::vec3(0.0f,0.0f,0.0f),
+                 0.0f,
+                 0.5f));
+
+        for(int j = -40; j <= 40; j=j+4){
+            for(float i = -4.0f; i < 50.0f; i=i+2.05){
+                this->addChild(
+                    make_unique<Test::Box>
+                        (pRenderer,
+                         1.0f,1.0f,1.0f,
+                        dynamic_cast<StandardResourceLoader*>
+                            (DEVICE.getResourceThread().getResourceLoaderPtr(MATERIAL))
+                                ->getMaterialPtr("material_grassblock"),
+                         glm::vec3(j,i,0.0f),
+                         glm::vec3(0.0f,0.0f,0.0f),
+                         0.5f,
+                         0.0f));
+            }
+        }
+
+        this->addChild(
+            make_unique<Test::Sphere>
+                (pRenderer,
+                 10.0f,
+                 dynamic_cast<StandardResourceLoader*>
+                    (DEVICE.getResourceThread().getResourceLoaderPtr(MATERIAL))
+                        ->getMaterialPtr("material_edwerd"),
+                 glm::vec3(-75.0f,3.0f,-30.0f),
+                 glm::vec3(60.0f,20.0f,30.0f),
+                 80.0f,
+                 0.0f));
+
+        addComponent(makeLogicComponent([this](){this->logic();}));
+        registerComponents();
+    }
+Test::World::~World(void){
+    unregisterComponents();
+}
+void Test::World::logic(void){
+    time_curr = clock::now();
+    float duration =
+        std::chrono::duration_cast<std::chrono::milliseconds>
+            (time_curr - time_prev).count() / 1000.0;
+    if(duration > 10.0){
+        StupidRenderer* _pRenderer = pRenderer;
+        this->eraseThisSubtree();
+        DEVICE.getUniverse().addChild(make_unique<Test::World>(_pRenderer));
+    }
+}
+

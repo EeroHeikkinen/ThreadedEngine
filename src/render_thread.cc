@@ -104,8 +104,6 @@ void RenderThread::loop(void){
             sf::sleep(sf::milliseconds(5));
     }
 
-    // delay
-    sf::sleep(sf::milliseconds(5));
     /*
     TODO
     Improve the delay

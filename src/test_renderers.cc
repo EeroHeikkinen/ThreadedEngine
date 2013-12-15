@@ -1,16 +1,17 @@
 #include "test_renderers.hh"
-#include "device.hh"
-#include "test_entities.hh"
+
+#include <glm/gtx/transform.hpp>
+
 
 Test::StupidRenderer::StupidRenderer(void) :
     defaultView(glm::lookAt(glm::vec3(5.0f,2.0f,0.0f),
                             glm::vec3(0.0f,0.0f,0.0f),
                             glm::vec3(0.0f,1.0f,0.0f))),
-    defaultProj(glm::perspective(60.0f, //FoV
+    defaultProj(glm::perspective(60.0f,     //FoV
                                  4.0f/3.0f, //Aspect ratio
-                                 0.1f, //near CP
-                                 100.0f)), //far CP
-    defaultCamera(StupidCameraComponent(this, defaultView, defaultProj)),
+                                 0.1f,      //near CP
+                                 100.0f)),  //far CP
+    defaultCamera(this, defaultView, defaultProj),
     pCurrentCamera(&defaultCamera)
     {}
 

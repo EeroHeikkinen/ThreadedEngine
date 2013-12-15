@@ -1,11 +1,11 @@
 #ifndef LOGIC_THREAD_HH
 #define LOGIC_THREAD_HH
 
-#include "component.hh"
-
 #include <thread>
 #include <unordered_set>
+
 class Device;
+class LogicComponent;
 
 
 class LogicThread{
