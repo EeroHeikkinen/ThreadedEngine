@@ -3,7 +3,6 @@
 
 //QueuedInterruptMutex
 QueuedInterruptMutex::QueuedInterruptMutex(void) : //initialize QIM
-    pCurrentLock(nullptr),
     pCurrentCv(nullptr)
     {}
 
@@ -26,19 +25,18 @@ void QueuedInterruptMutex::dispatchInterrupts(void){ //dispatch waiting interrup
 }
 
 void QueuedInterruptMutex::lock(void){
-    std::condition_variable* pQueuedCv = new std::condition_variable;
-    cvQueue.push(pQueuedCv);
+    std::condition_variable queuedCv;
+    cvQueue.push(&queuedCv);
 
-    std::unique_lock<std::mutex>* pQueuedLock = new std::unique_lock<std::mutex>(mutex);
-    while(pCurrentCv != pQueuedCv)
-        pQueuedCv->wait(*pQueuedLock);
-    pCurrentLock = pQueuedLock; //storing the lock pointer into a member variable for transfer into unlock call
+    std::unique_lock<std::mutex> queuedLock(mutex);
+    while(pCurrentCv != &queuedCv)
+        queuedCv.wait(queuedLock);
+    currentLock = std::move(queuedLock); //storing the lock in a member variable for transfer into unlock call
 }
 
 void QueuedInterruptMutex::unlock(void){
-    delete pCurrentCv; //this destructs the queued condition variable
     if(!cvQueue.try_pop(pCurrentCv)) //check if queue is empty
         pCurrentCv = &ownerCv;
     pCurrentCv->notify_all();
-    delete pCurrentLock; //this destructs the unique_lock and unlocks the mutex
+    currentLock.unlock(); //this unlocks the mutex (doesn't kill the crab)
 }

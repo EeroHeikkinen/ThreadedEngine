@@ -49,7 +49,7 @@ private:
 
     // Window & context
     sf::ContextSettings settings;
-    sf::Window* pWindow;
+    std::unique_ptr<sf::Window> pWindow;
     QueuedInterruptMutex glContextMutex;
 
     // Renderer container vector

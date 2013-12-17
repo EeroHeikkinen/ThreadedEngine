@@ -245,6 +245,7 @@ void Test::World::logic(void){
         std::chrono::duration_cast<std::chrono::milliseconds>
             (time_curr - time_prev).count() / 1000.0;
     if(duration > 10.0){
+        //World gets deleted so we need this temporary
         StupidRenderer* _pRenderer = pRenderer;
         this->eraseThisSubtree();
         DEVICE.getUniverse().addChild(make_unique<Test::World>(_pRenderer));

@@ -45,7 +45,7 @@ private:
     std::mutex mutex;
     std::unique_lock<std::mutex> ownerLock;
     std::condition_variable ownerCv;
-    std::unique_lock<std::mutex>* pCurrentLock;
+    std::unique_lock<std::mutex> currentLock;
     std::condition_variable* pCurrentCv;
     tbb::concurrent_queue<std::condition_variable*> cvQueue;
 };

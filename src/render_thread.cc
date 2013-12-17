@@ -18,7 +18,7 @@ RenderThread::RenderThread(Device* pDevice, unsigned int initOrderNumber) :
         settings.minorVersion = 3;
 
         // create the window
-        pWindow = new sf::Window(sf::VideoMode(1280, 960), "OpenGL", sf::Style::Default, settings);
+        pWindow = make_unique<sf::Window>(sf::VideoMode(1280, 960), "OpenGL", sf::Style::Default, settings);
         pWindow->setVerticalSyncEnabled(true);
 
         // initialize GLEW
@@ -45,7 +45,6 @@ RenderThread::~RenderThread(void){
         running = false;
         thread.join();
     }
-    delete pWindow;
 }
 
 void RenderThread::launch(unsigned int initOrderNumber){
@@ -111,7 +110,7 @@ void RenderThread::loop(void){
 }
 
 sf::Window* RenderThread::getWindowPtr(void){
-    return pWindow;
+    return pWindow.get();
 }
 
 //a thread can call this to borrow the glContext

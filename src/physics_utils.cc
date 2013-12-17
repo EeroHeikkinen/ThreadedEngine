@@ -17,7 +17,7 @@ void PhysicsMotionState::getWorldTransform(btTransform& worldTrans) const{
     const glm::mat4& model = pComponent->getModelMatrix();
 
     glm::vec3 trans(model[3]);
-    btVector3 btTrans(model[3][0], model[3][1], model[3][2]);
+    btVector3 btTrans(trans.x, trans.y, trans.z);
 
     glm::quat rot(glm::toQuat(model));
     btQuaternion btRot(rot.x, rot.y, rot.z, rot.w);
