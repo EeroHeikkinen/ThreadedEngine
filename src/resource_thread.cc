@@ -2,9 +2,11 @@
 #include "device.hh"
 
 #include <SFML/Window.hpp>
+#include <iostream>
 
 
 ResourceThread::ResourceThread(Device* pDevice, unsigned int initOrderNumber) :
+    device(*pDevice),
     running(true)
     {
         thread = std::thread(&ResourceThread::launch, this, initOrderNumber);
@@ -19,7 +21,7 @@ ResourceThread::~ResourceThread(void){
 
 void ResourceThread::launch(unsigned int initOrderNumber){
     //New thread begins here
-    DEVICE.initSequencer.initialize(this, initOrderNumber);
+    device.initSequencer.initialize(this, initOrderNumber);
     while (running)
         loop();
 }
@@ -33,7 +35,7 @@ void ResourceThread::join(void){
 }
 
 void ResourceThread::init(void){
-    DEVICE.getRenderThread().detachContext();
+    std::lock_guard<GlContextMutex> lock(device.glContextMutex);
 
     // ptr
     std::unique_ptr<StandardResourceLoader> pResLoader = make_unique<StandardResourceLoader>();
@@ -80,19 +82,15 @@ void ResourceThread::init(void){
     pResLoader2->load(MESH, "box");
     pResLoader2->load(MATERIAL, "material_edwerd");
     pResLoader2->load(MATERIAL, "material_grassblock");
-
-    DEVICE.getRenderThread().attachContext();
 }
 
 void ResourceThread::loop(void){
     while(!qLoadCalls.empty()){
-        DEVICE.getRenderThread().detachContext();
+        std::lock_guard<GlContextMutex> lock(device.glContextMutex);
 
-            ResourceLoadCall call;
-            if (qLoadCalls.try_pop(call))
-                call.pResLoader->load(call.resType, call.resId);
-
-        DEVICE.getRenderThread().attachContext();
+        ResourceLoadCall call;
+        if (qLoadCalls.try_pop(call))
+            call.pResLoader->load(call.resType, call.resId);
     }
 
     sf::sleep(sf::milliseconds(10));

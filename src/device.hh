@@ -10,6 +10,7 @@
 
 #define DEVICE Device::getDevice()
 
+
 class Device{
 public:
     static Device& getDevice(void);
@@ -32,6 +33,7 @@ public:
     friend void ResourceThread::launch(unsigned int);
     friend void LogicThread::launch(unsigned int);
 
+    GlContextMutex glContextMutex;
 private:
     Device(void); // private constructor
 

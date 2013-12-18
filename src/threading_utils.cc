@@ -1,7 +1,37 @@
 #include "threading_utils.hh"
 
+#include <SFML/Window.hpp>
 
-//QueuedInterruptMutex
+
+//GlContextMutex
+GlContextMutex::GlContextMutex(void) :
+    windowExists(false),
+    waitingThreads(0)
+    {}
+
+void GlContextMutex::lock(void){
+    WaitCounter waitCounter(waitingThreads);
+    mutex.lock();
+    pWindow->setActive(true);
+}
+
+void GlContextMutex::unlock(void){
+    pWindow->setActive(false);
+    mutex.unlock();
+}
+
+sf::Window& GlContextMutex::getWindow(void){
+    if(windowExists)
+        return *pWindow;
+    else
+        throw "Trying to get nonexistent window";
+}
+
+unsigned int GlContextMutex::getWaitingThreads(void){
+    return waitingThreads;
+}
+
+/*//QueuedInterruptMutex
 QueuedInterruptMutex::QueuedInterruptMutex(void) : //initialize QIM
     pCurrentCv(nullptr)
     {}
@@ -39,4 +69,4 @@ void QueuedInterruptMutex::unlock(void){
         pCurrentCv = &ownerCv;
     pCurrentCv->notify_all();
     currentLock.unlock(); //this unlocks the mutex (doesn't kill the crab)
-}
+}*/

@@ -8,6 +8,7 @@ class StandardResourceLoader;
 
 
 LogicThread::LogicThread(Device* pDevice, unsigned int initOrderNumber) :
+    device(*pDevice),
     running(true)
     {
         thread = std::thread(&LogicThread::launch, this, initOrderNumber);
@@ -22,7 +23,7 @@ LogicThread::~LogicThread(void){
 
 void LogicThread::launch(unsigned int initOrderNumber){
     //New thread begins here
-    DEVICE.initSequencer.initialize(this, initOrderNumber);
+    device.initSequencer.initialize(this, initOrderNumber);
     while (running)
         loop();
 }
@@ -38,9 +39,9 @@ void LogicThread::join(void){
 void LogicThread::init(void){
     //create a StupidRenderer
     Test::StupidRenderer* pRenderer =
-        DEVICE.getRenderThread().addRenderer(
+        device.getRenderThread().addRenderer(
             make_unique<Test::StupidRenderer>());
-    DEVICE.getUniverse().addChild(
+    device.getUniverse().addChild(
         make_unique<Test::World>(pRenderer));
 }
 

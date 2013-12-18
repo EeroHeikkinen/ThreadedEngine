@@ -17,6 +17,8 @@ class ResourceThread{
 public:
     ResourceThread(Device*, unsigned int);
     ~ResourceThread(void);
+    ResourceThread(const ResourceThread&) = delete;
+    ResourceThread& operator=(const ResourceThread&) = delete;
 
     void launch(unsigned int);
     void stop(void);
@@ -33,11 +35,8 @@ public:
 
     /*TODO: fix this interface*/
     ResourceLoader* getResourceLoaderPtr(ResourceType resType);
-
-    ResourceThread(const ResourceThread&) = delete;
-    ResourceThread& operator=(const ResourceThread&) = delete;
-
 private:
+    Device& device;
     std::thread thread;
     bool running;
 

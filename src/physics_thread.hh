@@ -15,6 +15,8 @@ class PhysicsThread{
 public:
     PhysicsThread(Device*, unsigned int);
     ~PhysicsThread(void);
+    PhysicsThread(const PhysicsThread&) = delete;
+    PhysicsThread& operator=(const PhysicsThread&) = delete;
 
     void launch(unsigned int);
     void stop(void);
@@ -25,10 +27,8 @@ public:
 
     PhysicsTree& getPhysicsTree();
     DiscreteDynamicsWorld& getDynamicsWorld();
-
-    PhysicsThread(const PhysicsThread&) = delete;
-    PhysicsThread& operator=(const PhysicsThread&) = delete;
 private:
+    Device& device;
     std::thread thread;
     bool running;
 

@@ -23,9 +23,12 @@ void Device::stop(void){
 
 void Device::join(void){
     renderThread.join();
-    sf::Window* pWindow = renderThread.getWindowPtr();
-    while (!pWindow->setActive(true))
-        sf::sleep(sf::milliseconds(5));
+    //sf::Window* pWindow = renderThread.getWindowPtr();
+    sf::Window& window = glContextMutex.getWindow();
+    if(glContextMutex.getWaitingThreads())
+        throw "Destruction failure: threads waiting for GL context";
+    else
+        window.setActive(true);
 }
 
 RenderThread& Device::getRenderThread(void){
@@ -58,12 +61,13 @@ Device::Device(void) :
 
 void Device::eventLoop(void){
     while (running){
-        sf::Window* pWindow = renderThread.getWindowPtr();
+        sf::Window& window = glContextMutex.getWindow();
+        //renderThread.getWindowPtr();
 
-        if (pWindow->isOpen()){
+        if (window.isOpen()){
             // handle events
             sf::Event event;
-            while (pWindow->pollEvent(event)){
+            while (window.pollEvent(event)){
                 if(event.type == sf::Event::Closed)
                     stop();
                 if(event.type == sf::Event::Resized)

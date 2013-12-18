@@ -12,6 +12,8 @@ class LogicThread{
 public:
     LogicThread(Device*, unsigned int);
     ~LogicThread(void);
+    LogicThread(const LogicThread&) = delete;
+    LogicThread& operator=(const LogicThread&) = delete;
 
     void launch(unsigned int);
     void stop(void);
@@ -23,10 +25,8 @@ public:
     // Adds a new LogicComponent pointer to vpLogicComponents vector.
     void addComponent(LogicComponent* pComponent);
     void removeComponent(LogicComponent* pComponent);
-
-    LogicThread(const LogicThread&) = delete;
-    LogicThread& operator=(const LogicThread&) = delete;
 private:
+    Device& device;
     std::thread thread;
     bool running;
 

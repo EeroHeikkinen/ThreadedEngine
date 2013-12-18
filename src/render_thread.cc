@@ -7,6 +7,7 @@
 
 
 RenderThread::RenderThread(Device* pDevice, unsigned int initOrderNumber) :
+    device(*pDevice),
     running(true)
     {
         // window settings
@@ -18,23 +19,20 @@ RenderThread::RenderThread(Device* pDevice, unsigned int initOrderNumber) :
         settings.minorVersion = 3;
 
         // create the window
-        pWindow = make_unique<sf::Window>(sf::VideoMode(1280, 960), "OpenGL", sf::Style::Default, settings);
-        pWindow->setVerticalSyncEnabled(true);
+        device.glContextMutex.createWindow(sf::VideoMode(1280, 960),
+                                           "OpenGL",
+                                           sf::Style::Default,
+                                           settings);
+        device.glContextMutex.getWindow().setVerticalSyncEnabled(true);
 
         // initialize GLEW
         glewExperimental = GL_TRUE;
         GLenum err = glewInit();
-        if (err != GLEW_OK)
+        if (err != GLEW_OK) // TODO: throw exception in case of failure
             std::cout << "GLEW initialization failed." << std::endl;//TEMP
 
-        /*
-        TODO
-        An exception needs to be thrown in case of GLEW initialization failure.
-        */
-
-        // disable GL context for main thread
-        while (!pWindow->setActive(false))
-            sf::sleep(sf::milliseconds(5));
+        // disable GL context for main thread (re-enabling it in RenderThread::join)
+        device.glContextMutex.getWindow().setActive(false);
 
         // launch render thread
         thread = std::thread(&RenderThread::launch, this, initOrderNumber);
@@ -48,17 +46,12 @@ RenderThread::~RenderThread(void){
 }
 
 void RenderThread::launch(unsigned int initOrderNumber){
-    glContextMutex.gainOwnership();
+    // gain ownership of the GL context
+    std::lock_guard<GlContextMutex> lock(device.glContextMutex);
 
-    while (!pWindow->setActive(true))
-        sf::sleep(sf::milliseconds(5));
-
-    DEVICE.initSequencer.initialize(this, initOrderNumber);
+    device.initSequencer.initialize(this, initOrderNumber);
     while (running)
         loop();
-
-    while (!pWindow->setActive(false))
-        sf::sleep(sf::milliseconds(5));
 }
 
 void RenderThread::stop(void){
@@ -67,6 +60,9 @@ void RenderThread::stop(void){
 
 void RenderThread::join(void){
     thread.join();
+
+    // re-enable gl context for main thread
+    device.glContextMutex.getWindow().setActive(true);
 }
 
 void RenderThread::init(void){
@@ -90,41 +86,11 @@ void RenderThread::loop(void){
     }
 
     // show the rendered stuff
-    pWindow->display();
+    device.glContextMutex.getWindow().display();
 
-    // check if other threads want to borrow the GL context
-    if(glContextMutex.checkInterrupts()){
-        while(!pWindow->setActive(false))
-            sf::sleep(sf::milliseconds(5));
-        //wait for other threads to do their work
-        glContextMutex.dispatchInterrupts();
-
-        while(!pWindow->setActive(true))
-            sf::sleep(sf::milliseconds(5));
+    // lend the GL context if needed
+    if(device.glContextMutex.getWaitingThreads()){
+        device.glContextMutex.unlock();
+        device.glContextMutex.lock();
     }
-
-    /*
-    TODO
-    Improve the delay
-    */
-}
-
-sf::Window* RenderThread::getWindowPtr(void){
-    return pWindow.get();
-}
-
-//a thread can call this to borrow the glContext
-void RenderThread::detachContext(void){
-    glContextMutex.lock();
-
-    while (!pWindow->setActive(true)) //omg dees spinlox!
-        sf::sleep(sf::milliseconds(5));
-}
-
-//the same thread that detached the context shall call this function as well
-void RenderThread::attachContext(void){
-    while (!pWindow->setActive(false)) //even moar of 'em basterdz!
-        sf::sleep(sf::milliseconds(5));
-
-    glContextMutex.unlock();
 }

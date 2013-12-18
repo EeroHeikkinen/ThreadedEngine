@@ -5,6 +5,7 @@
 #include <iostream>
 
 PhysicsThread::PhysicsThread(Device* pDevice, unsigned int initOrderNumber) :
+    device(*pDevice),
     running(true),
     dispatcher(&collisionConfiguration),
     dynamicsWorld(&dispatcher, &broadphase, &solver, &collisionConfiguration)
@@ -21,7 +22,7 @@ PhysicsThread::~PhysicsThread(void){
 
 void PhysicsThread::launch(unsigned int initOrderNumber){
     //New thread begins here
-    DEVICE.initSequencer.initialize(this, initOrderNumber);
+    device.initSequencer.initialize(this, initOrderNumber);
     while (running)
         loop();
 }

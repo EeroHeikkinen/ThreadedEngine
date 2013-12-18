@@ -5,7 +5,6 @@
 #include "threading_utils.hh"
 
 #include <thread>
-#include <mutex>
 #include <unordered_map>
 #include <SFML/Window.hpp>
 
@@ -16,6 +15,8 @@ class RenderThread{
 public:
     RenderThread(Device*, unsigned int);
     ~RenderThread(void);
+    RenderThread(const RenderThread&) = delete;
+    RenderThread& operator=(const RenderThread&) = delete;
 
     void launch(unsigned int);
     void stop(void);
@@ -24,39 +25,21 @@ public:
     void init(void);
     void loop(void);
 
-    sf::Window* getWindowPtr(void);
-
-    // Deactivates the GL context from this thread and activates it on
-    // the calling thread. This can happen only after rendering cycle.
-    // Render thread will wait for the other thread to attach the
-    // context back.
-    void detachContext(void);
-    void attachContext(void);
-
-    // Gains ownership of and adds a renderer pointer to vpRenderers vector.
+    // gains ownership of and adds a renderer pointer to vpRenderers vector.
     template<typename DerivedRenderer>
     DerivedRenderer* addRenderer(std::unique_ptr<DerivedRenderer>);
 
-    //deletion has to be implemented carefully, as it's not a thread-safe operation
-    //void deleteRenderer(Renderer*);
-
-    RenderThread(const RenderThread&) = delete;
-    RenderThread& operator=(const RenderThread&) = delete;
+    // deletion has to be implemented carefully, as it's not a thread-safe operation
+    // void deleteRenderer(Renderer*);
 private:
-    // Thread
+    Device& device;
     std::thread thread;
     bool running;
-
-    // Window & context
-    sf::ContextSettings settings;
-    std::unique_ptr<sf::Window> pWindow;
-    QueuedInterruptMutex glContextMutex;
 
     // Renderer container vector
     std::mutex rendererMapMutex;
     std::unordered_map<Renderer*, std::unique_ptr<Renderer>> mpRenderers;
 };
-
 template<typename DerivedRenderer>
 DerivedRenderer* RenderThread::addRenderer(std::unique_ptr<DerivedRenderer> pRenderer){
     std::lock_guard<std::mutex> lock(rendererMapMutex);

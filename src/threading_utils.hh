@@ -1,9 +1,14 @@
 #ifndef THREADING_UTILS_HH
 #define THREADING_UTILS_HH
 
+#include "make_unique.hh"
+
 #include <mutex>
+#include <atomic>
+#include <memory>
 #include <condition_variable>
-#include <tbb/tbb.h>
+
+namespace sf{class Window;}
 
 
 class FunctionSequencer{
@@ -25,11 +30,49 @@ protected:
     unsigned int currentNumber;
 };
 
-/* TODO: MAKE SURE THIS IS BASIC LOCKABLE *
- * if this is the case, this one can and  *
- * should be used with lock wrappers such *
- * as std::lock_guard or std::unique_lock */
-class QueuedInterruptMutex{
+class GlContextMutex{
+public:
+    GlContextMutex(void);
+    GlContextMutex(const GlContextMutex&) = delete;
+    GlContextMutex& operator=(const GlContextMutex&) = delete;
+
+    void lock(void);
+    void unlock(void);
+
+    template<typename... Args>
+    void createWindow(Args... args);
+
+    sf::Window& getWindow(void);
+    unsigned int getWaitingThreads(void);
+private:
+    std::atomic_bool windowExists;
+    std::unique_ptr<sf::Window> pWindow;
+
+    std::mutex mutex;
+    std::atomic_uint waitingThreads;
+    class WaitCounter{
+    public:
+        WaitCounter(std::atomic_uint& N) : N(N) {++N;}
+        ~WaitCounter(void){--N;}
+    private:
+        std::atomic_uint& N;
+    };
+};
+template<typename... Args>
+void GlContextMutex::createWindow(Args... args){
+    pWindow = make_unique<sf::Window>(std::forward<Args>(args)...);
+    windowExists = true;
+}
+
+class InitSequencer : private FunctionSequencer{
+public:
+    template<typename Thread>
+    void initialize(Thread* pThread, unsigned int orderNumber){
+        runInSequence([pThread](){pThread->init();}, orderNumber);
+    }
+};
+
+/*class QueuedInterruptMutex{
 public:
     QueuedInterruptMutex(void);
 
@@ -48,17 +91,7 @@ private:
     std::unique_lock<std::mutex> currentLock;
     std::condition_variable* pCurrentCv;
     tbb::concurrent_queue<std::condition_variable*> cvQueue;
-};
-
-class InitSequencer : private FunctionSequencer{
-public:
-    InitSequencer(){}
-
-    template<typename Thread>
-    void initialize(Thread* pThread, unsigned int orderNumber){
-        runInSequence([pThread](){pThread->init();}, orderNumber);
-    }
-};
+};*/
 
 
 #endif // THREADING_UTILS_HH
