@@ -4,32 +4,33 @@
 #include <SFML/Graphics.hpp>
 
 
-Texture::Texture(Type type_,
-                 GLenum minFilter_, GLenum magFilter_,
-                 GLenum sWrap_, GLenum tWrap_,
-                 GLuint AFLevel_)
-    {
-        info.type = type_;
-        info.minFilter = minFilter_;
-        info.magFilter = magFilter_;
-        info.sWrap = sWrap_;
-        info.tWrap = tWrap_;
-        info.AFLevel = AFLevel_;
+TextureInfo::TextureInfo(const std::string fileName_
+                         GLenum minFilter_, GLenum magFilter_,
+                         GLenum sWrap_, GLenum tWrap_,
+                         GLenum AFLevel_) :
+    fileName(fileName_),
+    minFilter(minFilter_), magFilter(magFilter_),
+    sWrap(sWrap_), tWrap(tWrap_),
+    AFLevel(AFLevel_)
+    {}
 
+
+Texture::Texture(void)
+    {
         glGenTextures(1, &texture);
     }
 
-Texture::~Texture(void) {
+Texture::~Texture(void){
     glDeleteTextures(1, &texture);
 }
 
-GLuint Texture::getTexture(void) {
-    return texture;
+virtual Texture* getPtr(void) const{
+    return getPtr;
 }
 
-void Texture::loadFromFile(const std::string& fileName) {
+virtual bool Texture::load(TextureInfo& info){
     sf::Image img;
-    img.loadFromFile(fileName);
+    img.loadFromFile(info.fileName);
 
     // binding the texture
     glBindTexture(GL_TEXTURE_2D, texture);
@@ -53,4 +54,10 @@ void Texture::loadFromFile(const std::string& fileName) {
 
     // mipmaps
     glGenerateMipmap(GL_TEXTURE_2D);
+
+    return true;
+}
+
+GLuint Texture::getTexture(void) const{
+    return texture;
 }

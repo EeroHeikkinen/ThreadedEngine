@@ -4,6 +4,12 @@
 #include <sstream>
 
 
+//ShaderObjectInfo
+
+ShaderObjectInfo::ShaderObjectInfo(GLenum type_, const std::string& fileName_) :
+    type(type_), fileName(fileName_)
+    {}
+
 //ShaderObject
 
 ShaderObject::ShaderObject(GLenum type_, const std::string& fileName) :
@@ -18,12 +24,12 @@ ShaderObject::~ShaderObject(void){
     glDeleteShader(objectID);
 }
 
-GLuint ShaderObject::getID(void) const{
-    return objectID;
+ShaderObject* ShaderObject::getPtr(void) const{
+    return this;
 }
 
-void ShaderObject::load(const std::string& fileName){
-    std::ifstream file(fileName);
+bool ShaderObject::load(ShaderObjectInfo& info){
+    std::ifstream file(info.fileName);
     std::string line;
     std::stringstream ssShader;
 
@@ -42,17 +48,15 @@ void ShaderObject::load(const std::string& fileName){
         exception (file can't be opened)
         */
     }
-}
 
-void ShaderObject::compile(void) const{
-    //specifying the source string
+    // uploading the source string
     const char* srcStr = strShader.c_str();
     glShaderSource(objectID, 1, &srcStr, NULL);
 
-    //compiling
+    // compiling
     glCompileShader(objectID);
 
-    //compilation error checking
+    // compilation error checking
     GLint compiled = GL_FALSE;
     glGetShaderiv(objectID, GL_COMPILE_STATUS, &compiled);
 
@@ -72,6 +76,27 @@ void ShaderObject::compile(void) const{
     }
 }
 
+GLuint ShaderObject::getID(void) const{
+    return objectID;
+}
+
+std::string ShaderObject::getShaderString(void) const{
+    return strShader;
+}
+
+//ShaderInfo
+
+ShaderInfo::ShaderInfo(ShaderObject* pShaderObj1, ShaderObject* pShaderObj2) :
+    vpShaderObjects({pShaderObj1, pShaderObj2})
+    {}
+
+ShaderInfo::ShaderInfo(std::vector<ShaderObject*>& vpShaderObjects_) :
+    vpShaderObjects(vpShaderObjects_)
+    {}
+
+ShaderInfo::addShaderObject(ShaderObject* pShaderObj) {
+    vpShaderObjects::push_back(pShaderObj);
+}
 
 //Shader
 
@@ -83,20 +108,10 @@ Shader::~Shader(void){
     glDeleteProgram(programID);
 }
 
-void Shader::addShaderObject(ShaderObject* pSO){
-    vpSOs.push_back(pSO);
-}
-
-void Shader::addShaderObjects(const std::vector<ShaderObject*>& vObjs){
-    for (auto& pShaderObject : vObjs) {
-        vpSOs.push_back(pShaderObject);
-    }
-}
-
-void Shader::link(void) const{
+void Shader::load(ShaderInfo& info){
     //attach all shader objects to the program
-    for (auto shaderObject : vpSOs)
-        glAttachShader(programID, shaderObject->getID());
+    for (auto shaderObj : info.vpShaderObjects)
+        glAttachShader(programID, shaderObj->getID());
 
     //linking
     glLinkProgram(programID);

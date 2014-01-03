@@ -16,46 +16,65 @@
 #include <map>
 
 
-class ShaderObject{
+class ShaderObjectInfo : public ResourceInfo {
 public:
-    explicit ShaderObject(GLenum, const std::string&); //might throw an exception
-    ~ShaderObject(void);
+    GLenum type;
+    std::string fileName;
 
-    GLuint getID(void) const;
-
-    ShaderObject(const ShaderObject&) = delete;
-    ShaderObject& operator=(const ShaderObject&) = delete;
-private:
-    const GLenum type;
-    const GLuint objectID;
-
-    std::string strShader;
-
-    void load(const std::string&); //might throw an exception
-    void compile(void) const; //might throw an exception
+    ShaderObjectInfo(GLenum type_, const std::string& fileName_);
 };
 
 
-class Shader{
+class ShaderObject : public Resource {
+public:
+    ShaderObject(void);
+    ~ShaderObject(void);
+
+    // resource member functions
+    virtual ShaderObject* getPtr(void) const;
+    virtual bool load(ShaderObjectInfo& info); //might throw an exception
+
+    GLuint getID(void) const;
+    std::string getShaderString(void) const;
+
+    ShaderObject(const ShaderObject&) = delete;
+    ShaderObject& operator=(const ShaderObject&) = delete;
+
+private:
+    const GLuint objectID;
+    std::string strShader;
+};
+
+
+class ShaderInfo : public ResourceInfo {
+public:
+    std::vector<ShaderObject*> vpShaderObjects;
+
+    ShaderInfo(void) {}
+    ShaderInfo(ShaderObject* pShaderObj1, ShaderObject* pShaderObj2);
+    ShaderInfo(std::vector<ShaderObject*>& vpShaderObjects_);
+
+    void addShaderObject(ShaderObject* pShaderObj);
+};
+
+
+class Shader : public Resource {
 public:
     Shader(void);
     ~Shader(void);
 
-    void addShaderObject(ShaderObject*);
-    void addShaderObject(GLenum, const std::string&);
-    void addShaderObjects(const std::map<GLenum, const std::string>&);
-    void addShaderObjects(const std::vector<ShaderObject*>&);
+    // resource member functions
+    virtual Shader* getPtr(void) const;
+    virtual void load(void) const;
 
-    void link(void) const;
     void use(void) const;
     GLuint getID(void) const;
 
     Shader(const Shader&) = delete; //Ro3
     Shader& operator=(const Shader&) = delete; //Ro3
+
 private:
     const GLuint programID;
-
-    std::vector<ShaderObject*> vpSOs;
 };
 
 

@@ -3,24 +3,29 @@
 #include "shader.hh"
 
 
-Material::Material(GLenum texid, Texture* pTexture_, Shader* pShader_) {
-    std::lock_guard<std::mutex> lock(mutex);
-
-    pTextures.emplace(texid, pTexture_);
+MaterialInfo::MaterialInfo(Shader* pShader_){
     pShader = pShader_;
 }
 
-Material::Material(std::unordered_map<GLenum, Texture*>& pTextures_, Shader* pShader_) {
-    std::lock_guard<std::mutex> lock(mutex);
-
-    pTextures.insert(pTextures_.begin(), pTextures.end());
-    pShader = pShader_;
+MaterialInfo::addTexture(GLenum texType, Texture* pTexture){
+    pTextures.emplace(texType, pTexture);
 }
 
-void Material::use(void) const {
+// Material
+
+Material* Material::getPtr(void) const{
+    return this;
+}
+
+bool Material::load(MaterialInfo& info){
+    pShader = info.pShader;
+    pTextures = info.pTextures;
+}
+
+void Material::use(void) const{
     glUseProgram(pShader->getID());
 
-    for (auto it = pTextures.begin(); it != pTextures.end(); it++) {
+    for (auto it = pTextures.begin(); it != pTextures.end(); it++){
         // the texture unit (GLenum)
         glActiveTexture(it->first);
         // the actual texture id
@@ -28,6 +33,6 @@ void Material::use(void) const {
     }
 }
 
-Shader* Material::getShaderPtr(void) const {
+Shader* Material::getShaderPtr(void) const{
     return pShader;
 }

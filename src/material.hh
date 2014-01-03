@@ -1,32 +1,43 @@
 #ifndef MATERIAL_HH
 #define MATERIAL_HH
 
+#include "resource.hh"
 
 #include <GL/GLEW.h>
-#include <mutex>
 #include <unordered_map>
 #include <string>
-
+#include <mutex>
 
 class Texture;
 class Shader;
 
 
-class Material {
+class MaterialInfo : public ResourceInfo {
+public:
+    std::unordered_map<GLenum, Texture*> pTextures;
+    Shader* pShader;
+
+    MaterialInfo(void) {};
+    MaterialInfo(Shader* pShader_);
+
+    void addTexture(GLenum texType, Texture* pTexture);
+};
+
+class Material : public Resource {
 public:
     Material(void) {}
-    Material(GLenum texid, Texture* pTexture_, Shader* pShader_);
-    Material(std::unordered_map<GLenum, Texture*>& pTextures_, Shader* pShader_);
+    ~Material(void) {}
+
+    // resource member functions
+    virtual Material* getPtr(void) const;
+    virtual bool load(MaterialInfo& info);
 
     void use(void) const;
-
     Shader* getShaderPtr(void) const;
 
 private:
     std::unordered_map<GLenum, Texture*> pTextures;
     Shader* pShader;
-
-    std::mutex mutex;
 };
 
 
