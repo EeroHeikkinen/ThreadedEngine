@@ -10,7 +10,7 @@ public:
 
 class Resource {
 public:
-    virtual Resource* getPtr(void) const = 0;
+    virtual Resource* getPtr(void) = 0;
     virtual bool load(void) = 0;
 };
 

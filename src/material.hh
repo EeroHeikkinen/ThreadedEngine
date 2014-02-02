@@ -29,7 +29,7 @@ public:
     ~Material(void) {}
 
     // resource member functions
-    virtual Material* getPtr(void) const;
+    virtual Material* getPtr(void);
     virtual bool load(MaterialInfo& info);
 
     void use(void) const;

@@ -10,6 +10,8 @@
 #ifndef SHADER_HH
 #define SHADER_HH
 
+#include "resource.hh"
+
 #include <GL/glew.h>
 #include <string>
 #include <vector>
@@ -31,7 +33,7 @@ public:
     ~ShaderObject(void);
 
     // resource member functions
-    virtual ShaderObject* getPtr(void) const;
+    virtual ShaderObject* getPtr(void);
     virtual bool load(ShaderObjectInfo& info); //might throw an exception
 
     GLuint getID(void) const;

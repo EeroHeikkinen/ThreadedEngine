@@ -7,13 +7,13 @@ MaterialInfo::MaterialInfo(Shader* pShader_){
     pShader = pShader_;
 }
 
-MaterialInfo::addTexture(GLenum texType, Texture* pTexture){
+void MaterialInfo::addTexture(GLenum texType, Texture* pTexture){
     pTextures.emplace(texType, pTexture);
 }
 
 // Material
 
-Material* Material::getPtr(void) const{
+Material* Material::getPtr(void) {
     return this;
 }
 
